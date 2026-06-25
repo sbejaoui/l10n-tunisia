@@ -6,8 +6,7 @@
     "author": "Rami Brick",
     "license": "LGPL-3",
     "depends": ["account"],
-    "data": [
-    ],
+    "data": [],
     "installable": True,
     "application": False,
 }
