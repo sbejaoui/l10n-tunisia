@@ -1,0 +1,36 @@
+{%- if odoo_version < 13 %}
+  {%- include "version-specific/mqt-compat/.pylintrc.jinja" %}
+{%- else %}
+{% extends "src/.pylintrc-mandatory.jinja" %}
+{% block note %}
+# This .pylintrc contains optional AND mandatory checks and is meant to be
+# loaded in an IDE to have it check everything, in the hope this will make
+# optional checks more visible to contributors who otherwise never look at a
+# green travis to see optional checks that failed.
+# .pylintrc-mandatory containing only mandatory checks is used the pre-commit
+# config as a blocking check.
+{% endblock %}
+{% block optional_checks %},
+{%- if odoo_version <= 18 %}
+    missing-manifest-dependency,
+    too-complex,
+{%- endif %}
+{%- if odoo_version >= 15 and odoo_version <= 18 %},
+    create-user-wo-reset-password,
+    dangerous-filter-wo-user,
+    file-not-used,
+    missing-newline-extrafiles,
+    no-utf8-coding-comment,
+    old-api7-method-defined,
+    unnecessary-utf8-coding-comment,
+{%- endif %}
+    # messages that do not cause the lint step to fail
+    consider-merging-classes-inherited,
+    deprecated-module,
+    invalid-commit,
+    missing-readme,
+    odoo-addons-relative-import,
+    redefined-builtin,
+    manifest-external-assets
+{% endblock %}
+{%- endif %}
