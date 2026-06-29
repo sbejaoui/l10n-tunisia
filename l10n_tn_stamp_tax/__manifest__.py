@@ -6,7 +6,10 @@
     "author": "Rami Brick",
     "license": "LGPL-3",
     "depends": ["account"],
-    "data": [],
+    "data": [
+        "data/account_tax.xml",
+        "report/report_invoice_document_stamp_tax.xml",
+        ],
     "installable": True,
     "application": False,
 }

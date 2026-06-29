@@ -1,0 +1,9 @@
+<odoo>
+    <template id="report_invoice_document_stamp_tax" inherit_id="account.report_invoice_document">
+        <xpath expr="//table[contains(@class, 'o_main_table')]/tbody//tr" position="attributes">
+            <attribute name="t-if">not any(tax.name == 'Stamp Tax' for tax in line.tax_ids)</attribute>
+        </xpath>
+    </template>
+</odoo>
+            
+
