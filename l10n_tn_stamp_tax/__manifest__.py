@@ -11,7 +11,7 @@
         "data/tva.xml",
         "data/fodec.xml",
         "report/report_invoice_document_stamp_tax.xml",
-        ],
+    ],
     "installable": True,
     "application": False,
 }
