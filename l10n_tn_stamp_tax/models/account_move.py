@@ -27,7 +27,9 @@ class AccountMove(models.Model):
 
     def _add_stamp_tax(self):
         self.ensure_one()
-        self.invoice_line_ids = [(Command.create(self._prepare_stamp_tax_line_vals()))]
+        self.write(
+            {"invoice_line_ids": [Command.create(self._prepare_stamp_tax_line_vals())]}
+        )
 
     def _prepare_stamp_tax_line_vals(self):
         self.ensure_one()
@@ -38,11 +40,12 @@ class AccountMove(models.Model):
             stamp_tax = self.env.ref("l10n_tn_stamp_tax.tax_stamp_purchase")
         else:
             raise ValueError(
-                "Stamp not found for this type of document. Only sale and purchase documents are supported."
+                "Stamp not found for this type of document. "
+                "Only sale and purchase documents are supported."
             )
         return {
             "name": stamp_tax.name,
             "quantity": 1.0,
-            "price_unit": stamp_tax.amount,
+            "price_unit": 0.0,
             "tax_ids": [(6, 0, [stamp_tax.id])],
         }
