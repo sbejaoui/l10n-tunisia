@@ -8,6 +8,8 @@
     "depends": ["account"],
     "data": [
         "data/account_tax.xml",
+        "data/tva.xml",
+        "data/fodec.xml",
         "report/report_invoice_document_stamp_tax.xml",
         ],
     "installable": True,
