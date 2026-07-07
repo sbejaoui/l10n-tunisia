@@ -7,8 +7,6 @@
     "license": "LGPL-3",
     "depends": ["account"],
     "data": [
-        "data/tva.xml",
-        "data/fodec.xml",
     ],
     "installable": True,
     "application": False,

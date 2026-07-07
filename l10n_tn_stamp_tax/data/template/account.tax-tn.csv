@@ -1,0 +1,7 @@
+"id","name","description","invoice_label","amount","amount_type","sequence","type_tax_use","tax_scope","include_base_amount","tax_group_id","active","tax_exigibility","cash_basis_transition_account_id","repartition_line_ids/factor_percent","repartition_line_ids/repartition_type","repartition_line_ids/document_type","repartition_line_ids/account_id","repartition_line_ids/tag_ids","description@fr","price_include_override"
+"tax_fodec_sale","FODEC","Fonds de Développement de la Compétitivité Industrielle","FODEC","1.0","percent","1","sale","","1","tax_group_fodec","1","","","","","","","","",""
+"tax_fodec_purchase","FODEC","Fonds de Développement de la Compétitivité Industrielle","FODEC","1.0","percent","1","purchase","","1","tax_group_fodec","1","","","","","","","","",""
+"tax_tva_sale","TVA","Taxe sur la Valeur Ajoutée","TVA","19.0","percent","2","sale","","","tax_group_tva","1","","","","","","","","",""
+"tax_tva_purchase","TVA","Taxe sur la Valeur Ajoutée","TVA","19.0","percent","2","purchase","","","tax_group_tva","1","","","","","","","","",""
+"tax_stamp_sale","Stamp Tax","Droit de timbre fiscal","Timbre fiscal","1.0","fixed","3","sale","","","tax_group_stamp_tax","0","","","","","","","","",""
+"tax_stamp_purchase","Stamp Tax","Droit de timbre fiscal","Timbre fiscal","1.0","fixed","3","purchase","","","tax_group_stamp_tax","0","","","","","","","","",""

@@ -7,8 +7,8 @@ class AccountMove(models.Model):
 
     def _is_stamp_tax_exist(self):
         self.ensure_one()
-        stamp_tax_sale = self.env.ref("l10n_tn_stamp_tax.tax_stamp_sale")
-        stamp_tax_purchase = self.env.ref("l10n_tn_stamp_tax.tax_stamp_purchase")
+        stamp_tax_sale = self.env['account.chart.template'].ref("tax_stamp_sale")
+        stamp_tax_purchase = self.env['account.chart.template'].ref("tax_stamp_purchase")
         return self.invoice_line_ids.filtered(
             lambda line: (
                 stamp_tax_sale in line.tax_ids or stamp_tax_purchase in line.tax_ids
@@ -39,9 +39,9 @@ class AccountMove(models.Model):
         self.ensure_one()
 
         if self.is_sale_document(include_receipts=False):
-            stamp_tax = self.env.ref("l10n_tn_stamp_tax.tax_stamp_sale")
+            stamp_tax = self.env['account.chart.template'].ref("tax_stamp_sale")
         elif self.is_purchase_document(include_receipts=False):
-            stamp_tax = self.env.ref("l10n_tn_stamp_tax.tax_stamp_purchase")
+            stamp_tax = self.env['account.chart.template'].ref("tax_stamp_purchase")
         else:
             raise ValueError(
                 "Stamp not found for this type of document. "
