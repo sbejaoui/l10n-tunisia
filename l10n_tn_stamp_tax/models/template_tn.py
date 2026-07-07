@@ -6,9 +6,10 @@ from odoo.addons.account.models.chart_template import template
 class AccountChartTemplate(models.AbstractModel):
     _inherit = 'account.chart.template'
 
-    @template('tn')
-    def _get_tn_template_data(self):
+    @template('tn_pcg')
+    def _get_tn_pcg_template_data(self):
         return {
+            'name': 'Tunisia - Plan Comptable Général',
             'code_digits': 6,
             'property_account_receivable_id': 'tn_pcg_recv',
             'property_account_payable_id': 'tn_pcg_pay',
@@ -17,8 +18,8 @@ class AccountChartTemplate(models.AbstractModel):
             'property_account_downpayment_categ_id': 'pcg_4191',
         }
 
-    @template('tn', 'res.company')
-    def _get_tn_res_company(self):
+    @template('tn_pcg', 'res.company')
+    def _get_tn_pcg_res_company(self):
         return {
             self.env.company.id: {
                 'account_fiscal_country_id': 'base.tn',
@@ -38,15 +39,15 @@ class AccountChartTemplate(models.AbstractModel):
             },
         }
 
-    @template('tn', 'account.journal')
-    def _get_tn_account_journal(self):
+    @template('tn_pcg', 'account.journal')
+    def _get_tn_pcg_account_journal(self):
         return {
             'sale': {'refund_sequence': True},
             'purchase': {'refund_sequence': True},
         }
 
-    @template('tn', 'account.reconcile.model')
-    def _get_tn_reconcile_model(self):
+    @template('tn_pcg', 'account.reconcile.model')
+    def _get_tn_pcg_reconcile_model(self):
         return {
             'bank_charges_reconcile_model': {
                 'name': 'Bank fees',
