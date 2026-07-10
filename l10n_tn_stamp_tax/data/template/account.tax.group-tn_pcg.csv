@@ -1,4 +1,0 @@
-"id","name","country_id","tax_receivable_account_id","tax_payable_account_id","name@fr"
-"tax_group_fodec","FODEC","base.tn","pcg_43668","pcg_43658","FODEC"
-"tax_group_tva","VAT 19%","base.tn","pcg_43667","pcg_43651","TVA 19%"
-"tax_group_stamp_tax","Stamp Tax","base.tn","pcg_43668","pcg_4331","Timbre Fiscal"

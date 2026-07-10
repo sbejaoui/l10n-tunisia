@@ -1,3 +1,1 @@
-from . import account_move as account_move
-from . import account_move_line as account_move_line
-from . import template_tn as template_tn
+from . import account_tax, account_move, account_move_line

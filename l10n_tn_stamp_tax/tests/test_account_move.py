@@ -6,16 +6,26 @@ from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 @tagged('post_install', '-at_install')
 class TestAccountMove(AccountTestInvoicingCommon):
 
-    chart_template = 'tn_pcg'
-
     @classmethod
+    @AccountTestInvoicingCommon.setup_country("tn")
     def setUpClass(cls):
         super().setUpClass()
         tn = cls.env.ref("base.tn")
-        cls.company_data['company'].country_id = tn
         cls.partner_a.country_id = tn
-        cls.stamp_tax_sale = cls.env['account.chart.template'].ref("tax_stamp_sale")
-        cls.stamp_tax_purchase = cls.env['account.chart.template'].ref("tax_stamp_purchase")
+        cls.stamp_tax_sale = cls._create_stamp_tax("sale")
+        cls.stamp_tax_purchase = cls._create_stamp_tax("purchase")
+
+    @classmethod
+    def _create_stamp_tax(cls, type_tax_use):
+        return cls.env["account.tax"].create({
+            "name": f"Stamp Tax {type_tax_use}",
+            "amount_type": "fixed",
+            "amount": 1.0,
+            "type_tax_use": type_tax_use,
+            "l10n_tn_is_stamp_tax": True,
+            "company_id": cls.company_data["company"].id,
+            "country_id": cls.company_data["company"].account_fiscal_country_id.id,
+        })
 
     def _create_invoice(self, move_type="out_invoice", partner=None):
         return self.env["account.move"].create({
@@ -39,12 +49,13 @@ class TestAccountMove(AccountTestInvoicingCommon):
         invoice.action_post()
 
         stamp_lines = invoice.invoice_line_ids.filtered(
-            lambda line: self.stamp_tax_sale in line.tax_ids
+            "l10n_tn_is_stamp_tax"
         )
 
         self.assertEqual(len(stamp_lines), 1)
         self.assertEqual(stamp_lines.quantity, 1.0)
         self.assertEqual(stamp_lines.price_unit, 0.0)
+        self.assertEqual(stamp_lines.tax_ids, self.stamp_tax_sale)
 
     def test_no_stamp_tax_for_foreign_partner(self):
         foreign_partner = self.env["res.partner"].create({
@@ -61,7 +72,15 @@ class TestAccountMove(AccountTestInvoicingCommon):
         bill.action_post()
 
         stamp_lines = bill.invoice_line_ids.filtered(
-            lambda line: self.stamp_tax_purchase in line.tax_ids
+            "l10n_tn_is_stamp_tax"
         )
 
         self.assertEqual(len(stamp_lines), 1)
+        self.assertEqual(stamp_lines.tax_ids, self.stamp_tax_purchase)
+
+    def test_batch_post_invoices_adds_stamp_tax(self):
+        invoices = self._create_invoice() | self._create_invoice()
+        invoices.action_post()
+
+        for invoice in invoices:
+            self.assertTrue(invoice._is_stamp_tax_exist())

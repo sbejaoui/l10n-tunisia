@@ -1,18 +1,17 @@
 This module adds Tunisian stamp tax (*droit de timbre*) handling on invoices.
 
-When a customer or vendor invoice is posted, a fixed stamp tax line is
-automatically appended to the invoice if one is not already present. The
-stamp tax is implemented as a standard fixed-amount ``account.tax``, so it
-is reflected in the invoice totals and the tax report like any other tax.
+It does **not** ship any tax of its own. Instead, it adds an **Is Stamp Tax**
+flag on taxes: you tick it on the fixed-amount tax you use as the stamp tax,
+and the module takes care of the rest.
 
-The module also ships the common Tunisian taxes used alongside the stamp
-tax:
+When a customer or vendor invoice is posted for a Tunisian company and a
+Tunisian partner, a stamp tax line is automatically appended if one is not
+already present. The line carries the flagged stamp tax, so the amount is
+reflected in the invoice totals and the tax report like any other tax.
 
-* **Stamp Tax** (*droit de timbre*) — a fixed amount per invoice, for both
-  sales and purchases.
-* **TVA** — the standard 19% Tunisian VAT, for sales and purchases.
-* **FODEC** — the 1% *Fonds de Développement de la Compétitivité*, applied
-  on the base amount before VAT, for sales and purchases.
+The correct sale or purchase stamp tax is selected automatically based on the
+document type and the company.
 
-On the printed invoice (PDF), the stamp tax is shown in the tax summary but
-hidden from the invoice line table, so it does not appear as a product line.
+On the printed invoice (PDF), the stamp tax line is hidden from the invoice
+line table, so it does not appear as a product line; the amount still shows in
+the tax summary.
