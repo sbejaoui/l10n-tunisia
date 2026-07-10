@@ -1,1 +1,1 @@
-from . import account_tax, account_move, account_move_line
+from . import account_move, account_move_line, account_tax
