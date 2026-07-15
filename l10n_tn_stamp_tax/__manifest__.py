@@ -4,8 +4,8 @@
     "version": "18.0.1.0.0",
     "countries": ["tn"],
     "category": "Accounting/Localizations/Account Charts",
-    "author": "Rami Brick",
-    "license": "LGPL-3",
+    "author": "Sobware",
+    "license": "AGPL-3",
     "depends": ["account", "l10n_tn"],
     "data": [
         "views/is_stamp_tax.xml",
