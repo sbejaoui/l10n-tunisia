@@ -1,6 +1,7 @@
 from odoo import Command
-from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 from odoo.tests.common import tagged
+
+from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
 
 @tagged("post_install", "-at_install")
@@ -46,10 +47,13 @@ class TestAccountMove(AccountTestInvoicingCommon):
             }
         )
 
+    def _is_stamp_tax_exist(self, invoice):
+        return bool(invoice.invoice_line_ids.filtered("l10n_tn_is_stamp_tax"))
+
     def test_stamp_tax_addition(self):
         invoice = self._create_invoice()
         invoice.action_post()
-        self.assertTrue(invoice._is_stamp_tax_exist())
+        self.assertTrue(self._is_stamp_tax_exist(invoice))
 
     def test_sale_invoice_has_one_stamp_tax_line(self):
         invoice = self._create_invoice()
@@ -72,7 +76,7 @@ class TestAccountMove(AccountTestInvoicingCommon):
         invoice = self._create_invoice(partner=foreign_partner)
         invoice.action_post()
 
-        self.assertFalse(invoice._is_stamp_tax_exist())
+        self.assertFalse(self._is_stamp_tax_exist(invoice))
 
     def test_purchase_invoice_uses_purchase_stamp_tax(self):
         bill = self._create_invoice(move_type="in_invoice")
@@ -88,4 +92,4 @@ class TestAccountMove(AccountTestInvoicingCommon):
         invoices.action_post()
 
         for invoice in invoices:
-            self.assertTrue(invoice._is_stamp_tax_exist())
+            self.assertTrue(self._is_stamp_tax_exist(invoice))
