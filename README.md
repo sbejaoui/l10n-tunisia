@@ -1,85 +1,38 @@
-# OCA Addons Repo Template
 
-This is a template created to make easier the task of maintaining OCA addon
-repositories.
+[![Support the OCA](https://odoo-community.org/readme-banner-image)](https://odoo-community.org/get-involved?utm_source=repo-readme)
 
-## Why?
+# l10n-tunisia
+[![Runboat](https://img.shields.io/badge/runboat-Try%20me-875A7B.png)](https://runboat.odoo-community.org/builds?repo=OCA/l10n-tunisia&target_branch=18.0)
+[![Pre-commit Status](https://github.com/OCA/l10n-tunisia/actions/workflows/pre-commit.yml/badge.svg?branch=18.0)](https://github.com/OCA/l10n-tunisia/actions/workflows/pre-commit.yml?query=branch%3A18.0)
+[![Build Status](https://github.com/OCA/l10n-tunisia/actions/workflows/test.yml/badge.svg?branch=18.0)](https://github.com/OCA/l10n-tunisia/actions/workflows/test.yml?query=branch%3A18.0)
+[![codecov](https://codecov.io/gh/OCA/l10n-tunisia/branch/18.0/graph/badge.svg)](https://codecov.io/gh/OCA/l10n-tunisia)
+[![Translation Status](https://translation.odoo-community.org/widgets/l10n-tunisia-18-0/-/svg-badge.svg)](https://translation.odoo-community.org/engage/l10n-tunisia-18-0/?utm_source=widget)
 
-We have dozens of repos. Most of them look the same, and most of them need
-specific-but-similar configurations for CI, code quality, dependency management, etc.
+<!-- /!\ do not modify above this line -->
 
-We need a place where to evolve those things and push them automatically everywhere
-else.
 
-This is that place.
 
-## How to use?
+<!-- /!\ do not modify below this line -->
 
-This is a template. It is based on [Copier](https://github.com/pykong/copier), go there
-to read its docs to know how it works.
+<!-- prettier-ignore-start -->
 
-Quick answer to bootstrap a new repo:
+[//]: # (addons)
 
-```bash
-# Install copier and pre-commit if missing
-pipx install copier
-pipx install pre-commit
-pipx ensurepath
-# Clone this template and answer its questions
-copier copy https://github.com/OCA/oca-addons-repo-template.git some-repo
-# Commit that
-cd some-repo
-git add .
-pre-commit install
-pre-commit run -a
-git commit -am 'Hello world 🖖'
-```
+This part will be replaced when running the oca-gen-addons-table script from OCA/maintainer-tools.
 
-Quick answer to update a repo:
+[//]: # (end addons)
 
-```bash
-# Update the repo
-cd some-repo
-copier update
-# Reformat updated files
-pre-commit run
-# Commit update
-git commit -am 'Updated from template'
-# Reformat all other files, in case some pre-commit configuration was updated
-pre-commit run -a || git commit -am 'Reformatted after template update'
-```
+<!-- prettier-ignore-end -->
 
-## How to contribute?
+## Licenses
 
-Go read [our contribution guideline](CONTRIBUTING.md).
+This repository is licensed under [AGPL-3.0](LICENSE).
 
-## Supported use cases
+However, each module can have a totally different license, as long as they adhere to Odoo Community Association (OCA)
+policy. Consult each module's `__manifest__.py` file, which contains a `license` key
+that explains its license.
 
-This template allows to bootstrap and update addon repositories for these Odoo versions:
-
-- 11.0
-- 12.0
-- 13.0
-- 14.0
-- 15.0
-- 16.0
-- 17.0
-- 18.0
-- 19.0
-
-Future versions will be added as they are released. Past versions could be added as long
-as they don't break existing branches.
-
-Right now this template is tightly coupled with code, guidelines and decisions from OCA.
-You might find some things that you can reuse in your own templates, but in general
-terms this template is not meant to support being used as is for other organizations.
-
-## The legal stuff
-
-Copyright holder: [Odoo Community Association](https://odoo-community.org/).
-
-Template license: [MIT](LICENSE)
-
-License of the rendered repositories: [AGPL](LICENSE.jinja)
-
-License of each module in those rendered repositories: Depends on the module.
+----
+OCA, or the [Odoo Community Association](http://odoo-community.org/), is a nonprofit
+organization whose mission is to support the collaborative development of Odoo features
+and promote its widespread use.
