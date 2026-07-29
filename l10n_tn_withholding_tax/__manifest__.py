@@ -11,7 +11,7 @@
     "website": "https://github.com/OCA/l10n-tunisia",
     "license": "AGPL-3",
     "depends": ["l10n_account_withholding_tax", "l10n_tn"],
-    "data": [],
+    "data": ["views/withholding_include_vat.xml"],
     "installable": True,
     "application": False,
 }
