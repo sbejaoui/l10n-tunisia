@@ -13,5 +13,7 @@ class TaxExemption(models.Model):
     date_start = fields.Date(string="Start Date")
     date_end = fields.Date(string="End Date")
     fiscal_position_id = fields.Many2one(
-        "account.fiscal.position", string="Fiscal Position"
+        "account.fiscal.position",
+        string="Fiscal Position",
+        domain=[("tax_ids", "!=", False)],
     )
