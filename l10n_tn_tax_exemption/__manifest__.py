@@ -13,7 +13,8 @@
     "depends": ["account", "l10n_tn"],
     "data": [
         "security/ir.model.access.csv",
-        "views/l10n_tn_tax_exemption.xml",
+        "views/res_partner.xml",
+        "views/account_move.xml",
     ],
     "installable": True,
     "application": False,

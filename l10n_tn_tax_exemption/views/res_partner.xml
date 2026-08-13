@@ -2,12 +2,6 @@
 <!-- Copyright 2026 sobware
      License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
 <odoo>
-    <record id="action_tax_exemption" model="ir.actions.act_window">
-        <field name="name">Tax Exemptions</field>
-        <field name="res_model">l10n_tn.tax_exemption</field>
-        <field name="view_mode">list,form</field>
-    </record>
-
     <record id="view_partner_form_tax_exemption" model="ir.ui.view">
         <field name="name">res.partner.form.tax.exemption</field>
         <field name="model">res.partner</field>
