@@ -27,3 +27,12 @@ class AccountMove(models.Model):
                 ],
                 limit=1,
             )
+
+    @api.depends("l10n_tn_tax_exemption_id")
+    def _compute_fiscal_position_id(self):
+        res = super()._compute_fiscal_position_id()
+        for move in self:
+            exemption = move.l10n_tn_tax_exemption_id
+            if exemption:
+                move.fiscal_position_id = exemption.fiscal_position_id
+        return res
