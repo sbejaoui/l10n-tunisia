@@ -10,6 +10,7 @@ class AccountMove(models.Model):
     l10n_tn_tax_exemption_id = fields.Many2one(
         "l10n_tn.tax_exemption",
         string="Tax Exemption",
+        ondelete="restrict",
         compute="_compute_l10n_tn_tax_exemption_id",
         store=True,
         readonly=False,
