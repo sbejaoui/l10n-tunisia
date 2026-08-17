@@ -15,6 +15,7 @@
         "security/ir.model.access.csv",
         "views/res_partner.xml",
         "views/account_move.xml",
+        "report/report_invoice.xml",
     ],
     "installable": True,
     "application": False,
