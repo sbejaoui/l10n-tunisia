@@ -34,15 +34,15 @@ class AccountTax(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         taxes = super().create(vals_list)
-        self.env._get_stamp_tax.clear_cache()
+        self.env.registry.clear_cache()
         return taxes
 
     def write(self, vals):
         res = super().write(vals)
-        self.env._get_stamp_tax.clear_cache()
+        self.env.registry.clear_cache()
         return res
 
     def unlink(self):
         res = super().unlink()
-        self.env._get_stamp_tax.clear_cache()
+        self.env.registry.clear_cache()
         return res
