@@ -8,16 +8,13 @@
         <field name="inherit_id" ref="account.view_account_journal_form" />
         <field name="arch" type="xml">
             <xpath expr="//field[@name='type']" position="after">
-                <field name="l10n_tn_journal_include_withholding" />
+                <field name="is_withholding_tax_journal" />
             </xpath>
-            <xpath
-                expr="//field[@name='l10n_tn_journal_include_withholding']"
-                position="after"
-            >
+            <xpath expr="//field[@name='is_withholding_tax_journal']" position="after">
                 <field
-                    name="l10n_tn_journal_amount"
+                    name="withholding_tax_rate"
                     widget="percentage"
-                    invisible="not l10n_tn_journal_include_withholding"
+                    invisible="not is_withholding_tax_journal"
                 />
             </xpath>
         </field>

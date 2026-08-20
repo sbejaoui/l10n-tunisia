@@ -7,8 +7,8 @@ from odoo import fields, models
 class AccountJournal(models.Model):
     _inherit = "account.journal"
 
-    l10n_tn_journal_include_withholding = fields.Boolean(
+    is_withholding_tax_journal = fields.Boolean(
         string="Journal includes Withholding Tax",
     )
 
-    l10n_tn_journal_amount = fields.Float(string="Amount")
+    withholding_tax_rate = fields.Float(string="Rate")
