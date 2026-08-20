@@ -10,7 +10,10 @@ class AccountPaymentRegister(models.TransientModel):
     @api.onchange("journal_id")
     def _calculate_withholding_amount(self):
         if self.journal_id.is_withholding_tax_journal:
-            withholding_amount = self.amount * self.journal_id.withholding_tax_rate
+            invoice = self.line_ids.move_id
+            withholding_amount = (
+                invoice.amount_total * self.journal_id.withholding_tax_rate
+            )  # get the amount from the invoice not the wizard
             self.amount = withholding_amount
         else:
             withholding_amount = 0.0
