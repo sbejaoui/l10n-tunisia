@@ -7,15 +7,15 @@
         <field name="model">account.journal</field>
         <field name="inherit_id" ref="account.view_account_journal_form" />
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='type']" position="after">
-                <field name="is_withholding_tax_journal" />
-            </xpath>
-            <xpath expr="//field[@name='is_withholding_tax_journal']" position="after">
-                <field
-                    name="withholding_tax_rate"
-                    widget="percentage"
-                    invisible="not is_withholding_tax_journal"
-                />
+            <xpath expr="//page[@name='advanced_settings']" position="inside">
+                <group string="Withholding Tax" invisible="type != 'bank'">
+                    <field name="is_withholding_tax_journal" />
+                    <field
+                        name="withholding_tax_rate"
+                        widget="percentage"
+                        invisible="not is_withholding_tax_journal"
+                    />
+                </group>
             </xpath>
         </field>
     </record>
