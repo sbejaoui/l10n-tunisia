@@ -12,8 +12,8 @@
     "license": "AGPL-3",
     "depends": ["l10n_account_withholding_tax", "l10n_tn"],
     "data": [
-        "views/withholding_include_vat.xml",
         "views/journal_include_withholding.xml",
+        "views/rs_eligible_alert.xml",
     ],
     "installable": True,
     "application": False,
