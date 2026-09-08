@@ -9,6 +9,7 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='move_type']" position="after">
                 <field name="is_rs_eligible" invisible="1" />
+                <field name="is_rs_paid" invisible="1" />
             </xpath>
             <xpath expr="//sheet" position="before">
                 <div
@@ -17,6 +18,13 @@
                     invisible="not is_rs_eligible"
                 >
                     Alert: This bill is eligible for Retenue à la Source (RS).
+                </div>
+                <div
+                    class="alert alert-info text-center mb-0"
+                    role="alert"
+                    invisible="not is_rs_paid"
+                >
+                    Note: The withholding tax (RS) for this bill has already been paid.
                 </div>
             </xpath>
         </field>

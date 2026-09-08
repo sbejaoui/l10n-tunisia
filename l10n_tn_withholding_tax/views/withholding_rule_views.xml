@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 sobware
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="view_l10n_tn_withholding_rule_list" model="ir.ui.view">
+        <field name="name">l10n.tn.withholding.rule.list</field>
+        <field name="model">l10n.tn.withholding.rule</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="product_id" />
+                <field name="description" />
+                <field name="amount" />
+                <field name="withholding_journal_id" />
+            </list>
+        </field>
+    </record>
+
+    <record id="view_l10n_tn_withholding_rule_form" model="ir.ui.view">
+        <field name="name">l10n.tn.withholding.rule.form</field>
+        <field name="model">l10n.tn.withholding.rule</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="product_id" />
+                        <field name="description" />
+                        <field name="amount" />
+                        <field name="withholding_journal_id" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_l10n_tn_withholding_rule" model="ir.actions.act_window">
+        <field name="name">Withholding Rules</field>
+        <field name="res_model">l10n.tn.withholding.rule</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem
+        id="menu_l10n_tn_withholding_rule"
+        name="Withholding Rules"
+        parent="account.account_account_menu"
+        action="action_l10n_tn_withholding_rule"
+    />
+</odoo>

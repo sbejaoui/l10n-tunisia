@@ -12,8 +12,11 @@
     "license": "AGPL-3",
     "depends": ["l10n_account_withholding_tax", "l10n_tn"],
     "data": [
+        "security/ir.model.access.csv",
         "views/journal_include_withholding.xml",
         "views/rs_eligible_alert.xml",
+        "views/withholding_rule_views.xml",
+        "views/account_payment_register_views.xml",
     ],
     "installable": True,
     "application": False,
