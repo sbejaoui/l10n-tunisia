@@ -14,7 +14,7 @@
     "data": [
         "security/ir.model.access.csv",
         "views/journal_include_withholding.xml",
-        "views/rs_eligible_alert.xml",
+        # "views/rs_eligible_alert.xml",
         "views/withholding_rule_views.xml",
         "views/account_payment_register_views.xml",
     ],

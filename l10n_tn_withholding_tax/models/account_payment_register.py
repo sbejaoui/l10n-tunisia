@@ -1,7 +1,8 @@
 # Copyright 2026 Sobware
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError
 
 
 class AccountPaymentRegister(models.TransientModel):
@@ -39,3 +40,13 @@ class AccountPaymentRegister(models.TransientModel):
                 record.withholding_tax_alert = message
             else:
                 record.withholding_tax_alert = False
+
+    @api.onchange("journal_id")
+    def _check_withholding_tax_already_paid(self):
+        if not self.journal_id.is_withholding_tax_journal:
+            return
+
+        payments = self.line_ids.move_id.matched_payment_ids
+
+        if any(payment.journal_id == self.journal_id for payment in payments):
+            raise UserError(_("This withholding tax has already been paid."))

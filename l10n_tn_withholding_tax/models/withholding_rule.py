@@ -23,6 +23,10 @@ class WithholdingRule(models.Model):
         for invoice in invoices:
             for line in invoice.invoice_line_ids:
                 rule = self.search([("product_id", "=", line.product_id.id)], limit=1)
-                if rule and not invoice.is_withholding_tax_rule_applied(rule):
+                if (
+                    rule
+                    and not invoice.is_withholding_tax_rule_applied(rule)
+                    and invoice.amount_total >= rule.amount
+                ):
                     applicable_rules |= rule
         return applicable_rules
