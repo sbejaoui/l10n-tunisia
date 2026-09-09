@@ -5,8 +5,12 @@
         <field name="model">account.payment.register</field>
         <field name="inherit_id" ref="account.view_account_payment_register_form" />
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='journal_id']" position="before">
-                <div class="alert alert-info" role="alert">
+            <xpath expr="//group[@name='group1']/.." position="before">
+                <div
+                    class="alert alert-info"
+                    role="alert"
+                    invisible="not withholding_tax_alert"
+                >
                     <field name="withholding_tax_alert" readonly="1" nolabel="1" />
                 </div>
             </xpath>

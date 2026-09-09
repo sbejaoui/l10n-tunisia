@@ -31,5 +31,11 @@ class AccountMove(models.Model):
                     rs_paid = True
             move.is_rs_paid = rs_paid
 
-    # def is_withholding_tax_rule_applied(self, rule):
-    # check payments journals same as rule withholding journal
+    def is_withholding_tax_rule_applied(self, rule):
+        self.ensure_one()
+
+        for payment in self.matched_payment_ids:
+            if payment.journal_id == rule.withholding_journal_id:
+                return True
+
+        return False
