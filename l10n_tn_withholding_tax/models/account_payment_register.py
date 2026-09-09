@@ -3,6 +3,7 @@
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
+from odoo.tools.misc import formatLang
 
 
 class AccountPaymentRegister(models.TransientModel):
@@ -19,23 +20,31 @@ class AccountPaymentRegister(models.TransientModel):
         else:
             withholding_amount = 0.0
 
-    # @api.depends("line_ids")
-    # def _compute_withholding_tax_alert(self):
-    #     for record in self:
-    #         record.withholding_tax_alert = "TEST MESSAGE"
+    def _get_withholding_amount(self, journal):
+        self.ensure_one()
+        if not journal.is_withholding_tax_journal:
+            return 0.0
+        total = sum(self.line_ids.move_id.mapped("amount_total"))
+        return total * journal.withholding_tax_rate
 
     @api.depends("line_ids")
     def _compute_withholding_tax_alert(self):
         for record in self:
             invoices = record.line_ids.move_id
+            currency = invoices.currency_id
             rules = self.env["l10n.tn.withholding.rule"]._get_applicable_rules(invoices)
 
             if rules:
                 message = "Applicable withholding rules:\n"
                 for rule in rules:
+                    amount = record._get_withholding_amount(rule.withholding_journal_id)
+                    formatted_price = formatLang(
+                        self.env, amount, currency_obj=currency
+                    )
                     message += (
                         f"- {rule.product_id.name}:"
-                        + f"{rule.withholding_journal_id.name}\n"
+                        + f" {rule.withholding_journal_id.name}"
+                        + f" ({formatted_price})\n"
                     )
                 record.withholding_tax_alert = message
             else:
