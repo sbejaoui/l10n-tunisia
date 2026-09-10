@@ -3,7 +3,6 @@
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
-from odoo.tools.misc import formatLang
 
 
 class AccountPaymentRegister(models.TransientModel):
@@ -20,22 +19,6 @@ class AccountPaymentRegister(models.TransientModel):
         else:
             withholding_amount = 0.0
 
-    def _get_withholding_amount(self, journal):
-        self.ensure_one()
-        if not journal.is_withholding_tax_journal:
-            return 0.0
-        total = sum(self.line_ids.move_id.mapped("amount_total"))
-        return total * journal.withholding_tax_rate
-
-    def _get_withholding_alert_message(self, rule, currency):
-        amount = self._get_withholding_amount(rule.withholding_journal_id)
-        formatted_price = formatLang(self.env, amount, currency_obj=currency)
-        return (
-            f"- {rule.product_id.name}:"
-            + f" {rule.withholding_journal_id.name}"
-            + f" ({formatted_price})\n"
-        )
-
     @api.depends("line_ids")
     def _compute_withholding_tax_alert(self):
         for record in self:
@@ -46,7 +29,8 @@ class AccountPaymentRegister(models.TransientModel):
             if rules:
                 message = "Applicable withholding rules:\n"
                 for rule in rules:
-                    message += record._get_withholding_alert_message(rule, currency)
+                    amount = rule._get_withholding_amount(invoices)
+                    message += rule._get_withholding_alert_message(amount, currency)
                 record.withholding_tax_alert = message
             else:
                 record.withholding_tax_alert = False
@@ -60,3 +44,18 @@ class AccountPaymentRegister(models.TransientModel):
 
         if any(payment.journal_id == self.journal_id for payment in payments):
             raise UserError(_("This withholding tax has already been paid."))
+
+    @api.depends("payment_type", "company_id", "can_edit_wizard")
+    def _compute_available_journal_ids(self):
+        res = super()._compute_available_journal_ids()
+        for wizard in self:
+            invoices = wizard.line_ids.move_id
+            rules = self.env["l10n.tn.withholding.rule"]._get_applicable_rules(invoices)
+            wizard.available_journal_ids = (
+                wizard.available_journal_ids.filtered(
+                    lambda j: not j.is_withholding_tax_journal
+                )
+                + rules.withholding_journal_id
+            )
+
+        return res

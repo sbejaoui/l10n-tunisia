@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import fields, models
+from odoo.tools.misc import formatLang
 
 
 class WithholdingRule(models.Model):
@@ -30,3 +31,17 @@ class WithholdingRule(models.Model):
                 ):
                     applicable_rules |= rule
         return applicable_rules
+
+    def _get_withholding_alert_message(self, amount, currency):
+        self.ensure_one()
+        formatted_price = formatLang(self.env, amount, currency_obj=currency)
+        return (
+            f"- {self.product_id.name}:"
+            + f" {self.withholding_journal_id.name}"
+            + f" ({formatted_price})\n"
+        )
+
+    def _get_withholding_amount(self, invoices):
+        self.ensure_one()
+        total = sum(invoice.amount_total for invoice in invoices)
+        return total * self.withholding_journal_id.withholding_tax_rate
