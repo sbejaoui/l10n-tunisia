@@ -27,6 +27,15 @@ class AccountPaymentRegister(models.TransientModel):
         total = sum(self.line_ids.move_id.mapped("amount_total"))
         return total * journal.withholding_tax_rate
 
+    def _get_withholding_alert_message(self, rule, currency):
+        amount = self._get_withholding_amount(rule.withholding_journal_id)
+        formatted_price = formatLang(self.env, amount, currency_obj=currency)
+        return (
+            f"- {rule.product_id.name}:"
+            + f" {rule.withholding_journal_id.name}"
+            + f" ({formatted_price})\n"
+        )
+
     @api.depends("line_ids")
     def _compute_withholding_tax_alert(self):
         for record in self:
@@ -37,15 +46,7 @@ class AccountPaymentRegister(models.TransientModel):
             if rules:
                 message = "Applicable withholding rules:\n"
                 for rule in rules:
-                    amount = record._get_withholding_amount(rule.withholding_journal_id)
-                    formatted_price = formatLang(
-                        self.env, amount, currency_obj=currency
-                    )
-                    message += (
-                        f"- {rule.product_id.name}:"
-                        + f" {rule.withholding_journal_id.name}"
-                        + f" ({formatted_price})\n"
-                    )
+                    message += record._get_withholding_alert_message(rule, currency)
                 record.withholding_tax_alert = message
             else:
                 record.withholding_tax_alert = False
