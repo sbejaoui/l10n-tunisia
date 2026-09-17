@@ -1,7 +1,8 @@
 # Copyright 2026 Sobware
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import ValidationError
 from odoo.tools.misc import formatLang
 
 
@@ -17,6 +18,7 @@ class WithholdingRule(models.Model):
     withholding_journal_id = fields.Many2one(
         comodel_name="account.journal",
         string="Withholding Tax Journal",
+        domain=[("is_withholding_tax_journal", "=", True)],
     )
 
     def _get_applicable_rules(self, invoices):
@@ -45,3 +47,11 @@ class WithholdingRule(models.Model):
         self.ensure_one()
         total = sum(invoice.amount_total for invoice in invoices)
         return total * self.withholding_journal_id.withholding_tax_rate
+
+    @api.constrains("amount")
+    def _check_amount_is_not_negative(self):
+        for rule in self:
+            if rule.amount < 0:
+                raise ValidationError(
+                    _("The minimum invoice amount cannot be negative.")
+                )

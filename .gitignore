@@ -86,3 +86,7 @@ docs/_build/
 
 # OCA rules
 !static/lib/
+
+# Docs
+withholding_multi_bill_report.md
+withholding_rules_spec.md
