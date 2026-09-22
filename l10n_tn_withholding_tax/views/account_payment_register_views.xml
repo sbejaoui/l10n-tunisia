@@ -13,6 +13,13 @@
                 >
                     <field name="withholding_tax_alert" readonly="1" nolabel="1" />
                 </div>
+                <div
+                    class="alert alert-warning"
+                    role="alert"
+                    invisible="not multiple_bills_alert"
+                >
+                    <field name="multiple_bills_alert" readonly="1" nolabel="1" />
+                </div>
             </xpath>
         </field>
     </record>
