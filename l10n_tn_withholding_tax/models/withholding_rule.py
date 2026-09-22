@@ -9,7 +9,7 @@ from odoo.tools.misc import formatLang
 class WithholdingRule(models.Model):
     _name = "l10n.tn.withholding.rule"
 
-    product_id = fields.Many2one(
+    product_id = fields.Many2many(
         comodel_name="product.product",
         string="Article",
     )
@@ -34,11 +34,13 @@ class WithholdingRule(models.Model):
                     applicable_rules |= rule
         return applicable_rules
 
-    def _get_withholding_alert_message(self, amount, currency):
+    def _get_withholding_alert_message(self, amount, currency, invoices):
         self.ensure_one()
         formatted_price = formatLang(self.env, amount, currency_obj=currency)
+        matching_products = self.product_id & invoices.invoice_line_ids.product_id
+        product_names = ", ".join(matching_products.mapped("display_name"))
         return (
-            f"- {self.product_id.name}:"
+            f"- {product_names}:"
             + f" {self.withholding_journal_id.name}"
             + f" ({formatted_price})\n"
         )

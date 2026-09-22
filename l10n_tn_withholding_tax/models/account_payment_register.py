@@ -30,7 +30,9 @@ class AccountPaymentRegister(models.TransientModel):
                 message = "Applicable withholding rules:\n"
                 for rule in rules:
                     amount = rule._get_withholding_amount(invoices)
-                    message += rule._get_withholding_alert_message(amount, currency)
+                    message += rule._get_withholding_alert_message(
+                        amount, currency, invoices
+                    )
                 record.withholding_tax_alert = message
             else:
                 record.withholding_tax_alert = False
