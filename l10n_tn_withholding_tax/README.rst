@@ -28,7 +28,27 @@ Withholding Tax
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
 
-This module adds support for Tunisian withholding tax.
+This module adds Tunisian withholding tax (*retenue à la source*)
+handling on bill payments.
+
+It does **not** create any journal or rule of its own. Instead, it lets
+you flag bank journals as withholding tax journals, each with its own
+rate, and define **Withholding Rules** that link a product to one of
+these journals.
+
+When you register a payment on a bill that contains a product with a
+rule, the payment wizard:
+
+- shows the applicable withholding taxes and the amount to withhold for
+  each one;
+- hides the withholding tax journals that do not apply to the bill;
+- fills in the withholding amount when you select one of the applicable
+  journals.
+
+The withholding amount is computed on the bill total, taxes included,
+and is recorded as a payment in the withholding tax journal. Once a
+withholding tax has been paid on a bill, it is no longer proposed for
+that bill.
 
 **Table of contents**
 
@@ -38,12 +58,57 @@ This module adds support for Tunisian withholding tax.
 Configuration
 =============
 
-No specific configuration is required for now.
+This module does not create any journal or rule. You set them up in two
+steps.
+
+**Withholding tax journals**
+
+1. Go to *Accounting > Configuration > Journals*.
+2. Create (or open) a journal of type **Bank**. Use one journal per
+   withholding tax rate.
+3. Open the **Advanced Settings** tab and, in the **Withholding Tax**
+   section, tick **Journal includes Withholding Tax**.
+4. Set the **Rate** of the withholding tax.
+
+The **Withholding Tax** section is only shown on journals of type
+**Bank**.
+
+**Withholding rules**
+
+1. Go to *Accounting > Configuration > Withholding Rules*.
+2. Create a rule and fill in:
+
+   - **Article**: the product the rule applies to.
+   - **Description**: a short explanation of the rule.
+   - **Amount**: the minimum bill total (taxes included) from which the
+     withholding applies. Use 0 to apply it to every bill. This amount
+     cannot be negative.
+   - **Withholding Tax Journal**: the journal holding the rate to apply.
+     Only journals with **Journal includes Withholding Tax** ticked can
+     be selected.
 
 Usage
 =====
 
-Use the standard Odoo accounting flows.
+Once the journals and rules are configured (see *Configuration*), the
+withholding tax is handled from the payment wizard:
+
+1. Open a posted vendor bill that contains a product with a withholding
+   rule, and click **Pay**.
+2. At the top of the wizard, a message lists the applicable withholding
+   taxes, with the journal and the amount to withhold for each one.
+3. In **Journal**, select the withholding tax journal. The **Amount** is
+   filled in automatically with the withholding amount.
+4. Click **Create Payment**.
+5. Pay the rest of the bill as usual with your bank journal.
+
+A rule applies when the bill contains its product and the bill total is
+equal to or higher than the rule's **Amount**. Withholding tax journals
+that do not match an applicable rule are not offered in the **Journal**
+field.
+
+Once the withholding tax has been paid, its journal is no longer offered
+for that bill and the rule no longer appears in the wizard.
 
 Bug Tracker
 ===========
@@ -67,6 +132,7 @@ Contributors
 ------------
 
 - Rami Brick <brickrami1@gmail.com>
+- Souheil Bejaoui <souheil.bejaoui@acsone.eu>
 
 Maintainers
 -----------

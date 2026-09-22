@@ -370,7 +370,25 @@ ul.auto-toc {
 !! source digest: sha256:e6cb16774c00895b0b9ceee052397827dd3a0f9ce9d983b226c2648a327596b1
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
 <p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Beta" src="https://img.shields.io/badge/maturity-Beta-yellow.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/licence-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/OCA/l10n-tunisia/tree/18.0/l10n_tn_withholding_tax"><img alt="OCA/l10n-tunisia" src="https://img.shields.io/badge/github-OCA%2Fl10n--tunisia-lightgray.png?logo=github" /></a> <a class="reference external image-reference" href="https://translation.odoo-community.org/projects/l10n-tunisia-18-0/l10n-tunisia-18-0-l10n_tn_withholding_tax"><img alt="Translate me on Weblate" src="https://img.shields.io/badge/weblate-Translate%20me-F47D42.png" /></a> <a class="reference external image-reference" href="https://runboat.odoo-community.org/builds?repo=OCA/l10n-tunisia&amp;target_branch=18.0"><img alt="Try me on Runboat" src="https://img.shields.io/badge/runboat-Try%20me-875A7B.png" /></a></p>
-<p>This module adds support for Tunisian withholding tax.</p>
+<p>This module adds Tunisian withholding tax (<em>retenue à la source</em>)
+handling on bill payments.</p>
+<p>It does <strong>not</strong> create any journal or rule of its own. Instead, it lets
+you flag bank journals as withholding tax journals, each with its own
+rate, and define <strong>Withholding Rules</strong> that link a product to one of
+these journals.</p>
+<p>When you register a payment on a bill that contains a product with a
+rule, the payment wizard:</p>
+<ul class="simple">
+<li>shows the applicable withholding taxes and the amount to withhold for
+each one;</li>
+<li>hides the withholding tax journals that do not apply to the bill;</li>
+<li>fills in the withholding amount when you select one of the applicable
+journals.</li>
+</ul>
+<p>The withholding amount is computed on the bill total, taxes included,
+and is recorded as a payment in the withholding tax journal. Once a
+withholding tax has been paid on a bill, it is no longer proposed for
+that bill.</p>
 <p><strong>Table of contents</strong></p>
 <div class="contents local topic" id="contents">
 <ul class="simple">
@@ -387,11 +405,55 @@ ul.auto-toc {
 </div>
 <div class="section" id="configuration">
 <h1><a class="toc-backref" href="#toc-entry-1">Configuration</a></h1>
-<p>No specific configuration is required for now.</p>
+<p>This module does not create any journal or rule. You set them up in two
+steps.</p>
+<p><strong>Withholding tax journals</strong></p>
+<ol class="arabic simple">
+<li>Go to <em>Accounting &gt; Configuration &gt; Journals</em>.</li>
+<li>Create (or open) a journal of type <strong>Bank</strong>. Use one journal per
+withholding tax rate.</li>
+<li>Open the <strong>Advanced Settings</strong> tab and, in the <strong>Withholding Tax</strong>
+section, tick <strong>Journal includes Withholding Tax</strong>.</li>
+<li>Set the <strong>Rate</strong> of the withholding tax.</li>
+</ol>
+<p>The <strong>Withholding Tax</strong> section is only shown on journals of type
+<strong>Bank</strong>.</p>
+<p><strong>Withholding rules</strong></p>
+<ol class="arabic simple">
+<li>Go to <em>Accounting &gt; Configuration &gt; Withholding Rules</em>.</li>
+<li>Create a rule and fill in:<ul>
+<li><strong>Article</strong>: the product the rule applies to.</li>
+<li><strong>Description</strong>: a short explanation of the rule.</li>
+<li><strong>Amount</strong>: the minimum bill total (taxes included) from which the
+withholding applies. Use 0 to apply it to every bill. This amount
+cannot be negative.</li>
+<li><strong>Withholding Tax Journal</strong>: the journal holding the rate to apply.
+Only journals with <strong>Journal includes Withholding Tax</strong> ticked can
+be selected.</li>
+</ul>
+</li>
+</ol>
 </div>
 <div class="section" id="usage">
 <h1><a class="toc-backref" href="#toc-entry-2">Usage</a></h1>
-<p>Use the standard Odoo accounting flows.</p>
+<p>Once the journals and rules are configured (see <em>Configuration</em>), the
+withholding tax is handled from the payment wizard:</p>
+<ol class="arabic simple">
+<li>Open a posted vendor bill that contains a product with a withholding
+rule, and click <strong>Pay</strong>.</li>
+<li>At the top of the wizard, a message lists the applicable withholding
+taxes, with the journal and the amount to withhold for each one.</li>
+<li>In <strong>Journal</strong>, select the withholding tax journal. The <strong>Amount</strong> is
+filled in automatically with the withholding amount.</li>
+<li>Click <strong>Create Payment</strong>.</li>
+<li>Pay the rest of the bill as usual with your bank journal.</li>
+</ol>
+<p>A rule applies when the bill contains its product and the bill total is
+equal to or higher than the rule’s <strong>Amount</strong>. Withholding tax journals
+that do not match an applicable rule are not offered in the <strong>Journal</strong>
+field.</p>
+<p>Once the withholding tax has been paid, its journal is no longer offered
+for that bill and the rule no longer appears in the wizard.</p>
 </div>
 <div class="section" id="bug-tracker">
 <h1><a class="toc-backref" href="#toc-entry-3">Bug Tracker</a></h1>
@@ -413,6 +475,7 @@ If you spotted it first, help us to smash it by providing a detailed and welcome
 <h2><a class="toc-backref" href="#toc-entry-6">Contributors</a></h2>
 <ul class="simple">
 <li>Rami Brick &lt;<a class="reference external" href="mailto:brickrami1&#64;gmail.com">brickrami1&#64;gmail.com</a>&gt;</li>
+<li>Souheil Bejaoui &lt;<a class="reference external" href="mailto:souheil.bejaoui&#64;acsone.eu">souheil.bejaoui&#64;acsone.eu</a>&gt;</li>
 </ul>
 </div>
 <div class="section" id="maintainers">
