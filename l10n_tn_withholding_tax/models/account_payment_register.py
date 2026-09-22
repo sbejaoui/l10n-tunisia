@@ -9,6 +9,7 @@ class AccountPaymentRegister(models.TransientModel):
     _inherit = "account.payment.register"
 
     withholding_tax_alert = fields.Text(compute="_compute_withholding_tax_alert")
+    has_multiple_bills = fields.Boolean(compute="_compute_has_multiple_bills")
     multiple_bills_alert = fields.Text(compute="_compute_multiple_bills_alert")
 
     @api.onchange("journal_id")
@@ -17,6 +18,8 @@ class AccountPaymentRegister(models.TransientModel):
             total_amount = sum(move.amount_total for move in self.line_ids.move_id)
             withholding_amount = total_amount * self.journal_id.withholding_tax_rate
             self.amount = withholding_amount
+            if self.has_multiple_bills:
+                self.group_payment = True
         else:
             withholding_amount = 0.0
 
@@ -38,12 +41,18 @@ class AccountPaymentRegister(models.TransientModel):
             else:
                 record.withholding_tax_alert = False
 
-    @api.depends("journal_id", "line_ids")
+    @api.depends("line_ids")
+    def _compute_has_multiple_bills(self):
+        for record in self:
+            record.has_multiple_bills = len(record.line_ids.move_id) > 1
+
+    @api.depends("journal_id", "has_multiple_bills")
     def _compute_multiple_bills_alert(self):
         for record in self:
-            bills = record.line_ids.move_id
-
-            if record.journal_id.is_withholding_tax_journal and len(bills) > 1:
+            if (
+                record.journal_id.is_withholding_tax_journal
+                and record.has_multiple_bills
+            ):
                 record.multiple_bills_alert = _(
                     "You are about to pay the withholding tax of multiple bills."
                 )
