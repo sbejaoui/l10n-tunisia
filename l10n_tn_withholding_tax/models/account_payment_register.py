@@ -18,8 +18,6 @@ class AccountPaymentRegister(models.TransientModel):
             total_amount = sum(move.amount_total for move in self.line_ids.move_id)
             withholding_amount = total_amount * self.journal_id.withholding_tax_rate
             self.amount = withholding_amount
-            if self.has_multiple_bills:
-                self.group_payment = True
         else:
             withholding_amount = 0.0
 
@@ -68,6 +66,33 @@ class AccountPaymentRegister(models.TransientModel):
 
         if any(payment.journal_id == self.journal_id for payment in payments):
             raise UserError(_("This withholding tax has already been paid."))
+
+    def _create_payments(self):
+        self.ensure_one()
+
+        if not (self.journal_id.is_withholding_tax_journal and self.has_multiple_bills):
+            return super()._create_payments()
+
+        payments = self.env["account.payment"]
+
+        for bill in self.line_ids.move_id:
+            payment_wizard = (
+                self.env["account.payment.register"]
+                .with_context(
+                    active_model="account.move",
+                    active_ids=[bill.id],
+                )
+                .create({})
+            )
+
+            payment_wizard.journal_id = self.journal_id
+            payment_wizard.payment_date = self.payment_date
+            payment_wizard.payment_method_line_id = self.payment_method_line_id
+            payment_wizard._calculate_withholding_amount()
+
+            payments |= payment_wizard._create_payments()
+
+        return payments
 
     @api.depends("payment_type", "company_id", "can_edit_wizard")
     def _compute_available_journal_ids(self):
