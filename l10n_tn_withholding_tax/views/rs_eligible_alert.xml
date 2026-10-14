@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 sobware
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="rs_eligible_alert" model="ir.ui.view">
+        <field name="name">account.move.form.rs_eligible_alert</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='move_type']" position="after">
+                <field name="is_rs_eligible" invisible="1" />
+                <field name="is_rs_paid" invisible="1" />
+            </xpath>
+            <xpath expr="//sheet" position="before">
+                <div
+                    class="alert alert-warning text-center mb-0"
+                    role="alert"
+                    invisible="not is_rs_eligible"
+                >
+                    Alert: This bill is eligible for Retenue à la Source (RS).
+                </div>
+                <div
+                    class="alert alert-info text-center mb-0"
+                    role="alert"
+                    invisible="not is_rs_paid"
+                >
+                    Note: The withholding tax (RS) for this bill has already been paid.
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
