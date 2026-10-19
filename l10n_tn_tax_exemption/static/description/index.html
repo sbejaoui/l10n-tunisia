@@ -377,9 +377,12 @@ for the invoice date and the customer’s commercial partner. It selects
 the attestation automatically and applies its fiscal position, which
 maps the invoice’s taxes. If the invoice date is empty, today’s date is
 used for the lookup.</p>
-<p>The attestation number and validity dates are shown on the printed
-invoice. The module does not create taxes or change tax rates itself;
-the fiscal position’s tax mappings determine the result.</p>
+<p>The module creates a 0% sales tax named <strong>Tax exonerated</strong>. The fiscal
+position’s tax mappings determine whether it is applied to invoice
+lines.</p>
+<p>When an attestation is selected, its number and start date are shown on
+the printed invoice, along with the Bon de Commande Visé number and
+date.</p>
 <p><strong>Table of contents</strong></p>
 <div class="contents local topic" id="contents">
 <ul class="simple">
@@ -396,21 +399,24 @@ the fiscal position’s tax mappings determine the result.</p>
 </div>
 <div class="section" id="configuration">
 <h1><a class="toc-backref" href="#toc-entry-1">Configuration</a></h1>
-<p>This module does not create a tax or a fiscal position. Set up the
-fiscal position and the customer’s attestation before creating an
-invoice:</p>
+<p>This module creates a 0% sales tax named <strong>Tax exonerated</strong>. It does not
+create or automatically change fiscal positions. Configure the fiscal
+position and the customer’s attestation before creating an invoice:</p>
 <ol class="arabic simple">
 <li>Go to <em>Accounting &gt; Configuration &gt; Fiscal Positions</em>. Open the
 Tunisian <strong>Exemption</strong> fiscal position, or create one for the
-company. Check that its <strong>Tax Mapping</strong> replaces the taxes used on
-invoices with the appropriate exempt taxes. The Tunisian chart
-includes a <strong>0% Exemption</strong> tax. A fiscal position needs at least one
-tax mapping to appear in the attestation’s <strong>Fiscal Position</strong> field.</li>
+company. In <strong>Tax Mapping</strong>, set <strong>Tax exonerated</strong> as the tax to
+apply for each sales tax covered by the exemption. A fiscal position
+needs at least one tax mapping to appear in the attestation’s
+<strong>Fiscal Position</strong> field.</li>
+<li>If you also use the <strong>Export</strong> fiscal position and want it to apply
+<strong>Tax exonerated</strong>, update its sales tax mappings in the same way.</li>
 <li>Go to <em>Contacts</em> and open the customer’s commercial partner. If
 invoices use a child contact, configure its parent company.</li>
 <li>On the <strong>Invoicing</strong> tab, under <strong>Tax Exemptions</strong>, add the
 <strong>Attestation</strong> number, <strong>Start Date</strong>, <strong>End Date</strong>, and <strong>Fiscal
-Position</strong>. Both dates are included in the validity period.</li>
+Position</strong>, and attach the <strong>Tax Exemption File</strong>. Both dates are
+included in the validity period.</li>
 </ol>
 <p>Avoid overlapping validity periods for the same partner: when more than
 one attestation matches, the module selects only one of them.</p>
@@ -426,16 +432,20 @@ Odoo can apply that fiscal position even without an attestation.</p>
 <li>Create a customer invoice for the partner and set an <strong>Invoice Date</strong>
 within the attestation’s validity period.</li>
 <li>On the <strong>Other Info</strong> tab, check that <strong>Tax Exemption</strong> shows the
-attestation and <strong>Fiscal Position</strong> shows its fiscal position.</li>
-<li>Add the invoice lines and check their taxes. If the fiscal position
-changes after lines have been added, use <strong>Update Taxes and
-Accounts</strong> and check the taxes again before posting.</li>
-<li>Preview or print the invoice to see the attestation number and
-validity dates.</li>
+attestation and <strong>Fiscal Position</strong> shows its fiscal position. Enter
+the <strong>Bon de Commande Visé</strong> number and date, and attach its file if
+available.</li>
+<li>Add the invoice lines and check their taxes. For sales taxes mapped
+to <strong>Tax exonerated</strong>, the lines should show that 0% tax. If the
+fiscal position changes after lines have been added, use <strong>Update
+Taxes and Accounts</strong> and check the taxes again before posting.</li>
+<li>Preview or print the invoice to see the attestation number and start
+date, along with the Bon de Commande Visé number and date.</li>
 </ol>
 <p>The lookup uses the commercial partner, so an invoice addressed to a
 child contact can use an attestation configured on its parent company.
-If no attestation matches, the <strong>Tax Exemption</strong> field stays empty.</p>
+If no attestation matches, the <strong>Tax Exemption</strong> field stays empty.
+Check the fiscal position and invoice-line taxes before posting.</p>
 </div>
 <div class="section" id="bug-tracker">
 <h1><a class="toc-backref" href="#toc-entry-3">Bug Tracker</a></h1>
