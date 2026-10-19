@@ -12,6 +12,14 @@
                 position="after"
             >
                 <field name="l10n_tn_tax_exemption_id" />
+                <field name="l10n_tn_bon_de_commande_vise" />
+                <field name="l10n_tn_bon_de_commande_vise_date" />
+                <field name="l10n_tn_bon_de_commande_vise_filename" invisible="1" />
+                <field
+                    name="l10n_tn_bon_de_commande_vise_file"
+                    widget="binary"
+                    filename="l10n_tn_bon_de_commande_vise_filename"
+                />
             </xpath>
         </field>
     </record>

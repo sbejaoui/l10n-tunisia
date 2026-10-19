@@ -28,7 +28,18 @@ Tax Exemption for Tunisia
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
 
+This module records Tunisian tax exemption attestations on partners. An
+attestation has a number, a validity period, and a fiscal position.
 
+When an invoice is created, the module looks for an attestation valid
+for the invoice date and the customer's commercial partner. It selects
+the attestation automatically and applies its fiscal position, which
+maps the invoice's taxes. If the invoice date is empty, today's date is
+used for the lookup.
+
+The attestation number and validity dates are shown on the printed
+invoice. The module does not create taxes or change tax rates itself;
+the fiscal position's tax mappings determine the result.
 
 **Table of contents**
 
@@ -38,12 +49,48 @@ Tax Exemption for Tunisia
 Configuration
 =============
 
+This module does not create a tax or a fiscal position. Set up the
+fiscal position and the customer's attestation before creating an
+invoice:
 
+1. Go to *Accounting > Configuration > Fiscal Positions*. Open the
+   Tunisian **Exemption** fiscal position, or create one for the
+   company. Check that its **Tax Mapping** replaces the taxes used on
+   invoices with the appropriate exempt taxes. The Tunisian chart
+   includes a **0% Exemption** tax. A fiscal position needs at least one
+   tax mapping to appear in the attestation's **Fiscal Position** field.
+2. Go to *Contacts* and open the customer's commercial partner. If
+   invoices use a child contact, configure its parent company.
+3. On the **Invoicing** tab, under **Tax Exemptions**, add the
+   **Attestation** number, **Start Date**, **End Date**, and **Fiscal
+   Position**. Both dates are included in the validity period.
+
+Avoid overlapping validity periods for the same partner: when more than
+one attestation matches, the module selects only one of them.
+
+If exemption must require a valid attestation, check that **Detect
+Automatically** is disabled on the exemption fiscal position. Otherwise,
+Odoo can apply that fiscal position even without an attestation.
 
 Usage
 =====
 
+Once the attestation and its fiscal position are configured (see
+*Configuration*), the attestation is selected automatically:
 
+1. Create a customer invoice for the partner and set an **Invoice Date**
+   within the attestation's validity period.
+2. On the **Other Info** tab, check that **Tax Exemption** shows the
+   attestation and **Fiscal Position** shows its fiscal position.
+3. Add the invoice lines and check their taxes. If the fiscal position
+   changes after lines have been added, use **Update Taxes and
+   Accounts** and check the taxes again before posting.
+4. Preview or print the invoice to see the attestation number and
+   validity dates.
+
+The lookup uses the commercial partner, so an invoice addressed to a
+child contact can use an attestation configured on its parent company.
+If no attestation matches, the **Tax Exemption** field stays empty.
 
 Bug Tracker
 ===========
