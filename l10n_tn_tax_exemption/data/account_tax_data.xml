@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 sobware
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo noupdate="1">
+    <record id="l10n_tn_tax_exemption" model="account.tax">
+        <field name="name">Tax exonerated</field>
+        <field name="description">Tax 0% Exemption</field>
+        <field name="invoice_label">0%</field>
+        <field name="amount_type">percent</field>
+        <field name="amount">0.0</field>
+        <field name="type_tax_use">sale</field>
+    </record>
+</odoo>

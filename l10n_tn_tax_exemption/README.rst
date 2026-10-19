@@ -37,9 +37,13 @@ the attestation automatically and applies its fiscal position, which
 maps the invoice's taxes. If the invoice date is empty, today's date is
 used for the lookup.
 
-The attestation number and validity dates are shown on the printed
-invoice. The module does not create taxes or change tax rates itself;
-the fiscal position's tax mappings determine the result.
+The module creates a 0% sales tax named **Tax exonerated**. The fiscal
+position's tax mappings determine whether it is applied to invoice
+lines.
+
+When an attestation is selected, its number and start date are shown on
+the printed invoice, along with the Bon de Commande Visé number and
+date.
 
 **Table of contents**
 
@@ -49,21 +53,24 @@ the fiscal position's tax mappings determine the result.
 Configuration
 =============
 
-This module does not create a tax or a fiscal position. Set up the
-fiscal position and the customer's attestation before creating an
-invoice:
+This module creates a 0% sales tax named **Tax exonerated**. It does not
+create or automatically change fiscal positions. Configure the fiscal
+position and the customer's attestation before creating an invoice:
 
 1. Go to *Accounting > Configuration > Fiscal Positions*. Open the
    Tunisian **Exemption** fiscal position, or create one for the
-   company. Check that its **Tax Mapping** replaces the taxes used on
-   invoices with the appropriate exempt taxes. The Tunisian chart
-   includes a **0% Exemption** tax. A fiscal position needs at least one
-   tax mapping to appear in the attestation's **Fiscal Position** field.
-2. Go to *Contacts* and open the customer's commercial partner. If
+   company. In **Tax Mapping**, set **Tax exonerated** as the tax to
+   apply for each sales tax covered by the exemption. A fiscal position
+   needs at least one tax mapping to appear in the attestation's
+   **Fiscal Position** field.
+2. If you also use the **Export** fiscal position and want it to apply
+   **Tax exonerated**, update its sales tax mappings in the same way.
+3. Go to *Contacts* and open the customer's commercial partner. If
    invoices use a child contact, configure its parent company.
-3. On the **Invoicing** tab, under **Tax Exemptions**, add the
+4. On the **Invoicing** tab, under **Tax Exemptions**, add the
    **Attestation** number, **Start Date**, **End Date**, and **Fiscal
-   Position**. Both dates are included in the validity period.
+   Position**, and attach the **Tax Exemption File**. Both dates are
+   included in the validity period.
 
 Avoid overlapping validity periods for the same partner: when more than
 one attestation matches, the module selects only one of them.
@@ -81,16 +88,20 @@ Once the attestation and its fiscal position are configured (see
 1. Create a customer invoice for the partner and set an **Invoice Date**
    within the attestation's validity period.
 2. On the **Other Info** tab, check that **Tax Exemption** shows the
-   attestation and **Fiscal Position** shows its fiscal position.
-3. Add the invoice lines and check their taxes. If the fiscal position
-   changes after lines have been added, use **Update Taxes and
-   Accounts** and check the taxes again before posting.
-4. Preview or print the invoice to see the attestation number and
-   validity dates.
+   attestation and **Fiscal Position** shows its fiscal position. Enter
+   the **Bon de Commande Visé** number and date, and attach its file if
+   available.
+3. Add the invoice lines and check their taxes. For sales taxes mapped
+   to **Tax exonerated**, the lines should show that 0% tax. If the
+   fiscal position changes after lines have been added, use **Update
+   Taxes and Accounts** and check the taxes again before posting.
+4. Preview or print the invoice to see the attestation number and start
+   date, along with the Bon de Commande Visé number and date.
 
 The lookup uses the commercial partner, so an invoice addressed to a
 child contact can use an attestation configured on its parent company.
 If no attestation matches, the **Tax Exemption** field stays empty.
+Check the fiscal position and invoice-line taxes before posting.
 
 Bug Tracker
 ===========

@@ -20,6 +20,7 @@ class TaxExemption(models.Model):
     name = fields.Char()
     partner_id = fields.Many2one("res.partner", string="Partner")
     date_start = fields.Date(string="Start Date")
+    date_issue = fields.Date(string="Issue Date")
     date_end = fields.Date(string="End Date")
     fiscal_position_id = fields.Many2one(
         "account.fiscal.position",

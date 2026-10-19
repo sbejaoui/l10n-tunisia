@@ -7,6 +7,8 @@ the attestation automatically and applies its fiscal position, which
 maps the invoice's taxes. If the invoice date is empty, today's date is
 used for the lookup.
 
-The attestation number and validity dates are shown on the printed
-invoice. The module does not create taxes or change tax rates itself;
-the fiscal position's tax mappings determine the result.
+The module creates a 0% sales tax named **Tax exonerated**. The fiscal
+position's tax mappings determine whether it is applied to invoice lines.
+
+When an attestation is selected, its number and start date are shown on
+the printed invoice, along with the Bon de Commande Visé number and date.

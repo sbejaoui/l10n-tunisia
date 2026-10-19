@@ -19,7 +19,7 @@
                 <br />
                 • Vente en suspension de la TVA (Attestation N°: <span
                 t-field="o.l10n_tn_tax_exemption_id.name"
-            /> du <span t-field="o.l10n_tn_tax_exemption_id.date_start" />)
+            /> obtenue le <span t-field="o.l10n_tn_tax_exemption_id.date_issue" />)
                 <br />
                 • Bon de Commande Visé N°: <span
                 t-field="o.l10n_tn_bon_de_commande_vise"

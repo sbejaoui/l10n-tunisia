@@ -18,6 +18,7 @@
                             />
                             <field name="date_start" readonly="move_count &gt; 0" />
                             <field name="date_end" readonly="move_count &gt; 0" />
+                            <field name="date_issue" readonly="move_count &gt; 0" />
                             <field
                                 name="fiscal_position_id"
                                 readonly="move_count &gt; 0"
