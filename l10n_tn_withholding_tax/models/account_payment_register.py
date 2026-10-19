@@ -3,6 +3,7 @@
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
+from odoo.tools.misc import formatLang
 
 
 class AccountPaymentRegister(models.TransientModel):
@@ -32,8 +33,16 @@ class AccountPaymentRegister(models.TransientModel):
                 message = "Applicable withholding rules:\n"
                 for rule in rules:
                     amount = rule._get_withholding_amount(invoices)
+                    net_amount = rule._get_net_amount(invoices)
+                    formatted_net = formatLang(
+                        self.env, net_amount, currency_obj=currency
+                    )
                     message += rule._get_withholding_alert_message(
                         amount, currency, invoices
+                    )
+                    message += _(
+                        "  Amount after withholding: %(amount)s\n",
+                        amount=formatted_net,
                     )
                 record.withholding_tax_alert = message
             else:

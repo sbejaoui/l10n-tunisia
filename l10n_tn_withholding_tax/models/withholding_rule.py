@@ -50,6 +50,11 @@ class WithholdingRule(models.Model):
         total = sum(invoice.amount_total for invoice in invoices)
         return total * self.withholding_journal_id.withholding_tax_rate
 
+    def _get_net_amount(self, invoices):
+        self.ensure_one()
+        total = sum(invoice.amount_total for invoice in invoices)
+        return total - self._get_withholding_amount(invoices)
+
     @api.constrains("amount")
     def _check_amount_is_not_negative(self):
         for rule in self:
