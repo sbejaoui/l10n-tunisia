@@ -10,11 +10,20 @@
             <p
                 t-if="o.l10n_tn_tax_exemption_id"
                 name="l10n_tn_tax_exemption"
-                class="mb-2"
+                style="font-size: 11px; font-family: 'Courier New', monospace; color: #555555;"
             >
-                Attestation n° <span t-field="o.l10n_tn_tax_exemption_id.name" />
-                du <span t-field="o.l10n_tn_tax_exemption_id.date_start" />
-                au <span t-field="o.l10n_tn_tax_exemption_id.date_end" />
+                <span
+                class="font-weight-bold text-uppercase"
+                style="text-decoration: underline;"
+            >Mentions Légales Obligatoires (Régime Suspensif)</span>
+                <br />
+                • Vente en suspension de la TVA (Attestation N°: <span
+                t-field="o.l10n_tn_tax_exemption_id.name"
+            /> du <span t-field="o.l10n_tn_tax_exemption_id.date_start" />)
+                <br />
+                • Bon de Commande Visé N°: <span
+                t-field="o.l10n_tn_bon_de_commande_vise"
+            /> du <span t-field="o.l10n_tn_bon_de_commande_vise_date" />
             </p>
         </xpath>
     </template>

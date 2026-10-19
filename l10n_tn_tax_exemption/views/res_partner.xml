@@ -22,6 +22,15 @@
                                 name="fiscal_position_id"
                                 readonly="move_count &gt; 0"
                             />
+                            <field
+                                name="l10n_tn_tax_exemption_filename"
+                                column_invisible="True"
+                            />
+                            <field
+                                name="l10n_tn_tax_exemption_file"
+                                widget="binary"
+                                filename="l10n_tn_tax_exemption_filename"
+                            />
                             <field name="move_count" string="Used by" />
                         </list>
                     </field>

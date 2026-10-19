@@ -26,13 +26,19 @@ class TaxExemption(models.Model):
         string="Fiscal Position",
         domain=[("tax_ids", "!=", False)],
     )
+    l10n_tn_tax_exemption_file = fields.Binary(
+        string="Tax Exemption File",
+        attachment=True,
+        copy=False,
+    )
+    l10n_tn_tax_exemption_filename = fields.Char(copy=False)
     move_ids = fields.One2many(
         "account.move",
         "l10n_tn_tax_exemption_id",
         string="Invoices",
     )
     move_count = fields.Integer(
-        string="Invoices",
+        string="Invoices count",
         compute="_compute_move_count",
     )
 

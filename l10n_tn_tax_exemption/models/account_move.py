@@ -14,15 +14,25 @@ class AccountMove(models.Model):
         compute="_compute_l10n_tn_tax_exemption_id",
         store=True,
         readonly=False,
+        precompute=True,
     )
 
-    @api.depends("commercial_partner_id", "invoice_date")
+    l10n_tn_bon_de_commande_vise = fields.Char(string="Bon de Commande Visé")
+    l10n_tn_bon_de_commande_vise_date = fields.Date(string="Bon de Commande Visé Date")
+    l10n_tn_bon_de_commande_vise_file = fields.Binary(
+        string="Bon de Commande Visé File",
+        attachment=True,
+        copy=False,
+    )
+    l10n_tn_bon_de_commande_vise_filename = fields.Char(copy=False)
+
+    @api.depends("partner_id.commercial_partner_id", "invoice_date")
     def _compute_l10n_tn_tax_exemption_id(self):
         for move in self:
             date = move.invoice_date or fields.Date.context_today(move)
             move.l10n_tn_tax_exemption_id = self.env["l10n_tn.tax_exemption"].search(
                 [
-                    ("partner_id", "=", move.commercial_partner_id.id),
+                    ("partner_id", "=", move.partner_id.commercial_partner_id.id),
                     ("date_start", "<=", date),
                     ("date_end", ">=", date),
                 ],
