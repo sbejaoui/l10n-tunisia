@@ -12,6 +12,7 @@ class AccountPaymentRegister(models.TransientModel):
     withholding_tax_alert = fields.Text(compute="_compute_withholding_tax_alert")
     has_multiple_bills = fields.Boolean(compute="_compute_has_multiple_bills")
     multiple_bills_alert = fields.Text(compute="_compute_multiple_bills_alert")
+    withholding_journal_selected = fields.Boolean()
 
     @api.onchange("journal_id")
     def _calculate_withholding_amount(self):
@@ -19,8 +20,12 @@ class AccountPaymentRegister(models.TransientModel):
             total_amount = sum(move.amount_total for move in self.line_ids.move_id)
             withholding_amount = total_amount * self.journal_id.withholding_tax_rate
             self.amount = withholding_amount
-        else:
-            withholding_amount = 0.0
+            self.withholding_journal_selected = True
+        elif self.journal_id and self.withholding_journal_selected:
+            self.withholding_journal_selected = False
+            self.custom_user_amount = False
+            self.custom_user_currency_id = False
+            self._compute_amount()
 
     @api.depends("line_ids")
     def _compute_withholding_tax_alert(self):
