@@ -17,7 +17,8 @@ class AccountPaymentRegister(models.TransientModel):
     @api.onchange("journal_id")
     def _calculate_withholding_amount(self):
         if self.journal_id.is_withholding_tax_journal:
-            total_amount = sum(move.amount_total for move in self.line_ids.move_id)
+            eligible_bills = self._get_withholding_eligible_bills()
+            total_amount = sum(bill.amount_total for bill in eligible_bills)
             withholding_amount = total_amount * self.journal_id.withholding_tax_rate
             self.amount = withholding_amount
             self.withholding_journal_selected = True
@@ -37,13 +38,20 @@ class AccountPaymentRegister(models.TransientModel):
             if rules:
                 message = "Applicable withholding rules:\n"
                 for rule in rules:
-                    amount = rule._get_withholding_amount(invoices)
-                    net_amount = rule._get_net_amount(invoices)
+                    eligible_bills = invoices.filtered(
+                        lambda bill, bound_rule=rule: bound_rule
+                        in self.env["l10n.tn.withholding.rule"]._get_applicable_rules(
+                            bill
+                        )
+                    )
+
+                    amount = rule._get_withholding_amount(eligible_bills)
+                    net_amount = rule._get_net_amount(eligible_bills)
                     formatted_net = formatLang(
                         self.env, net_amount, currency_obj=currency
                     )
                     message += rule._get_withholding_alert_message(
-                        amount, currency, invoices
+                        amount, currency, eligible_bills
                     )
                     message += _(
                         "  Amount after withholding: %(amount)s\n",
@@ -89,7 +97,14 @@ class AccountPaymentRegister(models.TransientModel):
 
         payments = self.env["account.payment"]
 
-        for bill in self.line_ids.move_id:
+        eligible_bills = self._get_withholding_eligible_bills()
+
+        if not eligible_bills:
+            raise UserError(
+                _("No selected bill is eligible for this withholding journal.")
+            )
+
+        for bill in eligible_bills:
             payment_wizard = (
                 self.env["account.payment.register"]
                 .with_context(
@@ -122,3 +137,12 @@ class AccountPaymentRegister(models.TransientModel):
             )
 
         return res
+
+    def _get_withholding_eligible_bills(self):
+        self.ensure_one()
+        rules = self.env["l10n.tn.withholding.rule"]
+
+        return self.line_ids.move_id.filtered(
+            lambda bill: self.journal_id
+            in rules._get_applicable_rules(bill).withholding_journal_id
+        )
