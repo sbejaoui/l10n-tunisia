@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 sobware
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="view_partner_form_tax_exemption" model="ir.ui.view">
+        <field name="name">res.partner.form.tax.exemption</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="account.view_partner_property_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='accounting']" position="inside">
+                <group string="Tax Exemptions" name="l10n_tn_tax_exemptions">
+                    <field name="l10n_tn_tax_exemption_ids" nolabel="1">
+                        <list editable="bottom">
+                            <field
+                                name="name"
+                                string="Attestation"
+                                readonly="move_count &gt; 0"
+                            />
+                            <field name="date_start" readonly="move_count &gt; 0" />
+                            <field name="date_end" readonly="move_count &gt; 0" />
+                            <field name="date_issue" readonly="move_count &gt; 0" />
+                            <field
+                                name="fiscal_position_id"
+                                readonly="move_count &gt; 0"
+                            />
+                            <field
+                                name="l10n_tn_tax_exemption_filename"
+                                column_invisible="True"
+                            />
+                            <field
+                                name="l10n_tn_tax_exemption_file"
+                                widget="binary"
+                                filename="l10n_tn_tax_exemption_filename"
+                            />
+                            <field name="move_count" string="Used by" />
+                        </list>
+                    </field>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>
