@@ -4,7 +4,7 @@
 {
     "name": "Withholding Tax",
     "summary": "Adds Tunisian Withholding Tax handling on invoices",
-    "version": "18.0.1.0.0",
+    "version": "19.0.1.0.0",
     "countries": ["tn"],
     "category": "Accounting/Localizations/Account Charts",
     "author": "Sobware, Odoo Community Association (OCA)",
