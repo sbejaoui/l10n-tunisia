@@ -10,7 +10,7 @@
     "author": "Sobware, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-tunisia",
     "license": "AGPL-3",
-    "depends": ["account", "l10n_tn"],
+    "depends": ["account", "l10n_tn_account_base"],
     "data": [
         "views/is_stamp_tax.xml",
         "report/report_invoice_document_stamp_tax.xml",

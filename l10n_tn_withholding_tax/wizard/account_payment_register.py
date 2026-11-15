@@ -1,7 +1,7 @@
 # Copyright 2026 Sobware
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.exceptions import UserError
 from odoo.tools.misc import formatLang
 
@@ -28,7 +28,10 @@ class AccountPaymentRegister(models.TransientModel):
             self.custom_user_currency_id = False
             self._compute_amount()
 
-    @api.depends("line_ids")
+    @api.depends(
+        "line_ids",
+        "line_ids.move_id.l10n_tn_is_domestic_transaction",
+    )
     def _compute_withholding_tax_alert(self):
         for record in self:
             invoices = record.line_ids.move_id
@@ -36,7 +39,7 @@ class AccountPaymentRegister(models.TransientModel):
             rules = self.env["l10n.tn.withholding.rule"]._get_applicable_rules(invoices)
 
             if rules:
-                message = "Applicable withholding rules:\n"
+                message = self.env._("Applicable withholding rules:\n")
                 for rule in rules:
                     eligible_bills = invoices.filtered(
                         lambda bill, bound_rule=rule: bound_rule
@@ -53,7 +56,7 @@ class AccountPaymentRegister(models.TransientModel):
                     message += rule._get_withholding_alert_message(
                         amount, currency, eligible_bills
                     )
-                    message += _(
+                    message += self.env._(
                         "  Amount after withholding: %(amount)s\n",
                         amount=formatted_net,
                     )
@@ -73,7 +76,7 @@ class AccountPaymentRegister(models.TransientModel):
                 record.journal_id.is_withholding_tax_journal
                 and record.has_multiple_bills
             ):
-                record.multiple_bills_alert = _(
+                record.multiple_bills_alert = self.env._(
                     "You are about to pay the withholding tax of multiple bills."
                 )
             else:
@@ -86,24 +89,29 @@ class AccountPaymentRegister(models.TransientModel):
 
         payments = self.line_ids.move_id.matched_payment_ids
 
-        if any(payment.journal_id == self.journal_id for payment in payments):
-            raise UserError(_("This withholding tax has already been paid."))
+        if any(
+            payment.journal_id == self.journal_id
+            and payment.state in ("in_process", "paid")
+            for payment in payments
+        ):
+            raise UserError(self.env._("This withholding tax has already been paid."))
 
     def _create_payments(self):
         self.ensure_one()
 
-        if not (self.journal_id.is_withholding_tax_journal and self.has_multiple_bills):
+        if not self.journal_id.is_withholding_tax_journal:
+            return super()._create_payments()
+
+        eligible_bills = self._get_withholding_eligible_bills()
+        if not eligible_bills:
+            raise UserError(
+                self.env._("No selected bill is eligible for this withholding journal.")
+            )
+
+        if not self.has_multiple_bills:
             return super()._create_payments()
 
         payments = self.env["account.payment"]
-
-        eligible_bills = self._get_withholding_eligible_bills()
-
-        if not eligible_bills:
-            raise UserError(
-                _("No selected bill is eligible for this withholding journal.")
-            )
-
         for bill in eligible_bills:
             payment_wizard = (
                 self.env["account.payment.register"]
@@ -123,7 +131,12 @@ class AccountPaymentRegister(models.TransientModel):
 
         return payments
 
-    @api.depends("payment_type", "company_id", "can_edit_wizard")
+    @api.depends(
+        "payment_type",
+        "company_id",
+        "can_edit_wizard",
+        "line_ids.move_id.l10n_tn_is_domestic_transaction",
+    )
     def _compute_available_journal_ids(self):
         res = super()._compute_available_journal_ids()
         for wizard in self:

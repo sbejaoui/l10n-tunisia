@@ -13,7 +13,6 @@ from .common import WithholdingTaxTestCommon
 @tagged("post_install", "-at_install")
 class TestKnownWithholdingIssues(WithholdingTaxTestCommon):
     # Purpose: cancelling withholding must make the rule and journal available again.
-    @skip("Known issue: cancelled withholding payments still count as paid.")
     def test_cancelled_withholding_payment_makes_rule_available_again(self):
         bill = self._create_move(self.product_a, 2000)
         wizard = self._create_payment_wizard(bill)
