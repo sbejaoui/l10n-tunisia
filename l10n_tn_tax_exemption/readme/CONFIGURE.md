@@ -24,6 +24,10 @@ invoice:
 
 The Tunisian **Exemption** fiscal position cannot be deleted.
 
+In *Accounting > Configuration > Settings > Taxes*, set **Tax Exemption
+Reminder** for each company. The default period is 12 calendar months before
+the invoice date. Set it to 0 to disable reminders for that company.
+
 Avoid overlapping validity periods for the same partner: when more than
 one attestation matches, the module selects only one of them.
 

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 Sobware
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="account.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath
+                expr="//block[@name='default_taxes_setting_container']"
+                position="inside"
+            >
+                <setting
+                    id="l10n_tn_tax_exemption_reminder"
+                    string="Tax Exemption Reminder"
+                    company_dependent="1"
+                    help="Remind users when a customer's exemption recently expired. Set to 0 to disable reminders."
+                    invisible="country_code != 'TN'"
+                >
+                    <div class="content-group">
+                        <field
+                            name="l10n_tn_tax_exemption_reminder_months"
+                            class="oe_inline"
+                        />
+                        <span class="ms-2">months before the invoice date</span>
+                    </div>
+                </setting>
+            </xpath>
+        </field>
+    </record>
+</odoo>

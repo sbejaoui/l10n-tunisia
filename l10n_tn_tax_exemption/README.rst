@@ -85,6 +85,11 @@ attestation before creating an invoice:
 
 The Tunisian **Exemption** fiscal position cannot be deleted.
 
+In *Accounting > Configuration > Settings > Taxes*, set **Tax Exemption
+Reminder** for each company. The default period is 12 calendar months
+before the invoice date. Set it to 0 to disable reminders for that
+company.
+
 Avoid overlapping validity periods for the same partner: when more than
 one attestation matches, the module selects only one of them.
 
@@ -138,6 +143,20 @@ report. A separate warning lists missing details: attestation number or
 issue date, fiscal position, and Endorsed Purchase Order number, date,
 or attachment. These alerts are hidden outside draft state; the legal
 message remains on the printed report.
+
+The exemption fields and legal-message alerts appear only when the
+company's Tunisian **Exemption** fiscal position is selected. The
+expired-exemption reminder remains available independently of the
+selected fiscal position.
+
+If no valid exemption is selected and the customer has an exemption that
+expired within the company's reminder period before the invoice date, a
+draft-only warning asks you to check whether the customer is still
+exempt and request an updated certificate. The lookup uses the
+commercial partner and also applies to customer credit notes. An
+exemption remains valid on its end date; a certificate that expired
+exactly the configured number of months earlier still triggers the
+reminder. If the invoice date is empty, today's date is used.
 
 Bug Tracker
 ===========

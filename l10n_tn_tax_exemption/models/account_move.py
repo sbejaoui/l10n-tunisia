@@ -37,6 +37,75 @@ class AccountMove(models.Model):
         string="Missing Tax Exemption Information",
         compute="_compute_l10n_tn_tax_exemption_warnings",
     )
+    l10n_tn_tax_exemption_reminder_warning = fields.Text(
+        string="Previous Tax Exemption Reminder",
+        compute="_compute_l10n_tn_tax_exemption_reminder_warning",
+    )
+    l10n_tn_is_exemption_fiscal_position = fields.Boolean(
+        compute="_compute_l10n_tn_is_exemption_fiscal_position",
+    )
+
+    @api.depends("fiscal_position_id", "company_id")
+    def _compute_l10n_tn_is_exemption_fiscal_position(self):
+        for move in self:
+            exemption_position = (
+                self.env["account.chart.template"]
+                .with_company(move.company_id)
+                .ref("fiscal_position_template_exo", raise_if_not_found=False)
+            )
+            move.l10n_tn_is_exemption_fiscal_position = bool(
+                exemption_position and move.fiscal_position_id == exemption_position
+            )
+
+    @api.depends(
+        "state",
+        "move_type",
+        "invoice_date",
+        "partner_id",
+        "partner_id.commercial_partner_id.l10n_tn_tax_exemption_ids.date_end",
+        "partner_id.commercial_partner_id.l10n_tn_tax_exemption_ids.name",
+        "company_id.l10n_tn_tax_exemption_reminder_months",
+        "l10n_tn_tax_exemption_id.date_start",
+        "l10n_tn_tax_exemption_id.date_end",
+        "l10n_tn_is_domestic_transaction",
+    )
+    @api.depends_context("lang")
+    def _compute_l10n_tn_tax_exemption_reminder_warning(self):
+        for move in self:
+            move.l10n_tn_tax_exemption_reminder_warning = False
+            months = move.company_id.l10n_tn_tax_exemption_reminder_months
+            if (
+                move.state != "draft"
+                or not move.partner_id
+                or not move._is_tax_exemption_applicable()
+                or months <= 0
+            ):
+                continue
+            date = move.invoice_date or fields.Date.context_today(move)
+            selected = move.l10n_tn_tax_exemption_id
+            if (
+                selected.date_start
+                and selected.date_end
+                and selected.date_start <= date <= selected.date_end
+            ):
+                continue
+            expired = self.env["l10n_tn.tax_exemption"].search(
+                [
+                    ("partner_id", "=", move.partner_id.commercial_partner_id.id),
+                    ("date_end", "<", date),
+                    ("date_end", ">=", fields.Date.subtract(date, months=months)),
+                ],
+                order="date_end desc, id desc",
+                limit=1,
+            )
+            if expired:
+                move.l10n_tn_tax_exemption_reminder_warning = self.env._(
+                    "This customer was previously tax exempt. Certificate "
+                    "%(certificate)s expired on %(date)s. Please check whether "
+                    "the customer is still exempt and request an updated certificate.",
+                    certificate=expired.display_name,
+                    date=format_date(self.env, expired.date_end),
+                )
 
     @api.depends(
         "move_type",
