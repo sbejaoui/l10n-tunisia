@@ -1,7 +1,7 @@
 # Copyright 2026 Sobware
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.exceptions import UserError
 from odoo.tools.misc import formatLang
 
@@ -36,7 +36,7 @@ class AccountPaymentRegister(models.TransientModel):
             rules = self.env["l10n.tn.withholding.rule"]._get_applicable_rules(invoices)
 
             if rules:
-                message = "Applicable withholding rules:\n"
+                message = self.env._("Applicable withholding rules:\n")
                 for rule in rules:
                     eligible_bills = invoices.filtered(
                         lambda bill, bound_rule=rule: bound_rule
@@ -53,7 +53,7 @@ class AccountPaymentRegister(models.TransientModel):
                     message += rule._get_withholding_alert_message(
                         amount, currency, eligible_bills
                     )
-                    message += _(
+                    message += self.env._(
                         "  Amount after withholding: %(amount)s\n",
                         amount=formatted_net,
                     )
@@ -73,7 +73,7 @@ class AccountPaymentRegister(models.TransientModel):
                 record.journal_id.is_withholding_tax_journal
                 and record.has_multiple_bills
             ):
-                record.multiple_bills_alert = _(
+                record.multiple_bills_alert = self.env._(
                     "You are about to pay the withholding tax of multiple bills."
                 )
             else:
@@ -87,7 +87,7 @@ class AccountPaymentRegister(models.TransientModel):
         payments = self.line_ids.move_id.matched_payment_ids
 
         if any(payment.journal_id == self.journal_id for payment in payments):
-            raise UserError(_("This withholding tax has already been paid."))
+            raise UserError(self.env._("This withholding tax has already been paid."))
 
     def _create_payments(self):
         self.ensure_one()
@@ -101,7 +101,7 @@ class AccountPaymentRegister(models.TransientModel):
 
         if not eligible_bills:
             raise UserError(
-                _("No selected bill is eligible for this withholding journal.")
+                self.env._("No selected bill is eligible for this withholding journal.")
             )
 
         for bill in eligible_bills:

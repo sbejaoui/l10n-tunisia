@@ -1,3 +1,7 @@
+.. image:: https://odoo-community.org/readme-banner-image
+   :target: https://odoo-community.org/get-involved?utm_source=readme
+   :alt: Odoo Community Association
+
 ===============
 Withholding Tax
 ===============
@@ -13,17 +17,17 @@ Withholding Tax
 .. |badge1| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status
     :alt: Beta
-.. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
+.. |badge2| image:: https://img.shields.io/badge/license-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fl10n--tunisia-lightgray.png?logo=github
-    :target: https://github.com/OCA/l10n-tunisia/tree/18.0/l10n_tn_withholding_tax
+    :target: https://github.com/OCA/l10n-tunisia/tree/19.0/l10n_tn_withholding_tax
     :alt: OCA/l10n-tunisia
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/l10n-tunisia-18-0/l10n-tunisia-18-0-l10n_tn_withholding_tax
+    :target: https://translation.odoo-community.org/projects/l10n-tunisia-19-0/l10n-tunisia-19-0-l10n_tn_withholding_tax
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runboat-Try%20me-875A7B.png
-    :target: https://runboat.odoo-community.org/builds?repo=OCA/l10n-tunisia&target_branch=18.0
+    :target: https://runboat.odoo-community.org/builds?repo=OCA/l10n-tunisia&target_branch=19.0
     :alt: Try me on Runboat
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
@@ -33,11 +37,12 @@ handling on bill payments.
 
 It does **not** create any journal or rule of its own. Instead, it lets
 you flag bank journals as withholding tax journals, each with its own
-rate, and define **Withholding Rules** that link a product to one of
-these journals.
+rate, and define **Withholding Rules** that link products to one of
+these journals, or apply based only on a minimum invoice total when no
+products are selected.
 
-When you register a payment on a bill that contains a product with a
-rule, the payment wizard:
+When you register a payment on a bill with an applicable rule, the
+payment wizard:
 
 - shows the applicable withholding taxes and the amount to withhold for
   each one;
@@ -78,11 +83,12 @@ The **Withholding Tax** section is only shown on journals of type
 1. Go to *Accounting > Configuration > Withholding Rules*.
 2. Create a rule and fill in:
 
-   - **Article**: the product the rule applies to.
+   - **Article**: the products the rule applies to. Leave empty to apply
+     the rule to any invoice meeting the minimum amount.
    - **Description**: a short explanation of the rule.
    - **Amount**: the minimum bill total (taxes included) from which the
-     withholding applies. Use 0 to apply it to every bill. This amount
-     cannot be negative.
+     withholding applies. The threshold is inclusive. Use 0 for no
+     minimum. This amount cannot be negative.
    - **Withholding Tax Journal**: the journal holding the rate to apply.
      Only journals with **Journal includes Withholding Tax** ticked can
      be selected.
@@ -93,8 +99,8 @@ Usage
 Once the journals and rules are configured (see *Configuration*), the
 withholding tax is handled from the payment wizard:
 
-1. Open a posted vendor bill that contains a product with a withholding
-   rule, and click **Pay**.
+1. Open a posted vendor bill that meets a withholding rule's conditions,
+   and click **Pay**.
 2. At the top of the wizard, a message lists the applicable withholding
    taxes, with the journal and the amount to withhold for each one.
 3. In **Journal**, select the withholding tax journal. The **Amount** is
@@ -102,10 +108,12 @@ withholding tax is handled from the payment wizard:
 4. Click **Create Payment**.
 5. Pay the rest of the bill as usual with your bank journal.
 
-A rule applies when the bill contains its product and the bill total is
-equal to or higher than the rule's **Amount**. Withholding tax journals
-that do not match an applicable rule are not offered in the **Journal**
-field.
+A rule applies when the bill total is equal to or higher than the rule's
+**Amount** and, if products are selected, the bill contains one of them.
+Rules without products also apply to invoice lines without a product.
+Amount-only and matching product rules can both apply. Withholding tax
+journals that do not match an applicable rule are not offered in the
+**Journal** field.
 
 Once the withholding tax has been paid, its journal is no longer offered
 for that bill and the rule no longer appears in the wizard.
@@ -116,7 +124,7 @@ Bug Tracker
 Bugs are tracked on `GitHub Issues <https://github.com/OCA/l10n-tunisia/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/l10n-tunisia/issues/new?body=module:%20l10n_tn_withholding_tax%0Aversion:%2018.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/l10n-tunisia/issues/new?body=module:%20l10n_tn_withholding_tax%0Aversion:%2019.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -147,6 +155,6 @@ OCA, or the Odoo Community Association, is a nonprofit organization whose
 mission is to support the collaborative development of Odoo features and
 promote its widespread use.
 
-This module is part of the `OCA/l10n-tunisia <https://github.com/OCA/l10n-tunisia/tree/18.0/l10n_tn_withholding_tax>`_ project on GitHub.
+This module is part of the `OCA/l10n-tunisia <https://github.com/OCA/l10n-tunisia/tree/19.0/l10n_tn_withholding_tax>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.

@@ -1,4 +1,3 @@
 from . import account_journal
-from . import account_payment_register
 from . import account_move
-from . import withholding_rule
+from . import l10n_tn_withholding_rule

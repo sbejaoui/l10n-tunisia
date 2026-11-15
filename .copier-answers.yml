@@ -1,5 +1,5 @@
 # Do NOT update manually; changes here will be overwritten by Copier
-_commit: v1.43
+_commit: v1.49
 _src_path: https://github.com/OCA/oca-addons-repo-template.git
 additional_ruff_rules: []
 convert_readme_fragments_to_markdown: true
@@ -13,12 +13,13 @@ github_enable_stale_action: true
 github_enforce_dev_status_compatibility: true
 include_wkhtmltopdf: false
 odoo_test_flavor: Both
-odoo_version: 18.0
+odoo_version: 19.0
 org_name: Odoo Community Association (OCA)
 org_slug: OCA
 postgres_image: ''
 rebel_module_groups: []
-repo_description: ''
+repo_description: Odoo localization modules for Tunisia, including accounting, taxation,
+    and compliance with Tunisian fiscal regulations.
 repo_name: l10n-tunisia
 repo_slug: l10n-tunisia
 repo_website: https://github.com/OCA/l10n-tunisia

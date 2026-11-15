@@ -1,6 +1,7 @@
 # Copyright 2026 Sobware
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+from odoo import Command
 from odoo.exceptions import UserError
 from odoo.tests import Form
 from odoo.tests.common import tagged
@@ -79,6 +80,38 @@ class TestAccountPaymentRegisterWithholding(WithholdingTaxTestCommon):
             eligible_bill.amount_total - payments.amount,
         )
         self.assertEqual(unruled_bill.amount_residual, unruled_bill.amount_total)
+
+    def test_amount_only_rule_creates_payment_for_eligible_bill(self):
+        eligible_bill = self._create_move(self.unruled_product, 2000)
+        below_threshold_bill = self._create_move(self.unruled_product, 500)
+        self.withholding_rule.write(
+            {
+                "product_id": [Command.clear()],
+                "amount": eligible_bill.amount_total,
+                "description": "General withholding",
+            }
+        )
+        wizard = self._create_payment_wizard(eligible_bill | below_threshold_bill)
+
+        self.assertIn(self.withholding_journal, wizard.available_journal_ids)
+        self.assertIn("General withholding", wizard.withholding_tax_alert)
+        with Form(wizard) as form:
+            form.journal_id = self.withholding_journal
+            self.assertAlmostEqual(form.amount, eligible_bill.amount_total * 0.015)
+
+        payments = wizard._create_payments()
+
+        self.assertEqual(len(payments), 1)
+        self.assertAlmostEqual(payments.amount, eligible_bill.amount_total * 0.015)
+        self.assertAlmostEqual(
+            eligible_bill.amount_residual, eligible_bill.amount_total - payments.amount
+        )
+        self.assertEqual(
+            below_threshold_bill.amount_residual, below_threshold_bill.amount_total
+        )
+        next_wizard = self._create_payment_wizard(eligible_bill)
+        self.assertFalse(next_wizard.withholding_tax_alert)
+        self.assertNotIn(self.withholding_journal, next_wizard.available_journal_ids)
 
     # Purpose: a multi-bill withholding payment with no eligible bill must fail clearly.
     def test_multiple_bills_without_eligible_bill_raise_error(self):

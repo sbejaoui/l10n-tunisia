@@ -1,7 +1,7 @@
 # Copyright 2026 Sobware
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 from odoo.tools.misc import formatLang
 
@@ -12,6 +12,7 @@ class WithholdingRule(models.Model):
     product_id = fields.Many2many(
         comodel_name="product.product",
         string="Article",
+        help="Leave empty to apply the rule to any invoice meeting the minimum amount.",
     )
     description = fields.Text()
     amount = fields.Float()
@@ -24,7 +25,17 @@ class WithholdingRule(models.Model):
     def _get_applicable_rules(self, invoices):
         applicable_rules = self.env["l10n.tn.withholding.rule"]
         for invoice in invoices:
+            amount_rules = self.search(
+                [("product_id", "=", False), ("amount", "<=", invoice.amount_total)]
+            )
+            applicable_rules |= amount_rules.filtered(
+                lambda rule, bill=invoice: not bill.is_withholding_tax_rule_applied(
+                    rule
+                )
+            )
             for line in invoice.invoice_line_ids:
+                if not line.product_id:
+                    continue
                 rule = self.search([("product_id", "=", line.product_id.id)], limit=1)
                 if (
                     rule
@@ -39,6 +50,8 @@ class WithholdingRule(models.Model):
         formatted_price = formatLang(self.env, amount, currency_obj=currency)
         matching_products = self.product_id & invoices.invoice_line_ids.product_id
         product_names = ", ".join(matching_products.mapped("display_name"))
+        if not self.product_id:
+            product_names = self.description or self.env._("All invoices")
         return (
             f"- {product_names}:"
             + f" {self.withholding_journal_id.name}"
@@ -60,5 +73,5 @@ class WithholdingRule(models.Model):
         for rule in self:
             if rule.amount < 0:
                 raise ValidationError(
-                    _("The minimum invoice amount cannot be negative.")
+                    self.env._("The minimum invoice amount cannot be negative.")
                 )

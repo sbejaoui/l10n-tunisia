@@ -3,11 +3,12 @@ handling on bill payments.
 
 It does **not** create any journal or rule of its own. Instead, it lets
 you flag bank journals as withholding tax journals, each with its own
-rate, and define **Withholding Rules** that link a product to one of
-these journals.
+rate, and define **Withholding Rules** that link products to one of
+these journals, or apply based only on a minimum invoice total when
+no products are selected.
 
-When you register a payment on a bill that contains a product with a
-rule, the payment wizard:
+When you register a payment on a bill with an applicable rule, the
+payment wizard:
 
 - shows the applicable withholding taxes and the amount to withhold for
   each one;

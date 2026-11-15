@@ -1,6 +1,7 @@
 # Copyright 2026 Sobware
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+from odoo import Command
 from odoo.exceptions import ValidationError
 from odoo.tests.common import tagged
 from odoo.tools.misc import formatLang
@@ -40,6 +41,37 @@ class TestWithholdingTaxModels(WithholdingTaxTestCommon):
             self.withholding_rule._get_applicable_rules(matching_bill),
         )
         self.assertFalse(self.withholding_rule._get_applicable_rules(unruled_bill))
+
+    def test_rule_without_products_matches_minimum_amount(self):
+        bill = self._create_move(self.unruled_product, 2000)
+        self.withholding_rule.product_id = [Command.clear()]
+
+        for minimum, expected in (
+            (bill.amount_total + 1, False),
+            (bill.amount_total, True),
+            (bill.amount_total - 1, True),
+            (0, True),
+        ):
+            with self.subTest(minimum=minimum):
+                self.withholding_rule.amount = minimum
+                self.assertEqual(
+                    self.withholding_rule
+                    in self.withholding_rule._get_applicable_rules(bill),
+                    expected,
+                )
+
+    def test_rule_without_products_matches_productless_invoice_line(self):
+        bill = self._create_move(self.unruled_product, 2000)
+        bill.button_draft()
+        bill.invoice_line_ids.product_id = False
+        bill.action_post()
+        self.withholding_rule.product_id = [Command.clear()]
+        self.withholding_rule.amount = bill.amount_total
+
+        self.assertIn(
+            self.withholding_rule,
+            self.withholding_rule._get_applicable_rules(bill),
+        )
 
     # Purpose: withholding, net amount, and alert text use the full bill total.
     def test_rule_calculates_amount_net_amount_and_alert_message(self):
