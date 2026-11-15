@@ -28,7 +28,10 @@ class AccountPaymentRegister(models.TransientModel):
             self.custom_user_currency_id = False
             self._compute_amount()
 
-    @api.depends("line_ids")
+    @api.depends(
+        "line_ids",
+        "line_ids.move_id.l10n_tn_is_domestic_transaction",
+    )
     def _compute_withholding_tax_alert(self):
         for record in self:
             invoices = record.line_ids.move_id
@@ -96,18 +99,19 @@ class AccountPaymentRegister(models.TransientModel):
     def _create_payments(self):
         self.ensure_one()
 
-        if not (self.journal_id.is_withholding_tax_journal and self.has_multiple_bills):
+        if not self.journal_id.is_withholding_tax_journal:
             return super()._create_payments()
 
-        payments = self.env["account.payment"]
-
         eligible_bills = self._get_withholding_eligible_bills()
-
         if not eligible_bills:
             raise UserError(
                 self.env._("No selected bill is eligible for this withholding journal.")
             )
 
+        if not self.has_multiple_bills:
+            return super()._create_payments()
+
+        payments = self.env["account.payment"]
         for bill in eligible_bills:
             payment_wizard = (
                 self.env["account.payment.register"]
@@ -127,7 +131,12 @@ class AccountPaymentRegister(models.TransientModel):
 
         return payments
 
-    @api.depends("payment_type", "company_id", "can_edit_wizard")
+    @api.depends(
+        "payment_type",
+        "company_id",
+        "can_edit_wizard",
+        "line_ids.move_id.l10n_tn_is_domestic_transaction",
+    )
     def _compute_available_journal_ids(self):
         res = super()._compute_available_journal_ids()
         for wizard in self:

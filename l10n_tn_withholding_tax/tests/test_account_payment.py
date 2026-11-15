@@ -1,7 +1,7 @@
 # Copyright 2026 Sobware
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 from odoo.tests import Form
 from odoo.tests.common import tagged
 
@@ -101,7 +101,34 @@ class TestWithholdingPaymentReception(WithholdingTaxTestCommon):
 
     def test_draft_certificate_cannot_be_validated(self):
         payment = self.env["account.payment"].create(
-            {"journal_id": self.withholding_journal.id, "amount": 30}
+            {
+                "journal_id": self.withholding_journal.id,
+                "partner_id": self.partner_a.id,
+                "amount": 30,
+            }
         )
         with self.assertRaises(UserError):
             payment.action_validate_withholding()
+
+    def test_standalone_foreign_withholding_payment_is_rejected(self):
+        self.partner_a.country_id = self.env.ref("base.fr")
+        with self.assertRaises(ValidationError):
+            self.env["account.payment"].create(
+                {
+                    "journal_id": self.withholding_journal.id,
+                    "partner_id": self.partner_a.id,
+                    "amount": 30,
+                }
+            )
+
+    def test_country_change_before_posting_withholding_is_rejected(self):
+        payment = self.env["account.payment"].create(
+            {
+                "journal_id": self.withholding_journal.id,
+                "partner_id": self.partner_a.id,
+                "amount": 30,
+            }
+        )
+        self.partner_a.country_id = self.env.ref("base.fr")
+        with self.assertRaises(ValidationError):
+            payment.action_post()

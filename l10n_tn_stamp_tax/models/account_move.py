@@ -9,10 +9,7 @@ class AccountMove(models.Model):
 
     def _is_stamp_tax_applicable(self):
         self.ensure_one()
-        return (
-            self.company_id.country_id.code == "TN"
-            and self.partner_id.country_id.code == "TN"
-        )
+        return self.l10n_tn_is_domestic_transaction
 
     def _clean_stamp_tax_lines(self):
         for move in self:

@@ -2,7 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import api, fields, models
-from odoo.exceptions import AccessError, UserError
+from odoo.exceptions import AccessError, UserError, ValidationError
 
 
 class AccountPayment(models.Model):
@@ -72,6 +72,7 @@ class AccountPayment(models.Model):
                 self.env._("Only accounting users can confirm certificates.")
             )
         self.check_access("write")
+        self._check_withholding_country()
         if any(
             not payment.is_withholding_tax_payment
             or payment.state != "in_process"
@@ -95,6 +96,31 @@ class AccountPayment(models.Model):
         if withholding:
             withholding.action_validate_withholding()
         return super(AccountPayment, self - withholding).action_validate()
+
+    @api.constrains("journal_id", "company_id", "partner_id", "invoice_ids")
+    def _check_withholding_country(self):
+        for payment in self.filtered("is_withholding_tax_payment"):
+            # use the shared invoice check for standalone payments as well
+            transaction = self.env["account.move"].new(
+                {
+                    "company_id": payment.company_id.id,
+                    "partner_id": payment.partner_id.id,
+                }
+            )
+            if not transaction.l10n_tn_is_domestic_transaction or any(
+                not invoice._is_withholding_tax_applicable()
+                for invoice in payment.invoice_ids
+            ):
+                raise ValidationError(
+                    self.env._(
+                        "Tunisian withholding requires both the company and "
+                        "the invoice partner to be based in Tunisia."
+                    )
+                )
+
+    def action_post(self):
+        self._check_withholding_country()
+        return super().action_post()
 
     def write(self, vals):
         if vals.get("state") in ("draft", "canceled", "rejected"):

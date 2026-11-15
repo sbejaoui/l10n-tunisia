@@ -99,6 +99,12 @@ Usage
 Once the journals and rules are configured (see *Configuration*), the
 withholding tax is handled from the payment wizard:
 
+Withholding applies only when both the invoice company and invoice
+partner have Tunisia as their country. A missing country makes the
+document ineligible. Withholding journals and alerts are not offered for
+ineligible documents. Direct payment creation and confirmation enforce
+the same country restriction.
+
 1. Open a posted vendor bill that meets a withholding rule's conditions,
    and click **Pay**.
 2. At the top of the wizard, a message lists the applicable withholding

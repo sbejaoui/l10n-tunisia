@@ -11,6 +11,44 @@ from .common import WithholdingTaxTestCommon
 
 @tagged("post_install", "-at_install")
 class TestAccountPaymentRegisterWithholding(WithholdingTaxTestCommon):
+    def test_foreign_or_missing_partner_country_disables_withholding(self):
+        for country in (self.env.ref("base.fr"), False):
+            with self.subTest(country=country):
+                self.partner_a.country_id = country
+                bill = self._create_move(self.product_a, 2000)
+                wizard = self._create_payment_wizard(bill)
+                self.assertFalse(self.withholding_rule._get_applicable_rules(bill))
+                self.assertFalse(wizard.withholding_tax_alert)
+                self.assertNotIn(self.withholding_journal, wizard.available_journal_ids)
+                wizard.journal_id = self.withholding_journal
+                with self.assertRaises(UserError):
+                    wizard._create_payments()
+
+    def test_foreign_company_disables_withholding(self):
+        self.company_data["company"].country_id = self.env.ref("base.fr")
+        bill = self._create_move(self.product_a, 2000)
+        self.assertFalse(self.withholding_rule._get_applicable_rules(bill))
+        wizard = self._create_payment_wizard(bill)
+        self.assertNotIn(self.withholding_journal, wizard.available_journal_ids)
+        wizard.journal_id = self.withholding_journal
+        with self.assertRaises(UserError):
+            wizard._create_payments()
+
+    def test_mixed_countries_register_withholding_only_for_domestic_bill(self):
+        domestic_bill = self._create_move(self.product_a, 2000)
+        foreign_partner = self.partner_a.copy(
+            {"country_id": self.env.ref("base.fr").id}
+        )
+        foreign_bill = domestic_bill.copy({"partner_id": foreign_partner.id})
+        foreign_bill.action_post()
+        wizard = self._create_payment_wizard(domestic_bill | foreign_bill)
+        with Form(wizard) as form:
+            form.journal_id = self.withholding_journal
+        payment = wizard._create_payments()
+        self.assertEqual(len(payment), 1)
+        self.assertEqual(payment.partner_id, domestic_bill.partner_id)
+        self.assertEqual(foreign_bill.amount_residual, foreign_bill.amount_total)
+
     # Purpose: only withholding journals linked to an applicable rule are selectable.
     def test_available_journals_follow_applicable_rules(self):
         eligible_bill = self._create_move(self.product_a, 2000)

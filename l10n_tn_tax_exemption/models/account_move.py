@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import api, fields, models
+from odoo.exceptions import ValidationError
 
 
 class AccountMove(models.Model):
@@ -26,9 +27,20 @@ class AccountMove(models.Model):
     )
     l10n_tn_bon_de_commande_vise_filename = fields.Char(copy=False)
 
-    @api.depends("partner_id.commercial_partner_id", "invoice_date")
+    @api.depends(
+        "partner_id.commercial_partner_id",
+        "invoice_date",
+        "l10n_tn_is_domestic_transaction",
+        "state",
+    )
     def _compute_l10n_tn_tax_exemption_id(self):
         for move in self:
+            # keep the certificate used on a posted document for its audit trail
+            if move.state == "posted":
+                continue
+            if not move._is_tax_exemption_applicable():
+                move.l10n_tn_tax_exemption_id = False
+                continue
             date = move.invoice_date or fields.Date.context_today(move)
             move.l10n_tn_tax_exemption_id = self.env["l10n_tn.tax_exemption"].search(
                 [
@@ -39,11 +51,30 @@ class AccountMove(models.Model):
                 limit=1,
             )
 
-    @api.depends("l10n_tn_tax_exemption_id")
+    @api.depends("l10n_tn_tax_exemption_id", "l10n_tn_is_domestic_transaction")
     def _compute_fiscal_position_id(self):
-        res = super()._compute_fiscal_position_id()
-        for move in self:
+        drafts = self.filtered(lambda move: move.state != "posted")
+        res = super(AccountMove, drafts)._compute_fiscal_position_id()
+        for move in drafts:
             exemption = move.l10n_tn_tax_exemption_id
-            if exemption:
+            if exemption and move._is_tax_exemption_applicable():
                 move.fiscal_position_id = exemption.fiscal_position_id
         return res
+
+    def _is_tax_exemption_applicable(self):
+        self.ensure_one()
+        return self.l10n_tn_is_domestic_transaction
+
+    @api.constrains("l10n_tn_tax_exemption_id", "partner_id", "company_id", "state")
+    def _check_tax_exemption_country(self):
+        for move in self:
+            if (
+                move.l10n_tn_tax_exemption_id
+                and not move._is_tax_exemption_applicable()
+            ):
+                raise ValidationError(
+                    self.env._(
+                        "Tunisian tax exemption requires both the company and "
+                        "the invoice partner to be based in Tunisia."
+                    )
+                )

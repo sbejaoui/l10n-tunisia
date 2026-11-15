@@ -71,3 +71,7 @@ class AccountMove(models.Model):
                 return True
 
         return False
+
+    def _is_withholding_tax_applicable(self):
+        self.ensure_one()
+        return self.l10n_tn_is_domestic_transaction

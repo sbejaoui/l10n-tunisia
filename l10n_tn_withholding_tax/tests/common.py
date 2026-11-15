@@ -6,10 +6,31 @@ from odoo import Command
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
 
+def setup_tunisian_parties(test_class):
+    test_class.company_data["company"].country_id = test_class.env.ref("base.tn")
+    test_class.partner_a.country_id = test_class.env.ref("base.tn")
+    # keep withholding amounts independent of stamp tax when both addons are installed
+    if "l10n_tn_is_stamp_tax" in test_class.env["account.tax"]._fields:
+        test_class.env["account.tax"].create(
+            [
+                {
+                    "name": f"Neutral stamp tax {tax_type}",
+                    "amount_type": "fixed",
+                    "amount": 0,
+                    "type_tax_use": tax_type,
+                    "company_id": test_class.company_data["company"].id,
+                    "l10n_tn_is_stamp_tax": True,
+                }
+                for tax_type in ("sale", "purchase")
+            ]
+        )
+
+
 class WithholdingTaxTestCommon(AccountTestInvoicingCommon):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        setup_tunisian_parties(cls)
         cls.withholding_journal = cls.env["account.journal"].create(
             {
                 "name": "Test RS 1.5%",

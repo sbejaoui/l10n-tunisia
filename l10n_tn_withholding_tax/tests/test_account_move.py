@@ -4,12 +4,15 @@ from odoo.tests.common import tagged
 
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
+from .common import setup_tunisian_parties
+
 
 @tagged("post_install", "-at_install")
 class TestAccountMove(AccountTestInvoicingCommon):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        setup_tunisian_parties(cls)
         cls.test_journal1 = cls.env["account.journal"].create(
             {
                 "name": "RS 1.5%",

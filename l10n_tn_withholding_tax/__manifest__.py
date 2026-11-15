@@ -10,7 +10,7 @@
     "author": "Sobware, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-tunisia",
     "license": "AGPL-3",
-    "depends": ["l10n_tn"],
+    "depends": ["account", "l10n_tn_account_base"],
     "data": [
         "security/ir.model.access.csv",
         "views/account_journal_views.xml",

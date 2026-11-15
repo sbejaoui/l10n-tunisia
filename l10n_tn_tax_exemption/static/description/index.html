@@ -433,6 +433,10 @@ Odoo can apply that fiscal position even without an attestation.</p>
 <h2><a class="toc-backref" href="#toc-entry-2">Usage</a></h2>
 <p>Once the attestation and its fiscal position are configured (see
 <em>Configuration</em>), the attestation is selected automatically:</p>
+<p>Exemption applies only when both the invoice company and invoice partner
+have Tunisia as their country. A missing country makes the document
+ineligible. Exemption fields are hidden for other transactions, and
+manually assigning a certificate to an ineligible document is rejected.</p>
 <ol class="arabic simple">
 <li>Create a customer invoice for the partner and set an <strong>Invoice Date</strong>
 within the attestation’s validity period.</li>
@@ -451,6 +455,9 @@ date, along with the Bon de Commande Visé number and date.</li>
 child contact can use an attestation configured on its parent company.
 If no attestation matches, the <strong>Tax Exemption</strong> field stays empty.
 Check the fiscal position and invoice-line taxes before posting.</p>
+<p>Changing countries re-evaluates exemption on draft documents.
+Certificates and fiscal positions already recorded on posted documents
+are preserved.</p>
 </div>
 <div class="section" id="bug-tracker">
 <h2><a class="toc-backref" href="#toc-entry-3">Bug Tracker</a></h2>

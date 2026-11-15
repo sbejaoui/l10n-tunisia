@@ -25,6 +25,8 @@ class WithholdingRule(models.Model):
     def _get_applicable_rules(self, invoices):
         applicable_rules = self.env["l10n.tn.withholding.rule"]
         for invoice in invoices:
+            if not invoice._is_withholding_tax_applicable():
+                continue
             amount_rules = self.search(
                 [("product_id", "=", False), ("amount", "<=", invoice.amount_total)]
             )
