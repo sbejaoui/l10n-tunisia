@@ -377,9 +377,10 @@ ul.auto-toc {
 <p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Beta" src="https://img.shields.io/badge/maturity-Beta-yellow.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/license-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/OCA/l10n-tunisia/tree/19.0/l10n_tn_stamp_tax"><img alt="OCA/l10n-tunisia" src="https://img.shields.io/badge/github-OCA%2Fl10n--tunisia-lightgray.png?logo=github" /></a> <a class="reference external image-reference" href="https://translation.odoo-community.org/projects/l10n-tunisia-19-0/l10n-tunisia-19-0-l10n_tn_stamp_tax"><img alt="Translate me on Weblate" src="https://img.shields.io/badge/weblate-Translate%20me-F47D42.png" /></a> <a class="reference external image-reference" href="https://runboat.odoo-community.org/builds?repo=OCA/l10n-tunisia&amp;target_branch=19.0"><img alt="Try me on Runboat" src="https://img.shields.io/badge/runboat-Try%20me-875A7B.png" /></a></p>
 <p>This module adds Tunisian stamp tax (<em>droit de timbre</em>) handling on
 invoices.</p>
-<p>It does <strong>not</strong> ship any tax of its own. Instead, it adds an <strong>Is Stamp
-Tax</strong> flag on taxes: you tick it on the fixed-amount tax you use as the
-stamp tax, and the module takes care of the rest.</p>
+<p>The module automatically configures the existing sales and purchase
+stamp taxes from the Tunisian chart of accounts using the <strong>Is Stamp
+Tax</strong> flag. No duplicate taxes are created and no manual setup is
+required for a new chart.</p>
 <p>When a customer or vendor invoice is posted for a Tunisian company and a
 Tunisian partner, a stamp tax line is automatically appended if one is
 not already present. The line carries the flagged stamp tax, so the
@@ -406,28 +407,30 @@ still shows in the tax summary.</p>
 </div>
 <div class="section" id="configuration">
 <h2><a class="toc-backref" href="#toc-entry-1">Configuration</a></h2>
-<p>This module does not create any tax. You flag an existing tax as the
-stamp tax:</p>
-<ol class="arabic simple">
-<li>Go to <em>Accounting &gt; Configuration &gt; Taxes</em>.</li>
-<li>Create (or open) the tax you want to use as the stamp tax. It should
-be a <strong>fixed</strong> amount tax, with the <strong>Tax Type</strong> set to <em>Sales</em> or
-<em>Purchases</em> depending on where it applies.</li>
-<li>Open the <strong>Advanced Options</strong> tab and tick <strong>Is Stamp Tax</strong>.</li>
-<li>Repeat for the purchase stamp tax if you need one on vendor bills: a
-separate fixed tax with <strong>Tax Type</strong> <em>Purchases</em> and <strong>Is Stamp Tax</strong>
-ticked.</li>
-</ol>
-<p>Only one stamp tax per direction (sales / purchases) and per company
-should be flagged. If no flagged stamp tax matches the document being
-posted, posting raises an error asking you to configure one.</p>
-<p>Once a stamp tax is flagged, it is added automatically at posting time;
-no further configuration is required on documents.</p>
+<p>The Tunisian chart supplies fixed stamp taxes of <strong>1 TND</strong> for sales and
+purchases, in its existing stamp-duty tax group. Sales stamp duty posts
+to account <strong>437</strong> and purchase stamp duty to <strong>6654</strong>, including
+refunds. The addon enables <strong>Is Stamp Tax</strong> on both chart taxes
+automatically.</p>
+<p>Existing companies using the Tunisian chart are configured when this
+addon is installed. If a company already has a flagged stamp tax for
+sales or purchases, that selection is preserved for that direction.
+Existing tax amounts, names and posting accounts are preserved.</p>
+<p>To review or customize the configuration, go to *Accounting &gt;
+Configuration</p>
+<blockquote>
+Taxes*. Keep only one active tax flagged as <strong>Is Stamp Tax</strong> per
+company and direction. The selected tax must be a fixed-amount tax
+with the appropriate Sales or Purchases type.</blockquote>
+<p>Future chart installations receive the flags through the standard Odoo
+chart-template mechanism. If the addon was already installed before this
+feature was added, flag the chart taxes manually in <strong>Advanced
+Options</strong>.</p>
 </div>
 <div class="section" id="usage">
 <h2><a class="toc-backref" href="#toc-entry-2">Usage</a></h2>
-<p>Once a stamp tax has been flagged (see <em>Configuration</em>), it is handled
-automatically:</p>
+<p>With the chart stamp taxes configured automatically (see
+<em>Configuration</em>):</p>
 <ol class="arabic simple">
 <li>Create a customer invoice or a vendor bill as usual.</li>
 <li>Confirm (post) the document.</li>

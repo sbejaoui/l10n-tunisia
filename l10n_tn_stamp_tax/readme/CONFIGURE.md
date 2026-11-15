@@ -1,18 +1,18 @@
-This module does not create any tax. You flag an existing tax as the
-stamp tax:
+The Tunisian chart supplies fixed stamp taxes of **1 TND** for sales and
+purchases, in its existing stamp-duty tax group. Sales stamp duty posts to
+account **437** and purchase stamp duty to **6654**, including refunds.
+The addon enables **Is Stamp Tax** on both chart taxes automatically.
 
-1.  Go to *Accounting \> Configuration \> Taxes*.
-2.  Create (or open) the tax you want to use as the stamp tax. It should
-    be a **fixed** amount tax, with the **Tax Type** set to *Sales* or
-    *Purchases* depending on where it applies.
-3.  Open the **Advanced Options** tab and tick **Is Stamp Tax**.
-4.  Repeat for the purchase stamp tax if you need one on vendor bills: a
-    separate fixed tax with **Tax Type** *Purchases* and **Is Stamp
-    Tax** ticked.
+Existing companies using the Tunisian chart are configured when this addon
+is installed. If a company already has a flagged stamp tax for sales or
+purchases, that selection is preserved for that direction. Existing tax
+amounts, names and posting accounts are preserved.
 
-Only one stamp tax per direction (sales / purchases) and per company
-should be flagged. If no flagged stamp tax matches the document being
-posted, posting raises an error asking you to configure one.
+To review or customize the configuration, go to *Accounting > Configuration
+> Taxes*. Keep only one active tax flagged as **Is Stamp Tax** per company
+and direction. The selected tax must be a fixed-amount tax with the
+appropriate Sales or Purchases type.
 
-Once a stamp tax is flagged, it is added automatically at posting time;
-no further configuration is required on documents.
+Future chart installations receive the flags through the standard Odoo
+chart-template mechanism. If the addon was already installed before this
+feature was added, flag the chart taxes manually in **Advanced Options**.

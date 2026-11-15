@@ -1,5 +1,4 @@
-Once a stamp tax has been flagged (see *Configuration*), it is handled
-automatically:
+With the chart stamp taxes configured automatically (see *Configuration*):
 
 1.  Create a customer invoice or a vendor bill as usual.
 2.  Confirm (post) the document.

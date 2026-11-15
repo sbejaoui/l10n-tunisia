@@ -35,9 +35,10 @@ Stamp Tax
 This module adds Tunisian stamp tax (*droit de timbre*) handling on
 invoices.
 
-It does **not** ship any tax of its own. Instead, it adds an **Is Stamp
-Tax** flag on taxes: you tick it on the fixed-amount tax you use as the
-stamp tax, and the module takes care of the rest.
+The module automatically configures the existing sales and purchase
+stamp taxes from the Tunisian chart of accounts using the **Is Stamp
+Tax** flag. No duplicate taxes are created and no manual setup is
+required for a new chart.
 
 When a customer or vendor invoice is posted for a Tunisian company and a
 Tunisian partner, a stamp tax line is automatically appended if one is
@@ -60,30 +61,34 @@ still shows in the tax summary.
 Configuration
 =============
 
-This module does not create any tax. You flag an existing tax as the
-stamp tax:
+The Tunisian chart supplies fixed stamp taxes of **1 TND** for sales and
+purchases, in its existing stamp-duty tax group. Sales stamp duty posts
+to account **437** and purchase stamp duty to **6654**, including
+refunds. The addon enables **Is Stamp Tax** on both chart taxes
+automatically.
 
-1. Go to *Accounting > Configuration > Taxes*.
-2. Create (or open) the tax you want to use as the stamp tax. It should
-   be a **fixed** amount tax, with the **Tax Type** set to *Sales* or
-   *Purchases* depending on where it applies.
-3. Open the **Advanced Options** tab and tick **Is Stamp Tax**.
-4. Repeat for the purchase stamp tax if you need one on vendor bills: a
-   separate fixed tax with **Tax Type** *Purchases* and **Is Stamp Tax**
-   ticked.
+Existing companies using the Tunisian chart are configured when this
+addon is installed. If a company already has a flagged stamp tax for
+sales or purchases, that selection is preserved for that direction.
+Existing tax amounts, names and posting accounts are preserved.
 
-Only one stamp tax per direction (sales / purchases) and per company
-should be flagged. If no flagged stamp tax matches the document being
-posted, posting raises an error asking you to configure one.
+To review or customize the configuration, go to \*Accounting >
+Configuration
 
-Once a stamp tax is flagged, it is added automatically at posting time;
-no further configuration is required on documents.
+   Taxes\*. Keep only one active tax flagged as **Is Stamp Tax** per
+   company and direction. The selected tax must be a fixed-amount tax
+   with the appropriate Sales or Purchases type.
+
+Future chart installations receive the flags through the standard Odoo
+chart-template mechanism. If the addon was already installed before this
+feature was added, flag the chart taxes manually in **Advanced
+Options**.
 
 Usage
 =====
 
-Once a stamp tax has been flagged (see *Configuration*), it is handled
-automatically:
+With the chart stamp taxes configured automatically (see
+*Configuration*):
 
 1. Create a customer invoice or a vendor bill as usual.
 2. Confirm (post) the document.
