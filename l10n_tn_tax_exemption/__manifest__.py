@@ -16,8 +16,8 @@
         "views/res_partner.xml",
         "views/account_move.xml",
         "report/report_invoice.xml",
-        "data/account_tax_data.xml",
     ],
     "installable": True,
     "application": False,
+    "post_init_hook": "post_init_hook",
 }

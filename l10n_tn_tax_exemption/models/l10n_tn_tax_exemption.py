@@ -18,14 +18,16 @@ class TaxExemption(models.Model):
     _description = "Tax Exemption"
 
     name = fields.Char()
-    partner_id = fields.Many2one("res.partner", string="Partner")
+    partner_id = fields.Many2one("res.partner")
     date_start = fields.Date(string="Start Date")
     date_issue = fields.Date(string="Issue Date")
     date_end = fields.Date(string="End Date")
     fiscal_position_id = fields.Many2one(
         "account.fiscal.position",
-        string="Fiscal Position",
         domain=[("tax_ids", "!=", False)],
+        default=lambda self: self.env["account.chart.template"].ref(
+            "fiscal_position_template_exo", raise_if_not_found=False
+        ),
     )
     l10n_tn_tax_exemption_file = fields.Binary(
         string="Tax Exemption File",

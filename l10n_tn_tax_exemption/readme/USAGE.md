@@ -13,7 +13,7 @@ certificate to an ineligible document is rejected.
     the **Bon de Commande Visé** number and date, and attach its file if
     available.
 3.  Add the invoice lines and check their taxes. For sales taxes mapped to
-    **Tax exonerated**, the lines should show that 0% tax. If the fiscal
+    **Tax Exemption**, the lines should show that 0% tax. If the fiscal
     position changes after lines have been added, use **Update Taxes and
     Accounts** and check the taxes again before posting.
 4.  Preview or print the invoice to see the attestation number and start
@@ -22,6 +22,9 @@ certificate to an ineligible document is rejected.
 The lookup uses the commercial partner, so an invoice addressed to a
 child contact can use an attestation configured on its parent company.
 If no attestation matches, the **Tax Exemption** field stays empty.
+For Tunisian companies, the invoice uses the partner's configured fiscal
+position in that case, or clears it if the partner has none. Changing the
+partner or invoice date recalculates the attestation and fiscal position.
 Check the fiscal position and invoice-line taxes before posting.
 
 Changing countries re-evaluates exemption on draft documents. Certificates and
