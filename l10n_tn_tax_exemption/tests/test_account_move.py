@@ -3,7 +3,7 @@
 
 from odoo import Command
 from odoo.exceptions import ValidationError
-from odoo.tests.common import tagged
+from odoo.tests.common import Form, tagged
 
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
@@ -30,6 +30,15 @@ class TestTaxExemptionCountry(AccountTestInvoicingCommon):
         cls.exemption_position = cls.env["account.fiscal.position"].create(
             {"name": "Tunisian exemption", "company_id": cls.env.company.id}
         )
+        cls.exemption_tax = cls.tax_sale_a.copy(
+            {
+                "name": "Exemption test tax",
+                "amount": 0,
+                "original_tax_ids": [Command.set(cls.tax_sale_a.ids)],
+                "fiscal_position_ids": [Command.set(cls.exemption_position.ids)],
+            }
+        )
+        cls.product_a.taxes_id = cls.tax_sale_a
         cls.exemption = cls.env["l10n_tn.tax_exemption"].create(
             {
                 "name": "TN certificate",
@@ -57,6 +66,39 @@ class TestTaxExemptionCountry(AccountTestInvoicingCommon):
         invoice = self._create_invoice()
         self.assertEqual(invoice.l10n_tn_tax_exemption_id, self.exemption)
         self.assertEqual(invoice.fiscal_position_id, self.exemption_position)
+
+    def test_fiscal_position_change_updates_existing_line_taxes(self):
+        invoice = self._create_invoice(
+            l10n_tn_tax_exemption_id=False, fiscal_position_id=False
+        )
+        self.assertEqual(invoice.invoice_line_ids.tax_ids, self.tax_sale_a)
+
+        with Form(invoice) as form:
+            form.fiscal_position_id = self.exemption_position
+        self.assertEqual(invoice.invoice_line_ids.tax_ids, self.exemption_tax)
+        self.assertEqual(invoice.amount_tax, 0)
+
+        with Form(invoice) as form:
+            form.fiscal_position_id = self.env["account.fiscal.position"]
+        self.assertEqual(invoice.invoice_line_ids.tax_ids, self.tax_sale_a)
+        self.assertGreater(invoice.amount_tax, 0)
+
+    def test_partner_change_restores_and_reapplies_line_taxes(self):
+        self.partner_b.country_id = self.env.ref("base.tn")
+        self.partner_b.property_account_position_id = False
+        invoice = self._create_invoice()
+        self.assertEqual(invoice.invoice_line_ids.tax_ids, self.exemption_tax)
+
+        with Form(invoice) as form:
+            form.partner_id = self.partner_b
+        self.assertFalse(invoice.l10n_tn_tax_exemption_id)
+        self.assertFalse(invoice.fiscal_position_id)
+        self.assertEqual(invoice.invoice_line_ids.tax_ids, self.tax_sale_a)
+
+        with Form(invoice) as form:
+            form.partner_id = self.partner_a
+        self.assertEqual(invoice.l10n_tn_tax_exemption_id, self.exemption)
+        self.assertEqual(invoice.invoice_line_ids.tax_ids, self.exemption_tax)
 
     def test_foreign_or_missing_partner_country_skips_exemption(self):
         for country in (self.env.ref("base.fr"), False):

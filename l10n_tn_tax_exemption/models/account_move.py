@@ -73,6 +73,19 @@ class AccountMove(models.Model):
                 move.fiscal_position_id = partner.property_account_position_id
         return res
 
+    @api.onchange("fiscal_position_id")
+    def _onchange_fpos_id_show_update_fpos(self):
+        res = super()._onchange_fpos_id_show_update_fpos()
+        if (
+            self.state == "draft"
+            and self.company_id.chart_template == "tn"
+            and self.is_invoice(include_receipts=True)
+            and self.invoice_line_ids
+        ):
+            self.action_update_fpos_values()
+            self.show_update_fpos = False
+        return res
+
     def _is_tax_exemption_applicable(self):
         self.ensure_one()
         return self.l10n_tn_is_domestic_transaction

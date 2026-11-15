@@ -13,9 +13,9 @@ certificate to an ineligible document is rejected.
     the **Bon de Commande Visé** number and date, and attach its file if
     available.
 3.  Add the invoice lines and check their taxes. For sales taxes mapped to
-    **Tax Exemption**, the lines should show that 0% tax. If the fiscal
-    position changes after lines have been added, use **Update Taxes and
-    Accounts** and check the taxes again before posting.
+    **Tax Exemption**, the lines should show that 0% tax. On draft Tunisian
+    invoices, changing the fiscal position in the form automatically updates
+    existing line taxes and accounts. Check the taxes again before posting.
 4.  Preview or print the invoice to see the attestation number and start
     date, along with the Bon de Commande Visé number and date.
 
