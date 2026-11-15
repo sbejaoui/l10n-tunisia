@@ -377,18 +377,18 @@ ul.auto-toc {
 <p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Beta" src="https://img.shields.io/badge/maturity-Beta-yellow.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/license-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/OCA/l10n-tunisia/tree/19.0/l10n_tn_tax_exemption"><img alt="OCA/l10n-tunisia" src="https://img.shields.io/badge/github-OCA%2Fl10n--tunisia-lightgray.png?logo=github" /></a> <a class="reference external image-reference" href="https://translation.odoo-community.org/projects/l10n-tunisia-19-0/l10n-tunisia-19-0-l10n_tn_tax_exemption"><img alt="Translate me on Weblate" src="https://img.shields.io/badge/weblate-Translate%20me-F47D42.png" /></a> <a class="reference external image-reference" href="https://runboat.odoo-community.org/builds?repo=OCA/l10n-tunisia&amp;target_branch=19.0"><img alt="Try me on Runboat" src="https://img.shields.io/badge/runboat-Try%20me-875A7B.png" /></a></p>
 <p>This module records Tunisian tax exemption attestations on partners. An
 attestation has a number, a validity period, and a fiscal position.</p>
-<p>When an invoice is created, the module looks for an attestation valid
-for the invoice date and the customer’s commercial partner. It selects
-the attestation automatically and applies its fiscal position, which
-maps the invoice’s taxes. If the invoice date is empty, today’s date is
-used for the lookup.</p>
+<p>When a customer invoice or credit note is created, the module looks for
+an attestation valid for the invoice date and the customer’s commercial
+partner. It selects the attestation automatically and applies its fiscal
+position, which maps the invoice’s taxes. If the invoice date is empty,
+today’s date is used for the lookup.</p>
 <p>The module creates a 0% sales tax named <strong>Tax Exemption</strong> through the
 Tunisian chart of accounts, with a separate tax and tax group per
 company. The <strong>Exemption</strong> fiscal position maps sales taxes to <strong>Tax
 Exemption</strong>. The <strong>Export</strong> fiscal position keeps the existing <strong>0%</strong>
 sales tax.</p>
-<p>When an attestation is selected, its number and start date are shown on
-the printed invoice, along with the Bon de Commande Visé number and
+<p>When an attestation is selected, its number and issue date are shown on
+the printed invoice, along with the Endorsed Purchase Order number and
 date.</p>
 <p><strong>Table of contents</strong></p>
 <div class="contents local topic" id="contents">
@@ -424,7 +424,7 @@ mappings to the existing <strong>0%</strong> tax.</li>
 <li>Go to <em>Contacts</em> and open the customer’s commercial partner. If
 invoices use a child contact, configure its parent company.</li>
 <li>On the <strong>Invoicing</strong> tab, under <strong>Tax Exemptions</strong>, add the
-<strong>Attestation</strong> number, <strong>Start Date</strong>, and <strong>End Date</strong>, and attach
+<strong>Certificate</strong> number, <strong>Start Date</strong>, and <strong>End Date</strong>, and attach
 the <strong>Tax Exemption File</strong>. The company’s Tunisian <strong>Exemption</strong>
 fiscal position is selected by default. The <strong>Fiscal Position</strong>
 column is hidden by default and can be shown through the column
@@ -441,24 +441,26 @@ Odoo can apply that fiscal position even without an attestation.</p>
 <h2><a class="toc-backref" href="#toc-entry-2">Usage</a></h2>
 <p>Once the attestation and its fiscal position are configured (see
 <em>Configuration</em>), the attestation is selected automatically:</p>
-<p>Exemption applies only when both the invoice company and invoice partner
-have Tunisia as their country. A missing country makes the document
-ineligible. Exemption fields are hidden for other transactions, and
-manually assigning a certificate to an ineligible document is rejected.</p>
+<p>Exemption applies only to customer invoices and customer credit notes
+when both the company and partner have Tunisia as their country. Vendor
+documents, receipts, journal entries, and documents with a missing
+country are ineligible. Exemption fields are hidden for other
+transactions, and manually assigning a certificate to an ineligible
+document is rejected.</p>
 <ol class="arabic simple">
-<li>Create a customer invoice for the partner and set an <strong>Invoice Date</strong>
+<li>Create a customer invoice or credit note and set an <strong>Invoice Date</strong>
 within the attestation’s validity period.</li>
 <li>On the <strong>Other Info</strong> tab, check that <strong>Tax Exemption</strong> shows the
 attestation and <strong>Fiscal Position</strong> shows its fiscal position. Enter
-the <strong>Bon de Commande Visé</strong> number and date, and attach its file if
-available.</li>
+the <strong>Endorsed Purchase Order</strong> number and date, and attach its file
+if available.</li>
 <li>Add the invoice lines and check their taxes. For sales taxes mapped
 to <strong>Tax Exemption</strong>, the lines should show that 0% tax. On draft
 Tunisian invoices, changing the fiscal position in the form
 automatically updates existing line taxes and accounts. Check the
 taxes again before posting.</li>
-<li>Preview or print the invoice to see the attestation number and start
-date, along with the Bon de Commande Visé number and date.</li>
+<li>Preview or print the invoice to see the attestation number and issue
+date, along with the Endorsed Purchase Order number and date.</li>
 </ol>
 <p>The lookup uses the commercial partner, so an invoice addressed to a
 child contact can use an attestation configured on its parent company.
@@ -471,6 +473,12 @@ posting.</p>
 <p>Changing countries re-evaluates exemption on draft documents.
 Certificates and fiscal positions already recorded on posted documents
 are preserved.</p>
+<p>When an exemption is selected on a draft customer invoice or credit
+note, an information banner previews the legal message printed on the
+report. A separate warning lists missing details: attestation number or
+issue date, fiscal position, and Endorsed Purchase Order number, date,
+or attachment. These alerts are hidden outside draft state; the legal
+message remains on the printed report.</p>
 </div>
 <div class="section" id="bug-tracker">
 <h2><a class="toc-backref" href="#toc-entry-3">Bug Tracker</a></h2>

@@ -16,7 +16,7 @@ invoice:
 3.  Go to *Contacts* and open the customer's commercial partner. If
     invoices use a child contact, configure its parent company.
 4.  On the **Invoicing** tab, under **Tax Exemptions**, add the
-    **Attestation** number, **Start Date**, and **End Date**, and attach
+    **Certificate** number, **Start Date**, and **End Date**, and attach
     the **Tax Exemption File**. The company's Tunisian **Exemption** fiscal
     position is selected by default. The **Fiscal Position** column is
     hidden by default and can be shown through the column selector.

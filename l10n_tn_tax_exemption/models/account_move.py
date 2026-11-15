@@ -3,6 +3,7 @@
 
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
+from odoo.tools.misc import format_date
 
 
 class AccountMove(models.Model):
@@ -18,14 +19,96 @@ class AccountMove(models.Model):
         precompute=True,
     )
 
-    l10n_tn_bon_de_commande_vise = fields.Char(string="Bon de Commande Visé")
-    l10n_tn_bon_de_commande_vise_date = fields.Date(string="Bon de Commande Visé Date")
-    l10n_tn_bon_de_commande_vise_file = fields.Binary(
-        string="Bon de Commande Visé File",
+    l10n_tn_endorsed_purchase_order = fields.Char(string="Endorsed Purchase Order")
+    l10n_tn_endorsed_purchase_order_date = fields.Date(
+        string="Endorsed Purchase Order Date"
+    )
+    l10n_tn_endorsed_purchase_order_file = fields.Binary(
+        string="Endorsed Purchase Order File",
         attachment=True,
         copy=False,
     )
-    l10n_tn_bon_de_commande_vise_filename = fields.Char(copy=False)
+    l10n_tn_endorsed_purchase_order_filename = fields.Char(copy=False)
+    l10n_tn_tax_exemption_warning = fields.Text(
+        string="Tax Exemption Notice",
+        compute="_compute_l10n_tn_tax_exemption_warnings",
+    )
+    l10n_tn_tax_exemption_missing_warning = fields.Text(
+        string="Missing Tax Exemption Information",
+        compute="_compute_l10n_tn_tax_exemption_warnings",
+    )
+
+    @api.depends(
+        "move_type",
+        "state",
+        "l10n_tn_tax_exemption_id.name",
+        "l10n_tn_tax_exemption_id.date_issue",
+        "fiscal_position_id",
+        "l10n_tn_endorsed_purchase_order",
+        "l10n_tn_endorsed_purchase_order_date",
+        "l10n_tn_endorsed_purchase_order_file",
+    )
+    @api.depends_context("lang")
+    def _compute_l10n_tn_tax_exemption_warnings(self):
+        for move in self:
+            move.l10n_tn_tax_exemption_warning = False
+            move.l10n_tn_tax_exemption_missing_warning = False
+            exemption = move.l10n_tn_tax_exemption_id
+            if not exemption or not move.is_sale_document():
+                continue
+            not_provided = self.env._("Not provided")
+            message = self.env._(
+                "Mandatory Legal Notice (VAT Suspension)\n"
+                "• Sale under VAT suspension (Certificate No.: %(attestation)s "
+                "issued on %(issue_date)s)",
+                attestation=exemption.name or not_provided,
+                issue_date=(
+                    format_date(self.env, exemption.date_issue)
+                    if exemption.date_issue
+                    else not_provided
+                ),
+            )
+            if (
+                move.l10n_tn_endorsed_purchase_order
+                and move.l10n_tn_endorsed_purchase_order_date
+            ):
+                message += "\n" + self.env._(
+                    "• Endorsed Purchase Order No.: %(order)s dated %(order_date)s",
+                    order=move.l10n_tn_endorsed_purchase_order,
+                    order_date=format_date(
+                        self.env, move.l10n_tn_endorsed_purchase_order_date
+                    ),
+                )
+            move.l10n_tn_tax_exemption_warning = message
+            if move.state != "draft":
+                continue
+            missing = [
+                label
+                for value, label in (
+                    (exemption.name, self.env._("Certificate Number")),
+                    (exemption.date_issue, self.env._("Certificate Issue Date")),
+                    (move.fiscal_position_id, self.env._("Fiscal Position")),
+                    (
+                        move.l10n_tn_endorsed_purchase_order,
+                        self.env._("Endorsed Purchase Order"),
+                    ),
+                    (
+                        move.l10n_tn_endorsed_purchase_order_date,
+                        self.env._("Endorsed Purchase Order Date"),
+                    ),
+                    (
+                        move.l10n_tn_endorsed_purchase_order_file,
+                        self.env._("Endorsed Purchase Order File"),
+                    ),
+                )
+                if not value
+            ]
+            if missing:
+                move.l10n_tn_tax_exemption_missing_warning = self.env._(
+                    "Tax exemption information is incomplete. Please fill in: "
+                    "%(fields)s.",
+                    fields=", ".join(missing),
+                )
 
     @api.depends(
         "partner_id",
@@ -33,9 +116,13 @@ class AccountMove(models.Model):
         "invoice_date",
         "l10n_tn_is_domestic_transaction",
         "state",
+        "move_type",
     )
     def _compute_l10n_tn_tax_exemption_id(self):
         for move in self:
+            if not move.is_sale_document():
+                move.l10n_tn_tax_exemption_id = False
+                continue
             # keep the certificate used on a posted document for its audit trail
             if move.state == "posted":
                 continue
@@ -58,9 +145,11 @@ class AccountMove(models.Model):
         "l10n_tn_is_domestic_transaction",
     )
     def _compute_fiscal_position_id(self):
-        drafts = self.filtered(lambda move: move.state != "posted")
-        res = super(AccountMove, drafts)._compute_fiscal_position_id()
-        for move in drafts:
+        moves = self.filtered(
+            lambda move: move.state != "posted" or not move.is_sale_document()
+        )
+        res = super(AccountMove, moves)._compute_fiscal_position_id()
+        for move in moves.filtered(lambda move: move.is_sale_document()):
             exemption = move.l10n_tn_tax_exemption_id
             if (
                 exemption
@@ -79,7 +168,7 @@ class AccountMove(models.Model):
         if (
             self.state == "draft"
             and self.company_id.chart_template == "tn"
-            and self.is_invoice(include_receipts=True)
+            and self.is_sale_document()
             and self.invoice_line_ids
         ):
             self.action_update_fpos_values()
@@ -88,19 +177,21 @@ class AccountMove(models.Model):
 
     def _is_tax_exemption_applicable(self):
         self.ensure_one()
-        return self.l10n_tn_is_domestic_transaction
+        return self.is_sale_document() and self.l10n_tn_is_domestic_transaction
 
-    @api.constrains("l10n_tn_tax_exemption_id", "partner_id", "company_id", "state")
+    @api.constrains(
+        "l10n_tn_tax_exemption_id", "partner_id", "company_id", "state", "move_type"
+    )
     def _check_tax_exemption_country(self):
         for move in self:
-            if (
-                move.state != "posted"
-                and move.l10n_tn_tax_exemption_id
-                and not move._is_tax_exemption_applicable()
+            if move.l10n_tn_tax_exemption_id and (
+                not move.is_sale_document()
+                or (move.state != "posted" and not move._is_tax_exemption_applicable())
             ):
                 raise ValidationError(
                     self.env._(
-                        "Tunisian tax exemption requires both the company and "
-                        "the invoice partner to be based in Tunisia."
+                        "Tunisian tax exemption is only available on customer "
+                        "invoices and credit notes where both the company and "
+                        "the invoice partner are based in Tunisia."
                     )
                 )
