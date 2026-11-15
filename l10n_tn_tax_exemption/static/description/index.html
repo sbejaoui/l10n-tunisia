@@ -431,6 +431,9 @@ column is hidden by default and can be shown through the column
 selector. Both dates are included in the validity period.</li>
 </ol>
 <p>The Tunisian <strong>Exemption</strong> fiscal position cannot be deleted.</p>
+<p>An exemption’s start and end dates remain editable until a linked
+invoice or credit note is posted. Attempts to change them then identify
+the affected posted documents; create a new exemption instead.</p>
 <p>In <em>Accounting &gt; Configuration &gt; Settings &gt; Taxes</em>, set <strong>Tax Exemption
 Reminder</strong> for each company. The default period is 12 calendar months
 before the invoice date. Set it to 0 to disable reminders for that
@@ -466,6 +469,11 @@ taxes again before posting.</li>
 <li>Preview or print the invoice to see the attestation number and issue
 date, along with the Endorsed Purchase Order number and date.</li>
 </ol>
+<p>Posting checks that the selected exemption has both validity dates and
+covers the invoice date, including the start and end dates. If a
+certificate’s dates change and no longer cover an existing draft,
+posting is blocked. Select a valid exemption, or remove it and update
+the invoice taxes before posting.</p>
 <p>The lookup uses the commercial partner, so an invoice addressed to a
 child contact can use an attestation configured on its parent company.
 If no attestation matches, the <strong>Tax Exemption</strong> field stays empty. For

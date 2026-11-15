@@ -16,8 +16,15 @@
                                 string="Certificate"
                                 readonly="move_count &gt; 0"
                             />
-                            <field name="date_start" readonly="move_count &gt; 0" />
-                            <field name="date_end" readonly="move_count &gt; 0" />
+                            <field
+                                name="date_start"
+                                readonly="posted_move_count &gt; 0"
+                            />
+                            <field
+                                name="date_end"
+                                readonly="posted_move_count &gt; 0"
+                            />
+                            <field name="posted_move_count" column_invisible="True" />
                             <field name="date_issue" readonly="move_count &gt; 0" />
                             <field
                                 name="fiscal_position_id"

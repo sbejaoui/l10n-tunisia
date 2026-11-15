@@ -85,6 +85,10 @@ attestation before creating an invoice:
 
 The Tunisian **Exemption** fiscal position cannot be deleted.
 
+An exemption's start and end dates remain editable until a linked
+invoice or credit note is posted. Attempts to change them then identify
+the affected posted documents; create a new exemption instead.
+
 In *Accounting > Configuration > Settings > Taxes*, set **Tax Exemption
 Reminder** for each company. The default period is 12 calendar months
 before the invoice date. Set it to 0 to disable reminders for that
@@ -123,6 +127,12 @@ document is rejected.
    taxes again before posting.
 4. Preview or print the invoice to see the attestation number and issue
    date, along with the Endorsed Purchase Order number and date.
+
+Posting checks that the selected exemption has both validity dates and
+covers the invoice date, including the start and end dates. If a
+certificate's dates change and no longer cover an existing draft,
+posting is blocked. Select a valid exemption, or remove it and update
+the invoice taxes before posting.
 
 The lookup uses the commercial partner, so an invoice addressed to a
 child contact can use an attestation configured on its parent company.

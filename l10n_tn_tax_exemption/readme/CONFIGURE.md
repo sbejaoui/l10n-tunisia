@@ -24,6 +24,10 @@ invoice:
 
 The Tunisian **Exemption** fiscal position cannot be deleted.
 
+An exemption's start and end dates remain editable until a linked invoice or
+credit note is posted. Attempts to change them then identify the affected posted documents;
+create a new exemption instead.
+
 In *Accounting > Configuration > Settings > Taxes*, set **Tax Exemption
 Reminder** for each company. The default period is 12 calendar months before
 the invoice date. Set it to 0 to disable reminders for that company.

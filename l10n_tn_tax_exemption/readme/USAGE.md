@@ -20,6 +20,11 @@ certificate to an ineligible document is rejected.
 4.  Preview or print the invoice to see the attestation number and issue
     date, along with the Endorsed Purchase Order number and date.
 
+Posting checks that the selected exemption has both validity dates and covers
+the invoice date, including the start and end dates. If a certificate's dates
+change and no longer cover an existing draft, posting is blocked. Select a
+valid exemption, or remove it and update the invoice taxes before posting.
+
 The lookup uses the commercial partner, so an invoice addressed to a
 child contact can use an attestation configured on its parent company.
 If no attestation matches, the **Tax Exemption** field stays empty.

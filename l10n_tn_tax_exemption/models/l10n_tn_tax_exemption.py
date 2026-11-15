@@ -7,8 +7,6 @@ from odoo.exceptions import UserError
 PROTECTED_FIELDS = {
     "name",
     "partner_id",
-    "date_start",
-    "date_end",
     "fiscal_position_id",
 }
 
@@ -44,11 +42,18 @@ class TaxExemption(models.Model):
         string="Invoices count",
         compute="_compute_move_count",
     )
+    posted_move_count = fields.Integer(
+        string="Posted Invoices",
+        compute="_compute_move_count",
+    )
 
-    @api.depends("move_ids")
+    @api.depends("move_ids.state")
     def _compute_move_count(self):
         for exemption in self:
             exemption.move_count = len(exemption.move_ids)
+            exemption.posted_move_count = len(
+                exemption.move_ids.filtered(lambda move: move.state == "posted")
+            )
 
     def _check_not_used(self):
         for exemption in self:
@@ -63,9 +68,37 @@ class TaxExemption(models.Model):
                     )
                 )
 
+    def _check_dates_not_used_on_posted_invoices(self):
+        for exemption in self:
+            # shared certificates must stay protected across invoice access rules
+            posted = exemption.sudo().move_ids.filtered(
+                lambda move: move.state == "posted"
+            )
+            if posted:
+                raise UserError(
+                    self.env._(
+                        "Cannot change the validity dates of tax exemption "
+                        "%(exemption)s because it is used by posted invoice(s): "
+                        "%(invoices)s. Create a new tax exemption instead.",
+                        exemption=exemption.display_name,
+                        invoices=", ".join(posted.mapped("display_name")),
+                    )
+                )
+
     def write(self, vals):
         if not PROTECTED_FIELDS.isdisjoint(vals):
             self._check_not_used()
+        dates = {
+            name: fields.Date.to_date(vals[name]) or False
+            for name in ("date_start", "date_end")
+            if name in vals
+        }
+        if dates:
+            self.filtered(
+                lambda exemption: any(
+                    exemption[name] != value for name, value in dates.items()
+                )
+            )._check_dates_not_used_on_posted_invoices()
         return super().write(vals)
 
     def unlink(self):

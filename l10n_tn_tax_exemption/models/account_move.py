@@ -248,6 +248,40 @@ class AccountMove(models.Model):
         self.ensure_one()
         return self.is_sale_document() and self.l10n_tn_is_domestic_transaction
 
+    def _post(self, soft=True):
+        for move in self:
+            exemption = move.l10n_tn_tax_exemption_id
+            if move.state != "draft" or not move.is_sale_document() or not exemption:
+                continue
+            date = move.invoice_date or fields.Date.context_today(move)
+            if (
+                not exemption.date_start
+                or not exemption.date_end
+                or not exemption.date_start <= date <= exemption.date_end
+            ):
+                raise ValidationError(
+                    self.env._(
+                        "Cannot post %(invoice)s dated %(invoice_date)s: tax "
+                        "exemption %(exemption)s does not cover the invoice date "
+                        "(valid from %(start)s to %(end)s). Select a valid "
+                        "exemption, or remove it and update taxes before posting.",
+                        invoice=move.display_name,
+                        invoice_date=format_date(self.env, date),
+                        exemption=exemption.display_name,
+                        start=(
+                            format_date(self.env, exemption.date_start)
+                            if exemption.date_start
+                            else self.env._("Not provided")
+                        ),
+                        end=(
+                            format_date(self.env, exemption.date_end)
+                            if exemption.date_end
+                            else self.env._("Not provided")
+                        ),
+                    )
+                )
+        return super()._post(soft=soft)
+
     @api.constrains(
         "l10n_tn_tax_exemption_id", "partner_id", "company_id", "state", "move_type"
     )

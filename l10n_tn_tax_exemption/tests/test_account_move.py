@@ -2,8 +2,8 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import Command
-from odoo.exceptions import ValidationError
-from odoo.tests.common import Form, tagged
+from odoo.exceptions import UserError, ValidationError
+from odoo.tests import Form, tagged
 
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
@@ -66,6 +66,59 @@ class TestTaxExemptionCountry(AccountTestInvoicingCommon):
         invoice = self._create_invoice()
         self.assertEqual(invoice.l10n_tn_tax_exemption_id, self.exemption)
         self.assertEqual(invoice.fiscal_position_id, self.exemption_position)
+
+    def test_exemption_dates_can_change_when_only_used_by_drafts(self):
+        invoice = self._create_invoice(invoice_date="2024-01-15")
+        self.exemption.write({"date_start": "2024-01-10", "date_end": "2024-01-31"})
+        self.assertEqual(invoice.l10n_tn_tax_exemption_id, self.exemption)
+        invoice.action_post()
+        self.assertEqual(invoice.state, "posted")
+
+    def test_posted_invoice_protects_exemption_dates_and_is_named_in_error(self):
+        self._create_invoice()
+        posted = self._create_invoice()
+        posted.action_post()
+        for values in (
+            {"date_start": "2024-01-02"},
+            {"date_end": "2024-12-30"},
+        ):
+            with self.subTest(values=values):
+                with self.assertRaises(UserError) as error, self.env.cr.savepoint():
+                    self.exemption.write(values)
+                self.assertIn(posted.name, str(error.exception))
+                self.assertIn(self.exemption.name, str(error.exception))
+
+    def test_date_changes_invalidate_draft_exemption_at_posting(self):
+        original_dates = {
+            "date_start": self.exemption.date_start,
+            "date_end": self.exemption.date_end,
+        }
+        for move_type in ("out_invoice", "out_refund"):
+            for values in (
+                {"date_start": "2024-01-02"},
+                {"date_end": "2023-12-31"},
+                {"date_start": False},
+                {"date_end": False},
+            ):
+                with self.subTest(move_type=move_type, values=values):
+                    self.exemption.write(original_dates)
+                    invoice = self._create_invoice(move_type=move_type)
+                    self.exemption.write(values)
+                    self.assertEqual(invoice.l10n_tn_tax_exemption_id, self.exemption)
+                    with (
+                        self.assertRaisesRegex(ValidationError, "Cannot post"),
+                        self.env.cr.savepoint(),
+                    ):
+                        invoice.action_post()
+                    self.assertEqual(invoice.state, "draft")
+                    self.assertEqual(invoice.l10n_tn_tax_exemption_id, self.exemption)
+
+    def test_exemption_validity_includes_start_and_end_dates_at_posting(self):
+        for date in ("2024-01-01", "2024-12-31"):
+            with self.subTest(date=date):
+                invoice = self._create_invoice(invoice_date=date)
+                invoice.action_post()
+                self.assertEqual(invoice.state, "posted")
 
     def test_expired_exemption_reminder_uses_invoice_date(self):
         invoice = self._create_invoice(invoice_date="2025-01-01")
