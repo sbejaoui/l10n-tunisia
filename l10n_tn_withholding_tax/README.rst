@@ -86,6 +86,9 @@ The **Withholding Tax** section is only shown on journals of type
    - **Article**: the products the rule applies to. Leave empty to apply
      the rule to any invoice meeting the minimum amount.
    - **Description**: a short explanation of the rule.
+   - **Document Type**: **Customer Invoice** (``out_invoice``) or
+     **Vendor Bill** (``in_invoice``). Leave empty to apply the rule to
+     both.
    - **Amount**: the minimum bill total (taxes included) from which the
      withholding applies. The threshold is inclusive. Use 0 for no
      minimum. This amount cannot be negative.

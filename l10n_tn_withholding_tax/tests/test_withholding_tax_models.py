@@ -11,6 +11,53 @@ from .common import WithholdingTaxTestCommon
 
 @tagged("post_install", "-at_install")
 class TestWithholdingTaxModels(WithholdingTaxTestCommon):
+    def test_rule_document_type_for_product_and_amount_only_rules(self):
+        invoice = self._create_move(self.product_a, 2000, move_type="out_invoice")
+        bill = self._create_move(self.product_a, 2000, move_type="in_invoice")
+        for products in (self.product_a, self.env["product.product"]):
+            self.withholding_rule.product_id = [Command.set(products.ids)]
+            for move_type, on_invoice, on_bill in (
+                (False, True, True),
+                ("out_invoice", True, False),
+                ("in_invoice", False, True),
+            ):
+                with self.subTest(products=products.ids, move_type=move_type):
+                    self.withholding_rule.move_type = move_type
+                    self.assertEqual(
+                        self.withholding_rule
+                        in self.withholding_rule._get_applicable_rules(invoice),
+                        on_invoice,
+                    )
+                    self.assertEqual(
+                        self.withholding_rule
+                        in self.withholding_rule._get_applicable_rules(bill),
+                        on_bill,
+                    )
+                    invoice_wizard = self._create_payment_wizard(invoice)
+                    bill_wizard = self._create_payment_wizard(bill)
+                    self.assertEqual(
+                        self.withholding_journal
+                        in invoice_wizard.available_journal_ids,
+                        on_invoice,
+                    )
+                    self.assertEqual(
+                        self.withholding_journal in bill_wizard.available_journal_ids,
+                        on_bill,
+                    )
+
+    def test_product_rule_lookup_skips_other_document_types(self):
+        self.withholding_rule.move_type = "in_invoice"
+        invoice_rule = self.withholding_rule.copy(
+            {
+                "move_type": "out_invoice",
+                "withholding_journal_id": self.other_withholding_journal.id,
+            }
+        )
+        invoice = self._create_move(self.product_a, 2000, move_type="out_invoice")
+        applicable = self.withholding_rule._get_applicable_rules(invoice)
+        self.assertIn(invoice_rule, applicable)
+        self.assertNotIn(self.withholding_rule, applicable)
+
     def test_rules_and_available_journals_are_scoped_to_invoice_company(self):
         company = self.company_data["company"]
         other_company = self.setup_other_company()["company"]

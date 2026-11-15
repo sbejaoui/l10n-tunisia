@@ -9,6 +9,7 @@
             <list>
                 <field name="product_id" widget="many2many_tags" />
                 <field name="description" />
+                <field name="move_type" />
                 <field name="amount" />
                 <field name="withholding_journal_id" />
             </list>
@@ -24,6 +25,7 @@
                     <group>
                         <field name="product_id" widget="many2many_tags" />
                         <field name="description" />
+                        <field name="move_type" />
                         <field name="amount" />
                         <field name="withholding_journal_id" />
                     </group>

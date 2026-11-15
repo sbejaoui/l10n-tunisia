@@ -16,6 +16,11 @@ class WithholdingRule(models.Model):
         help="Leave empty to apply the rule to any invoice meeting the minimum amount.",
     )
     description = fields.Text()
+    move_type = fields.Selection(
+        [("out_invoice", "Customer Invoice"), ("in_invoice", "Vendor Bill")],
+        string="Document Type",
+        help="Leave empty to apply to both customer invoices and vendor bills.",
+    )
     amount = fields.Float()
     withholding_journal_id = fields.Many2one(
         comodel_name="account.journal",
@@ -34,9 +39,12 @@ class WithholdingRule(models.Model):
                     ("is_withholding_tax_journal", "=", True),
                 ]
             )
-            journal_domain = [("withholding_journal_id", "in", journals.ids)]
+            rule_domain = [
+                ("withholding_journal_id", "in", journals.ids),
+                ("move_type", "in", [False, invoice.move_type]),
+            ]
             amount_rules = self.search(
-                journal_domain
+                rule_domain
                 + [("product_id", "=", False), ("amount", "<=", invoice.amount_total)]
             )
             applicable_rules |= amount_rules.filtered(
@@ -48,7 +56,7 @@ class WithholdingRule(models.Model):
                 if not line.product_id:
                     continue
                 rule = self.search(
-                    journal_domain + [("product_id", "=", line.product_id.id)],
+                    rule_domain + [("product_id", "=", line.product_id.id)],
                     limit=1,
                 )
                 if (
