@@ -60,3 +60,8 @@ updated certificate. The lookup uses the commercial partner and also applies
 to customer credit notes. An exemption remains valid on its end date; a
 certificate that expired exactly the configured number of months earlier
 still triggers the reminder. If the invoice date is empty, today's date is used.
+
+On the printed invoice or credit note, the zero-amount exemption group appears
+as **VAT under suspension** (**TVA en suspension** in French), without a base
+amount. Stamp duty appears last in the same tax subtotal. This also applies to
+the company-currency summary; accounting taxes and totals are unchanged.
