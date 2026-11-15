@@ -23,7 +23,7 @@ class AccountMove(models.Model):
     def _post(self, soft=True):
         self._clean_stamp_tax_lines()
         self.filtered(
-            lambda move: (move.state == "draft" and move._is_stamp_tax_applicable())
+            lambda move: move.state == "draft" and move._is_stamp_tax_applicable()
         )._add_stamp_tax()
         res = super()._post(soft=soft)
         return res
@@ -39,6 +39,7 @@ class AccountMove(models.Model):
         tax_type = "sale" if self.is_sale_document() else "purchase"
         stamp_tax = self.env["account.tax"]._get_stamp_tax(tax_type, self.company_id.id)
         return {
+            "sequence": max(self.invoice_line_ids.mapped("sequence"), default=0) + 1,
             "quantity": 1.0,
             "price_unit": 0.0,
             "l10n_tn_is_stamp_tax": True,

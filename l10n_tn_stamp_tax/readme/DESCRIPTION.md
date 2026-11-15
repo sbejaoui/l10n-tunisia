@@ -1,9 +1,9 @@
 This module adds Tunisian stamp tax (*droit de timbre*) handling on
 invoices.
 
-It does **not** ship any tax of its own. Instead, it adds an **Is Stamp
-Tax** flag on taxes: you tick it on the fixed-amount tax you use as the
-stamp tax, and the module takes care of the rest.
+The module automatically configures the existing sales and purchase stamp
+taxes from the Tunisian chart of accounts using the **Is Stamp Tax** flag.
+No duplicate taxes are created and no manual setup is required for a new chart.
 
 When a customer or vendor invoice is posted for a Tunisian company and a
 Tunisian partner, a stamp tax line is automatically appended if one is

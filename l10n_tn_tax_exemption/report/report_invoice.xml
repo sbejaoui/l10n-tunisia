@@ -6,6 +6,17 @@
         id="report_invoice_document_tax_exemption"
         inherit_id="account.report_invoice_document"
     >
+        <xpath expr="//t[@t-set='forced_vat']" position="before">
+            <t
+                t-set="tn_exemption_group"
+                t-value="o.env['account.chart.template'].with_company(o.company_id).ref('tax_group_exemption', raise_if_not_found=False) if o.company_id.chart_template == 'tn' and o.is_sale_document() else False"
+            />
+            <t
+                t-set="tn_stamp_group"
+                t-value="o.env['account.chart.template'].with_company(o.company_id).ref('l10n_tn_tax_group_tf', raise_if_not_found=False) if tn_exemption_group else False"
+            />
+            <t t-set="tn_exemption_label">VAT under suspension</t>
+        </xpath>
         <xpath expr="//p[@name='note']" position="after">
             <p
                 t-if="o.move_type in ('out_invoice', 'out_refund') and o.l10n_tn_tax_exemption_warning"
@@ -20,6 +31,40 @@
                     <t t-out="message_line" />
                 </t>
             </p>
+        </xpath>
+    </template>
+    <template
+        id="invoice_tax_totals_exemption"
+        inherit_id="account.document_tax_totals"
+    >
+        <xpath expr="//t[@t-as='tax_group']" position="attributes">
+            <attribute
+                name="t-foreach"
+            >sorted(subtotal['tax_groups'], key=lambda group: group['id'] == tn_stamp_group.id) if tn_stamp_group else subtotal['tax_groups']</attribute>
+        </xpath>
+        <xpath expr="//t[@t-as='tax_group']/tr" position="before">
+            <t
+                t-if="tn_exemption_group and tax_group['id'] == tn_exemption_group.id and currency.is_zero(tax_group['tax_amount_currency'])"
+                t-set="tax_group"
+                t-value="dict(tax_group, group_name=tn_exemption_label, display_base_amount_currency=False)"
+            />
+        </xpath>
+    </template>
+    <template
+        id="invoice_tax_totals_company_currency_exemption"
+        inherit_id="account.document_tax_totals_company_currency_template"
+    >
+        <xpath expr="//t[@t-as='tax_group']" position="attributes">
+            <attribute
+                name="t-foreach"
+            >sorted(subtotal['tax_groups'], key=lambda group: group['id'] == tn_stamp_group.id) if tn_stamp_group else subtotal['tax_groups']</attribute>
+        </xpath>
+        <xpath expr="//t[@t-as='tax_group']/tr" position="before">
+            <t
+                t-if="tn_exemption_group and tax_group['id'] == tn_exemption_group.id and currency.is_zero(tax_group['tax_amount'])"
+                t-set="tax_group"
+                t-value="dict(tax_group, group_name=tn_exemption_label, display_base_amount=False)"
+            />
         </xpath>
     </template>
 </odoo>

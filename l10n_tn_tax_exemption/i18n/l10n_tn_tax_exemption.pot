@@ -358,3 +358,8 @@ msgid ""
 "Warn when a customer's exemption expired within this many months before the "
 "invoice date. Set to 0 to disable reminders."
 msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#: model_terms:ir.ui.view,arch_db:l10n_tn_tax_exemption.report_invoice_document_tax_exemption
+msgid "VAT under suspension"
+msgstr ""
