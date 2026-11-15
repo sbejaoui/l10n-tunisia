@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 Sobware
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="view_payment_form_withholding" model="ir.ui.view">
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_validate']" position="attributes">
+                <attribute
+                    name="invisible"
+                >is_withholding_tax_payment or state != 'in_process' or move_id</attribute>
+            </xpath>
+            <xpath expr="//form/header" position="inside">
+                <field name="is_withholding_tax_payment" invisible="1" />
+                <field name="withholding_reception_confirmed" invisible="1" />
+                <button
+                    name="action_validate_withholding"
+                    string="Validate Reception"
+                    type="object"
+                    class="oe_highlight"
+                    groups="account.group_account_invoice"
+                    invisible="not is_withholding_tax_payment or payment_type != 'inbound' or state != 'in_process' or withholding_reception_confirmed"
+                />
+                <button
+                    name="action_validate_withholding"
+                    string="Confirm Certificate Delivery"
+                    type="object"
+                    class="oe_highlight"
+                    groups="account.group_account_invoice"
+                    invisible="not is_withholding_tax_payment or payment_type != 'outbound' or state != 'in_process' or withholding_reception_confirmed"
+                />
+            </xpath>
+            <xpath expr="//sheet" position="inside">
+                <group
+                    string="Withholding Certificate"
+                    invisible="not is_withholding_tax_payment"
+                >
+                    <field name="withholding_reception_confirmed" />
+                    <field name="withholding_reception_date" />
+                    <field name="withholding_reception_user_id" />
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_withholding_payment_list" model="ir.ui.view">
+        <field name="model">account.payment</field>
+        <field name="arch" type="xml">
+            <list
+                create="0"
+                edit="0"
+                decoration-muted="state in ('canceled', 'rejected')"
+            >
+                <field name="date" />
+                <field name="name" />
+                <field name="partner_id" string="Partner" />
+                <field name="invoice_ids" widget="many2many_tags" optional="show" />
+                <field name="journal_id" />
+                <field name="amount" />
+                <field name="currency_id" />
+                <field
+                    name="state"
+                    widget="badge"
+                    decoration-info="state == 'draft'"
+                    decoration-warning="state == 'in_process'"
+                    decoration-success="state == 'paid'"
+                />
+                <field name="withholding_reception_confirmed" optional="hide" />
+                <field name="withholding_reception_date" optional="show" />
+                <field name="withholding_reception_user_id" optional="hide" />
+                <field
+                    name="company_id"
+                    groups="base.group_multi_company"
+                    optional="show"
+                />
+            </list>
+        </field>
+    </record>
+
+    <record id="view_withholding_payment_kanban" model="ir.ui.view">
+        <field name="model">account.payment</field>
+        <field name="arch" type="xml">
+            <kanban
+                create="0"
+                default_group_by="state"
+                group_create="0"
+                group_edit="0"
+                group_delete="0"
+                records_draggable="0"
+            >
+                <field name="currency_id" />
+                <templates>
+                    <t t-name="card">
+                        <div class="d-flex justify-content-between mb-2">
+                            <field name="partner_id" class="fw-bold" />
+                            <field name="amount" widget="monetary" />
+                        </div>
+                        <field name="name" />
+                        <field name="invoice_ids" widget="many2many_tags" />
+                        <field name="journal_id" />
+                        <footer>
+                            <field name="date" />
+                            <field name="state" widget="badge" class="ms-auto" />
+                        </footer>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_withholding_payment_search" model="ir.ui.view">
+        <field name="model">account.payment</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" />
+                <field name="partner_id" />
+                <field name="journal_id" />
+                <field name="invoice_ids" />
+                <filter
+                    name="pending"
+                    string="Awaiting Certificate"
+                    domain="[('state', '=', 'in_process')]"
+                />
+                <filter
+                    name="validated"
+                    string="Validated"
+                    domain="[('state', '=', 'paid')]"
+                />
+                <filter
+                    name="draft"
+                    string="Draft"
+                    domain="[('state', '=', 'draft')]"
+                />
+                <filter
+                    name="canceled"
+                    string="Canceled / Rejected"
+                    domain="[('state', 'in', ['canceled', 'rejected'])]"
+                />
+                <separator />
+                <filter name="payment_date" string="Payment Date" date="date" />
+                <filter
+                    name="confirmation_date"
+                    string="Confirmation Date"
+                    date="withholding_reception_date"
+                />
+                <group>
+                    <filter
+                        name="group_state"
+                        string="State"
+                        context="{'group_by': 'state'}"
+                    />
+                    <filter
+                        name="group_partner"
+                        string="Partner"
+                        context="{'group_by': 'partner_id'}"
+                    />
+                    <filter
+                        name="group_journal"
+                        string="Journal"
+                        context="{'group_by': 'journal_id'}"
+                    />
+                    <filter
+                        name="group_company"
+                        string="Company"
+                        context="{'group_by': 'company_id'}"
+                        groups="base.group_multi_company"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_withholding_payment_incoming" model="ir.actions.act_window">
+        <field name="name">Incoming Withholding Payments</field>
+        <field name="res_model">account.payment</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="search_view_id" ref="view_withholding_payment_search" />
+        <field
+            name="domain"
+        >[('journal_id.is_withholding_tax_journal', '=', True), ('payment_type', '=', 'inbound')]</field>
+        <field
+            name="context"
+        >{'default_payment_type': 'inbound', 'create': False}</field>
+        <field name="help" type="html">
+            <p
+                class="o_view_nocontent_smiling_face"
+            >No incoming withholding payments</p>
+            <p
+            >Register withholding from a customer invoice, then validate reception of its certificate here.</p>
+        </field>
+    </record>
+    <record id="action_withholding_payment_outgoing" model="ir.actions.act_window">
+        <field name="name">Outgoing Withholding Payments</field>
+        <field name="res_model">account.payment</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="search_view_id" ref="view_withholding_payment_search" />
+        <field
+            name="domain"
+        >[('journal_id.is_withholding_tax_journal', '=', True), ('payment_type', '=', 'outbound')]</field>
+        <field
+            name="context"
+        >{'default_payment_type': 'outbound', 'create': False}</field>
+        <field name="help" type="html">
+            <p
+                class="o_view_nocontent_smiling_face"
+            >No outgoing withholding payments</p>
+            <p
+            >Register withholding from a vendor bill, then confirm delivery of its certificate here.</p>
+        </field>
+    </record>
+
+    <record id="action_withholding_incoming_kanban" model="ir.actions.act_window.view">
+        <field name="sequence">1</field>
+        <field name="view_mode">kanban</field>
+        <field name="view_id" ref="view_withholding_payment_kanban" />
+        <field name="act_window_id" ref="action_withholding_payment_incoming" />
+    </record>
+    <record id="action_withholding_incoming_list" model="ir.actions.act_window.view">
+        <field name="sequence">2</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_withholding_payment_list" />
+        <field name="act_window_id" ref="action_withholding_payment_incoming" />
+    </record>
+    <record id="action_withholding_outgoing_kanban" model="ir.actions.act_window.view">
+        <field name="sequence">1</field>
+        <field name="view_mode">kanban</field>
+        <field name="view_id" ref="view_withholding_payment_kanban" />
+        <field name="act_window_id" ref="action_withholding_payment_outgoing" />
+    </record>
+    <record id="action_withholding_outgoing_list" model="ir.actions.act_window.view">
+        <field name="sequence">2</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_withholding_payment_list" />
+        <field name="act_window_id" ref="action_withholding_payment_outgoing" />
+    </record>
+
+    <record id="menu_withholding_payment_incoming" model="ir.ui.menu">
+        <field name="name">Incoming Withholding Payments</field>
+        <field name="parent_id" ref="account.menu_finance_receivables" />
+        <field name="action" ref="action_withholding_payment_incoming" />
+        <field name="sequence">25</field>
+        <field name="group_ids" eval="[(4, ref('account.group_account_invoice'))]" />
+    </record>
+    <record id="menu_withholding_payment_outgoing" model="ir.ui.menu">
+        <field name="name">Outgoing Withholding Payments</field>
+        <field name="parent_id" ref="account.menu_finance_payables" />
+        <field name="action" ref="action_withholding_payment_outgoing" />
+        <field name="sequence">25</field>
+        <field name="group_ids" eval="[(4, ref('account.group_account_invoice'))]" />
+    </record>
+</odoo>

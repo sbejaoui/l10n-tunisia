@@ -86,7 +86,11 @@ class AccountPaymentRegister(models.TransientModel):
 
         payments = self.line_ids.move_id.matched_payment_ids
 
-        if any(payment.journal_id == self.journal_id for payment in payments):
+        if any(
+            payment.journal_id == self.journal_id
+            and payment.state in ("in_process", "paid")
+            for payment in payments
+        ):
             raise UserError(self.env._("This withholding tax has already been paid."))
 
     def _create_payments(self):
