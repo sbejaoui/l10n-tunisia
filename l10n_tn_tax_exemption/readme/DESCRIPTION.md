@@ -12,5 +12,6 @@ Tunisian chart of accounts, with a separate tax and tax group per company.
 The **Exemption** fiscal position maps sales taxes to **Tax Exemption**.
 The **Export** fiscal position keeps the existing **0%** sales tax.
 
-When an attestation is selected, its number and issue date are shown on
-the printed invoice, along with the Endorsed Purchase Order number and date.
+When an attestation is selected, the printed invoice shows the indicative
+suspended VAT amount, Endorsed Purchase Order number, certificate number,
+and exemption expiry date. The same message is previewed on the draft form.

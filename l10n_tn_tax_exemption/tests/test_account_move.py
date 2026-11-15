@@ -235,11 +235,11 @@ class TestTaxExemptionCountry(AccountTestInvoicingCommon):
         self.assertTrue(invoice.l10n_tn_tax_exemption_missing_warning)
 
         self.assertNotIn(
-            "• Endorsed Purchase Order", invoice.l10n_tn_tax_exemption_warning
+            "Endorsed purchase order number:", invoice.l10n_tn_tax_exemption_warning
         )
         invoice.l10n_tn_endorsed_purchase_order = "BC-2024-001"
         self.assertNotIn(
-            "• Endorsed Purchase Order", invoice.l10n_tn_tax_exemption_warning
+            "Endorsed purchase order number:", invoice.l10n_tn_tax_exemption_warning
         )
 
         self.exemption.date_issue = "2024-01-01"
@@ -264,6 +264,51 @@ class TestTaxExemptionCountry(AccountTestInvoicingCommon):
         invoice = self._create_invoice(l10n_tn_tax_exemption_id=False)
         self.assertFalse(invoice.l10n_tn_tax_exemption_warning)
         self.assertFalse(invoice.l10n_tn_tax_exemption_missing_warning)
+
+    def test_exemption_notice_matches_requested_content(self):
+        invoice = self._create_invoice(
+            l10n_tn_endorsed_purchase_order="PO-001",
+            l10n_tn_endorsed_purchase_order_date="2024-01-01",
+        )
+        lines = invoice.l10n_tn_tax_exemption_warning.splitlines()
+        self.assertEqual(len(lines), 4)
+        self.assertTrue(lines[0].startswith("Indicative suspended VAT amount:"))
+        self.assertIn(invoice.currency_id.name, lines[0])
+        self.assertEqual(lines[1], "Endorsed purchase order number: PO-001")
+        self.assertEqual(lines[2], "Tax exemption certificate No.: TN certificate")
+        self.assertTrue(lines[3].startswith("Exemption expiry date:"))
+
+    def test_suspended_vat_uses_discounted_exempt_line_amount(self):
+        self.tax_sale_a.amount = 19
+        invoice = self._create_invoice()
+        line = invoice.invoice_line_ids
+        line.write({"price_unit": 100, "quantity": 2, "discount": 10})
+        self.assertAlmostEqual(invoice.l10n_tn_suspended_vat_amount, 34.2)
+        self.assertEqual(invoice.amount_tax, 0)
+        line.discount = 0
+        self.assertAlmostEqual(invoice.l10n_tn_suspended_vat_amount, 38)
+
+    def test_suspended_vat_excludes_nonexempt_taxes(self):
+        self.tax_sale_a.amount = 19
+        invoice = self._create_invoice()
+        other_tax = self.tax_sale_a.copy({"name": "Non-exempt sales tax", "amount": 5})
+        invoice.invoice_line_ids.tax_ids += other_tax
+        self.assertAlmostEqual(invoice.l10n_tn_suspended_vat_amount, 19)
+        self.assertAlmostEqual(invoice.amount_tax, 5)
+
+    def test_suspended_vat_uses_net_base_for_price_included_source_tax(self):
+        self.tax_sale_a.write({"amount": 19, "price_include_override": "tax_included"})
+        invoice = self._create_invoice()
+        self.assertAlmostEqual(invoice.invoice_line_ids.price_subtotal, 100)
+        self.assertAlmostEqual(invoice.l10n_tn_suspended_vat_amount, 19)
+
+    def test_suspended_vat_uses_account_taxes_without_product(self):
+        self.tax_sale_a.amount = 19
+        invoice = self._create_invoice()
+        line = invoice.invoice_line_ids
+        line.account_id.tax_ids = self.tax_sale_a
+        line.product_id = False
+        self.assertAlmostEqual(invoice.l10n_tn_suspended_vat_amount, 19)
 
     def test_fiscal_position_change_updates_existing_line_taxes(self):
         invoice = self._create_invoice(

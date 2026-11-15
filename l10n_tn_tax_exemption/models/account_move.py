@@ -3,7 +3,7 @@
 
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
-from odoo.tools.misc import format_date
+from odoo.tools.misc import format_date, formatLang
 
 
 class AccountMove(models.Model):
@@ -44,6 +44,77 @@ class AccountMove(models.Model):
     l10n_tn_is_exemption_fiscal_position = fields.Boolean(
         compute="_compute_l10n_tn_is_exemption_fiscal_position",
     )
+    l10n_tn_suspended_vat_amount = fields.Monetary(
+        string="Indicative Suspended VAT",
+        compute="_compute_l10n_tn_suspended_vat_amount",
+    )
+
+    @api.depends(
+        "move_type",
+        "l10n_tn_tax_exemption_id",
+        "l10n_tn_tax_exemption_id.fiscal_position_id.tax_ids",
+        "currency_id.rounding",
+        "company_id.tax_calculation_rounding_method",
+        "invoice_line_ids.display_type",
+        "invoice_line_ids.price_subtotal",
+        "invoice_line_ids.quantity",
+        "invoice_line_ids.tax_ids.amount",
+        "invoice_line_ids.tax_ids.amount_type",
+        "invoice_line_ids.tax_ids.original_tax_ids",
+        "invoice_line_ids.product_id.taxes_id.amount",
+        "invoice_line_ids.product_id.taxes_id.amount_type",
+        "invoice_line_ids.account_id.tax_ids.amount",
+        "invoice_line_ids.account_id.tax_ids.amount_type",
+    )
+    def _compute_l10n_tn_suspended_vat_amount(self):
+        account_tax = self.env["account.tax"]
+        for move in self:
+            move.l10n_tn_suspended_vat_amount = 0
+            if not move.is_sale_document() or not move.l10n_tn_tax_exemption_id:
+                continue
+            base_lines = []
+            for line in move.invoice_line_ids.filtered(
+                lambda line: line.display_type == "product"
+            ):
+                original_taxes = line.product_id.taxes_id._filter_taxes_by_company(
+                    move.company_id
+                ) or line.account_id.tax_ids.filtered(
+                    lambda tax: tax.type_tax_use == "sale"
+                )._filter_taxes_by_company(move.company_id)
+                exempt_taxes = (
+                    line.tax_ids
+                    & move.l10n_tn_tax_exemption_id.fiscal_position_id.tax_ids
+                ).filtered(
+                    lambda tax: tax.amount_type in ("percent", "division")
+                    and tax.amount == 0
+                )
+                suspended_taxes = original_taxes & exempt_taxes.original_tax_ids
+                if suspended_taxes:
+                    base_lines.append(
+                        account_tax._prepare_base_line_for_taxes_computation(
+                            line,
+                            tax_ids=suspended_taxes,
+                            price_unit=(
+                                line.price_subtotal / line.quantity
+                                if line.quantity
+                                else 0
+                            ),
+                            quantity=line.quantity,
+                            discount=0,
+                            special_mode="total_excluded",
+                            extra_tax_data={},
+                            rate=line.currency_rate or 1,
+                        )
+                    )
+            account_tax._add_tax_details_in_base_lines(base_lines, move.company_id)
+            account_tax._round_base_lines_tax_details(base_lines, move.company_id)
+            move.l10n_tn_suspended_vat_amount = move.currency_id.round(
+                sum(
+                    tax_data["tax_amount_currency"]
+                    for base_line in base_lines
+                    for tax_data in base_line["tax_details"]["taxes_data"]
+                )
+            )
 
     @api.depends("fiscal_position_id", "company_id")
     def _compute_l10n_tn_is_exemption_fiscal_position(self):
@@ -112,6 +183,9 @@ class AccountMove(models.Model):
         "state",
         "l10n_tn_tax_exemption_id.name",
         "l10n_tn_tax_exemption_id.date_issue",
+        "l10n_tn_tax_exemption_id.date_end",
+        "l10n_tn_suspended_vat_amount",
+        "currency_id",
         "fiscal_position_id",
         "l10n_tn_endorsed_purchase_order",
         "l10n_tn_endorsed_purchase_order_date",
@@ -127,27 +201,32 @@ class AccountMove(models.Model):
                 continue
             not_provided = self.env._("Not provided")
             message = self.env._(
-                "Mandatory Legal Notice (VAT Suspension)\n"
-                "• Sale under VAT suspension (Certificate No.: %(attestation)s "
-                "issued on %(issue_date)s)",
-                attestation=exemption.name or not_provided,
-                issue_date=(
-                    format_date(self.env, exemption.date_issue)
-                    if exemption.date_issue
-                    else not_provided
+                "Indicative suspended VAT amount: %(amount)s %(currency)s",
+                amount=formatLang(
+                    self.env,
+                    move.l10n_tn_suspended_vat_amount,
+                    digits=move.currency_id.decimal_places,
                 ),
+                currency=move.currency_id.name,
             )
             if (
                 move.l10n_tn_endorsed_purchase_order
                 and move.l10n_tn_endorsed_purchase_order_date
             ):
                 message += "\n" + self.env._(
-                    "• Endorsed Purchase Order No.: %(order)s dated %(order_date)s",
+                    "Endorsed purchase order number: %(order)s",
                     order=move.l10n_tn_endorsed_purchase_order,
-                    order_date=format_date(
-                        self.env, move.l10n_tn_endorsed_purchase_order_date
-                    ),
                 )
+            message += "\n" + self.env._(
+                "Tax exemption certificate No.: %(certificate)s\n"
+                "Exemption expiry date: %(expiry_date)s",
+                certificate=exemption.name or not_provided,
+                expiry_date=(
+                    format_date(self.env, exemption.date_end)
+                    if exemption.date_end
+                    else not_provided
+                ),
+            )
             move.l10n_tn_tax_exemption_warning = message
             if move.state != "draft":
                 continue
@@ -156,6 +235,7 @@ class AccountMove(models.Model):
                 for value, label in (
                     (exemption.name, self.env._("Certificate Number")),
                     (exemption.date_issue, self.env._("Certificate Issue Date")),
+                    (exemption.date_end, self.env._("Certificate Expiry Date")),
                     (move.fiscal_position_id, self.env._("Fiscal Position")),
                     (
                         move.l10n_tn_endorsed_purchase_order,

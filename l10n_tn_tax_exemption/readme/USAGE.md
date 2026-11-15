@@ -17,8 +17,15 @@ certificate to an ineligible document is rejected.
     **Tax Exemption**, the lines should show that 0% tax. On draft Tunisian
     invoices, changing the fiscal position in the form automatically updates
     existing line taxes and accounts. Check the taxes again before posting.
-4.  Preview or print the invoice to see the attestation number and issue
-    date, along with the Endorsed Purchase Order number and date.
+4.  Preview or print the invoice to see the indicative suspended VAT amount,
+    Endorsed Purchase Order number, certificate number, and expiry date.
+
+The indicative suspended VAT is calculated from the original sales taxes
+mapped to the zero-rate exemption tax on each line, using discounted net line
+amounts and the company's tax rounding rules. It is displayed in the invoice
+currency and does not change the actual invoice taxes. Product sales taxes
+are used, with account sales taxes as a fallback for lines without them.
+The purchase order line is omitted until its number and date are both filled.
 
 Posting checks that the selected exemption has both validity dates and covers
 the invoice date, including the start and end dates. If a certificate's dates

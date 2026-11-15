@@ -47,9 +47,10 @@ company. The **Exemption** fiscal position maps sales taxes to **Tax
 Exemption**. The **Export** fiscal position keeps the existing **0%**
 sales tax.
 
-When an attestation is selected, its number and issue date are shown on
-the printed invoice, along with the Endorsed Purchase Order number and
-date.
+When an attestation is selected, the printed invoice shows the
+indicative suspended VAT amount, Endorsed Purchase Order number,
+certificate number, and exemption expiry date. The same message is
+previewed on the draft form.
 
 **Table of contents**
 
@@ -125,8 +126,17 @@ document is rejected.
    Tunisian invoices, changing the fiscal position in the form
    automatically updates existing line taxes and accounts. Check the
    taxes again before posting.
-4. Preview or print the invoice to see the attestation number and issue
-   date, along with the Endorsed Purchase Order number and date.
+4. Preview or print the invoice to see the indicative suspended VAT
+   amount, Endorsed Purchase Order number, certificate number, and
+   expiry date.
+
+The indicative suspended VAT is calculated from the original sales taxes
+mapped to the zero-rate exemption tax on each line, using discounted net
+line amounts and the company's tax rounding rules. It is displayed in
+the invoice currency and does not change the actual invoice taxes.
+Product sales taxes are used, with account sales taxes as a fallback for
+lines without them. The purchase order line is omitted until its number
+and date are both filled.
 
 Posting checks that the selected exemption has both validity dates and
 covers the invoice date, including the start and end dates. If a

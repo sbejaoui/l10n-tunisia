@@ -10,19 +10,13 @@
             <p
                 t-if="o.move_type in ('out_invoice', 'out_refund') and o.l10n_tn_tax_exemption_warning"
                 name="l10n_tn_tax_exemption"
-                style="font-size: 11px; font-family: 'Courier New', monospace; color: #555555;"
+                style="font-size: 16px; color: #555555;"
             >
                 <t
-                    t-set="exemption_message_lines"
-                    t-value="o.l10n_tn_tax_exemption_warning.split('\n')"
-                />
-                <span
-                    class="font-weight-bold text-uppercase"
-                    style="text-decoration: underline;"
-                    t-out="exemption_message_lines[0]"
-                />
-                <t t-foreach="exemption_message_lines[1:]" t-as="message_line">
-                    <br />
+                    t-foreach="o.l10n_tn_tax_exemption_warning.split('\n')"
+                    t-as="message_line"
+                >
+                    <br t-if="not message_line_first" />
                     <t t-out="message_line" />
                 </t>
             </p>
