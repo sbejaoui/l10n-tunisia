@@ -8,10 +8,11 @@
             <xpath expr="//group[@name='group1']/.." position="before">
                 <field name="withholding_journal_selected" invisible="1" />
                 <field name="has_multiple_bills" invisible="1" />
+                <field name="show_withholding_tax_applicable" invisible="1" />
                 <group>
                     <field
                         name="withholding_tax_applicable"
-                        invisible="not has_multiple_bills"
+                        invisible="not show_withholding_tax_applicable"
                     />
                     <field
                         name="withholding_handling"

@@ -32,6 +32,38 @@ class TestPaymentAllocation(WithholdingTaxTestCommon):
             form.withholding_handling = handling
         return wizard, invoices
 
+    def test_withholding_option_requires_multiple_eligible_invoices(self):
+        invoices = self._create_move(self.product_a, 1000, move_type="out_invoice")
+        self.assertFalse(
+            self._create_payment_wizard(invoices).show_withholding_tax_applicable
+        )
+        invoices |= self._create_move(self.product_b, 2000, move_type="out_invoice")
+        self.assertTrue(
+            self._create_payment_wizard(invoices).show_withholding_tax_applicable
+        )
+
+        self.partner_a.country_id = self.env.ref("base.us")
+        self.assertFalse(
+            self._create_payment_wizard(invoices).show_withholding_tax_applicable
+        )
+        self.partner_a.country_id = self.env.ref("base.tn")
+        self.company_data["company"].country_id = self.env.ref("base.fr")
+        self.assertFalse(
+            self._create_payment_wizard(invoices).show_withholding_tax_applicable
+        )
+
+    def test_withholding_option_is_hidden_without_matching_document_rules(self):
+        journals = self.withholding_journal | self.other_withholding_journal
+        rules = self.env["l10n.tn.withholding.rule"].search(
+            [("withholding_journal_id", "in", journals.ids)]
+        )
+        rules.move_type = "in_invoice"
+        invoices = self._create_move(self.product_a, 1000, move_type="out_invoice")
+        invoices |= self._create_move(self.product_b, 2000, move_type="out_invoice")
+        self.assertFalse(
+            self._create_payment_wizard(invoices).show_withholding_tax_applicable
+        )
+
     def test_one_receipt_leaves_withholding_on_each_invoice(self):
         wizard, invoices = self._allocation_wizard()
         expected = {

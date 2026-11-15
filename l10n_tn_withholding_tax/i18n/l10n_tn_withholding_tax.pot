@@ -1,0 +1,549 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_tn_withholding_tax
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-15 14:24+0000\n"
+"PO-Revision-Date: 2026-11-15 14:24+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/wizard/account_payment_register.py:0
+msgid "  Amount after withholding: %(amount)s\n"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/models/l10n_tn_withholding_rule.py:0
+msgid "All invoices"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_l10n_tn_withholding_rule__amount
+msgid "Amount"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/wizard/account_payment_register.py:0
+msgid "Applicable withholding rules:\n"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_l10n_tn_withholding_rule__product_id
+msgid "Article"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_l10n_tn_payment_register_withholding_line__available_withholding_journal_ids
+msgid "Available Withholding Journal"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.view_withholding_payment_search
+msgid "Awaiting Certificate"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.view_withholding_payment_search
+msgid "Canceled / Rejected"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_l10n_tn_payment_register_withholding_line__cash_amount
+msgid "Cash Allocation"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/wizard/account_payment_register_allocation.py:0
+msgid "Cash allocations must total the bank/cash payment amount."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/wizard/account_payment_register_allocation.py:0
+msgid ""
+"Cash plus withholding cannot exceed the balance of %(invoice)s, and amounts "
+"cannot be negative."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_payment__withholding_reception_date
+msgid "Certificate Confirmation Date"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_payment__withholding_reception_confirmed
+msgid "Certificate Confirmed"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_payment__withholding_reception_user_id
+msgid "Certificate Confirmed By"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/wizard/account_payment_register_allocation.py:0
+msgid "Choose how to handle withholding."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.view_withholding_payment_search
+msgid "Company"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.view_payment_form_withholding
+msgid "Confirm Certificate Delivery"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.view_withholding_payment_search
+msgid "Confirmation Date"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_l10n_tn_payment_register_withholding_line__create_uid
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_l10n_tn_withholding_rule__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_l10n_tn_payment_register_withholding_line__create_date
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_l10n_tn_withholding_rule__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_l10n_tn_payment_register_withholding_line__currency_id
+msgid "Currency"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_l10n_tn_withholding_rule__description
+msgid "Description"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_journal__display_name
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_move__display_name
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_move_line__display_name
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_payment__display_name
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_payment_register__display_name
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_l10n_tn_payment_register_withholding_line__display_name
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_l10n_tn_withholding_rule__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.view_withholding_payment_search
+msgid "Draft"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/wizard/account_payment_register_allocation.py:0
+msgid "Expected one payment counterpart journal item."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_payment_register__has_multiple_bills
+msgid "Has Multiple Bills"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_journal__id
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_move__id
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_move_line__id
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_payment__id
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_payment_register__id
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_l10n_tn_payment_register_withholding_line__id
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_l10n_tn_withholding_rule__id
+msgid "ID"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.actions.act_window,name:l10n_tn_withholding_tax.action_withholding_payment_incoming
+#: model:ir.ui.menu,name:l10n_tn_withholding_tax.menu_withholding_payment_incoming
+msgid "Incoming Withholding Payments"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_l10n_tn_payment_register_withholding_line__invoice_id
+msgid "Invoice"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model,name:l10n_tn_withholding_tax.model_l10n_tn_payment_register_withholding_line
+msgid "Invoice Payment and Withholding Allocation"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/wizard/account_payment_register_allocation.py:0
+msgid "Invoice allocations require one bank/cash payment."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/models/account_move_line.py:0
+#: code:addons/l10n_tn_withholding_tax/wizard/account_payment_register_allocation.py:0
+msgid "Invoice allocations require the company currency."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model,name:l10n_tn_withholding_tax.model_account_journal
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.view_withholding_payment_search
+msgid "Journal"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model,name:l10n_tn_withholding_tax.model_account_move
+msgid "Journal Entry"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model,name:l10n_tn_withholding_tax.model_account_move_line
+msgid "Journal Item"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_journal__is_withholding_tax_journal
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_payment__is_withholding_tax_payment
+msgid "Journal includes Withholding Tax"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields.selection,name:l10n_tn_withholding_tax.selection__account_payment_register__withholding_handling__keep_unpaid
+msgid "Keep Unpaid"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_l10n_tn_payment_register_withholding_line__write_uid
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_l10n_tn_withholding_rule__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_l10n_tn_payment_register_withholding_line__write_date
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_l10n_tn_withholding_rule__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,help:l10n_tn_withholding_tax.field_l10n_tn_withholding_rule__product_id
+msgid ""
+"Leave empty to apply the rule to any invoice meeting the minimum amount."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_payment_register__multiple_bills_alert
+msgid "Multiple Bills Alert"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.actions.act_window,help:l10n_tn_withholding_tax.action_withholding_payment_incoming
+msgid "No incoming withholding payments"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.actions.act_window,help:l10n_tn_withholding_tax.action_withholding_payment_outgoing
+msgid "No outgoing withholding payments"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/wizard/account_payment_register.py:0
+msgid "No selected bill is eligible for this withholding journal."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/wizard/account_payment_register_allocation.py:0
+msgid ""
+"No withholding journals are selected. No withholding will be reserved or "
+"registered."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/models/account_payment.py:0
+msgid "Only accounting users can confirm certificates."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/models/account_payment.py:0
+msgid "Only pending withholding payments can be confirmed."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.actions.act_window,name:l10n_tn_withholding_tax.action_withholding_payment_outgoing
+#: model:ir.ui.menu,name:l10n_tn_withholding_tax.menu_withholding_payment_outgoing
+msgid "Outgoing Withholding Payments"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.view_withholding_payment_list
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.view_withholding_payment_search
+msgid "Partner"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model,name:l10n_tn_withholding_tax.model_account_payment_register
+msgid "Pay"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.view_withholding_payment_search
+msgid "Payment Date"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model,name:l10n_tn_withholding_tax.model_account_payment
+msgid "Payments"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/wizard/account_payment_register_allocation.py:0
+msgid "Provide exactly one allocation per invoice."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_bank_statement_line__is_rs_paid
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_move__is_rs_paid
+msgid "RS Already Paid"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_bank_statement_line__is_rs_eligible
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_move__is_rs_eligible
+msgid "RS Eligible"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_journal__withholding_tax_rate
+msgid "Rate"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields.selection,name:l10n_tn_withholding_tax.selection__account_payment_register__withholding_handling__pay
+msgid "Register Withholding Payment"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.actions.act_window,help:l10n_tn_withholding_tax.action_withholding_payment_incoming
+msgid ""
+"Register withholding from a customer invoice, then validate reception of its"
+" certificate here."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.actions.act_window,help:l10n_tn_withholding_tax.action_withholding_payment_outgoing
+msgid ""
+"Register withholding from a vendor bill, then confirm delivery of its "
+"certificate here."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_l10n_tn_payment_register_withholding_line__invoice_balance
+msgid "Remaining Balance"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/wizard/account_payment_register_allocation.py:0
+msgid "Select a regular bank or cash journal."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/wizard/account_payment_register_allocation.py:0
+msgid ""
+"Select at least two invoices for one partner, company and receivable/payable"
+" account, without mixing invoices and refunds."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.view_withholding_payment_search
+msgid "State"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/wizard/account_payment_register_allocation.py:0
+msgid "The balance of %(invoice)s changed. Reopen the payment wizard."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/wizard/account_payment_register_allocation.py:0
+msgid "The bank/cash payment must be greater than zero."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/models/l10n_tn_withholding_rule.py:0
+msgid "The minimum invoice amount cannot be negative."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/wizard/account_payment_register_allocation.py:0
+msgid "The payment could not be allocated in full. Reopen the wizard."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/models/account_move_line.py:0
+msgid "The requested payment allocation is no longer valid."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/wizard/account_payment_register_allocation.py:0
+msgid ""
+"The suggested net payment is %(net)s. A partial payment is allowed if its "
+"cash allocations match the amount received."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/wizard/account_payment_register_allocation.py:0
+msgid ""
+"The withholding journals or rates for %(invoice)s do not match its "
+"applicable rules."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/wizard/account_payment_register.py:0
+msgid "This withholding tax has already been paid."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.view_account_payment_register_withholding_tax_alert
+msgid "Total Balance"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.view_account_payment_register_withholding_tax_alert
+msgid "Total Cash"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.view_account_payment_register_withholding_tax_alert
+msgid "Total Withholding"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model,name:l10n_tn_withholding_tax.model_l10n_tn_withholding_rule
+msgid "Tunisian Withholding Tax Rule"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/models/account_payment.py:0
+msgid ""
+"Tunisian withholding requires both the company and the invoice partner to be"
+" based in Tunisia."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.view_payment_form_withholding
+msgid "Validate Reception"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.view_withholding_payment_search
+msgid "Validated"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields.selection,name:l10n_tn_withholding_tax.selection__l10n_tn_withholding_rule__move_type__in_invoice
+msgid "Vendor Bill"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_payment_register__withholding_allocation_line_ids
+msgid "Withholding Allocation Line"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_payment_register__withholding_allocation_warning
+msgid "Withholding Allocation Warning"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_l10n_tn_payment_register_withholding_line__withholding_amount
+msgid "Withholding Amount"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.view_payment_form_withholding
+msgid "Withholding Certificate"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_payment_register__withholding_handling
+msgid "Withholding Handling"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_payment_register__withholding_journal_selected
+msgid "Withholding Journal Selected"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.actions.act_window,name:l10n_tn_withholding_tax.action_l10n_tn_withholding_rule
+#: model:ir.ui.menu,name:l10n_tn_withholding_tax.menu_l10n_tn_withholding_rule
+msgid "Withholding Rules"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.journal_include_withholding
+msgid "Withholding Tax"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_payment_register__withholding_tax_alert
+msgid "Withholding Tax Alert"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_payment_register__withholding_tax_applicable
+msgid "Withholding Tax Applicable"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_l10n_tn_withholding_rule__withholding_journal_id
+msgid "Withholding Tax Journal"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_l10n_tn_payment_register_withholding_line__withholding_journal_ids
+msgid "Withholding Taxes"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_l10n_tn_payment_register_withholding_line__wizard_id
+msgid "Wizard"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/wizard/account_payment_register.py:0
+msgid "You are about to pay the withholding tax of multiple bills."
+msgstr ""

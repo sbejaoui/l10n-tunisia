@@ -12,6 +12,10 @@ Select several invoices for the same customer and click **Pay**. Enable
 **Withholding Tax Applicable**, then choose **Keep Unpaid** or **Register
 Withholding Payment**.
 
+The checkbox is shown only when several invoices are selected and at least one
+has an applicable withholding rule. It is hidden when none of the selected
+invoices meets the Tunisia country restriction or matches a withholding rule.
+
 The allocation table shows each invoice's remaining balance, applicable
 withholding journals, calculated withholding amount, and cash allocation.
 Different invoices can use different journals or several journals. Edit the

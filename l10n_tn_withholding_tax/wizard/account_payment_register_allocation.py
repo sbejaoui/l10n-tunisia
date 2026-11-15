@@ -9,6 +9,9 @@ from odoo.tools.misc import formatLang
 class AccountPaymentRegister(models.TransientModel):
     _inherit = "account.payment.register"
 
+    show_withholding_tax_applicable = fields.Boolean(
+        compute="_compute_show_withholding_tax_applicable",
+    )
     withholding_tax_applicable = fields.Boolean()
     withholding_handling = fields.Selection(
         [("keep_unpaid", "Keep Unpaid"), ("pay", "Register Withholding Payment")],
@@ -25,6 +28,19 @@ class AccountPaymentRegister(models.TransientModel):
     withholding_allocation_warning = fields.Text(
         compute="_compute_withholding_allocation_warning",
     )
+
+    @api.depends(
+        "line_ids",
+        "line_ids.move_id.l10n_tn_is_domestic_transaction",
+        "line_ids.move_id.matched_payment_ids.state",
+    )
+    def _compute_show_withholding_tax_applicable(self):
+        rules = self.env["l10n.tn.withholding.rule"]
+        for wizard in self:
+            invoices = wizard.line_ids.move_id
+            wizard.show_withholding_tax_applicable = len(invoices) > 1 and bool(
+                rules._get_applicable_rules(invoices)
+            )
 
     @api.depends("line_ids", "withholding_tax_applicable")
     def _compute_withholding_allocation_line_ids(self):
