@@ -1,0 +1,1878 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_tn_account_payment_bill_of_exchange
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-15 22:09+0000\n"
+"PO-Revision-Date: 2026-11-15 22:09+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.actions.report,print_report_name:l10n_tn_account_payment_bill_of_exchange.report_bill
+msgid "'Traite - %s' % (object.boe_reference or object.name)"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.report_bill_document
+msgid ""
+",\n"
+"                            veuillez payer à l'ordre de"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.report_bill_document
+msgid "<strong>Acceptation et signature du tiré</strong>"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.report_bill_document
+msgid "<strong>Signature du tireur</strong>"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_payment.py:0
+msgid "A confirmed bill needs an accounting entry and signed acceptance."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_payment.py:0
+msgid ""
+"A replacement must cover exactly the old unpaid invoices and their "
+"unreserved remaining principal."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields.selection,name:l10n_tn_account_payment_bill_of_exchange.selection__account_payment__boe_acceptance__accepted
+msgid "Accepted"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model,name:l10n_tn_account_payment_bill_of_exchange.model_account_chart_template
+msgid "Account Chart Template"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__message_needaction
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__message_needaction
+msgid "Action Needed"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment__boe_active_amount
+msgid "Active Principal"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__activity_ids
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__activity_ids
+msgid "Activities"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__activity_exception_decoration
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__activity_state
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__activity_state
+msgid "Activity State"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__activity_type_icon
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__activity_type_icon
+msgid "Activity Type Icon"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_payment.py:0
+msgid "Add the bill journal from the company chart settings first."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_company_boe
+msgid "Ajouter le journal Traites depuis le plan comptable"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_partial_reconcile.py:0
+msgid ""
+"Allocate the returned principal from its unpaid bill incident to keep "
+"recovery tracking accurate."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__amount
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_operation__amount
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__amount
+msgid "Amount"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/wizard/boe_operation.py:0
+msgid "An actual operation cannot be dated in the future."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_payment.py:0
+msgid "An authorized accounting user is required."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_operation
+msgid "Annulation"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_payment_boe_form
+msgid "Annuler la traite"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_operation
+msgid "Appliquer"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__message_attachment_count
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__message_attachment_count
+msgid "Attachment Count"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_partial_reconcile.py:0
+msgid "Bank matching removed; the collection is pending again."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__bill_id
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_operation__bill_id
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__bill_id
+msgid "Bill"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model,name:l10n_tn_account_payment_bill_of_exchange.model_l10n_tn_boe_settlement
+msgid "Bill Collection"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment__boe_exposure_amount
+msgid "Bill Exposure"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_payment.py:0
+#: model:ir.model,name:l10n_tn_account_payment_bill_of_exchange.model_l10n_tn_boe_operation
+msgid "Bill Operation"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_payment.py:0
+msgid "Bill follow-up"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_payment.py:0
+msgid "Bill follow-up completed: no remaining principal."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_payment.py:0
+msgid "Bill invoices must match the customer, company and currency."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_payment.py:0
+msgid "Bill maturity requires follow-up."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment__tn_boe
+msgid "Bill of Exchange"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/wizard/boe_operation.py:0
+msgid "Bill operation %(operation)s: %(reference)s"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_payment.py:0
+msgid "Bill receipts do not support custom entries or write-offs."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/wizard/account_payment_register.py:0
+msgid "Bill receipts do not support write-offs."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_payment.py:0
+msgid "Bill totals and collection links are managed by accounting operations."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_spreadsheet_dashboard__tn_boe_dashboard
+msgid "Bills Follow-up Dashboard"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_res_company__tn_boe_manager_id
+msgid "Bills Follow-up Manager"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_bank_statement_line__boe_payment_ids
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_move__boe_payment_ids
+msgid "Bills of Exchange"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_payment.py:0
+msgid ""
+"Bills require a Tunisian company, a positive TND amount and a customer "
+"receipt."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment__boe_acceptance
+msgid "Boe Acceptance"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment__boe_acceptance_date
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment_register__boe_acceptance_date
+msgid "Boe Acceptance Date"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment__boe_available_amount
+msgid "Boe Available Amount"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment__boe_custody
+msgid "Boe Custody"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment__boe_days_overdue
+msgid "Boe Days Overdue"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment__boe_incident_ids
+msgid "Boe Incident"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment__boe_issue_date
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment_register__boe_issue_date
+msgid "Boe Issue Date"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment__boe_issue_place
+msgid "Boe Issue Place"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment__boe_last_contact_date
+msgid "Boe Last Contact Date"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment__boe_maturity_date
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment_register__boe_maturity_date
+msgid "Boe Maturity Date"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment__boe_next_action
+msgid "Boe Next Action"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment__boe_next_action_date
+msgid "Boe Next Action Date"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment__boe_overdue
+msgid "Boe Overdue"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment__boe_payment_place
+msgid "Boe Payment Place"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment__boe_promise_amount
+msgid "Boe Promise Amount"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment__boe_promise_date
+msgid "Boe Promise Date"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment__boe_received_date
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment_register__boe_received_date
+msgid "Boe Received Date"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment__boe_reference
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment_register__boe_reference
+msgid "Boe Reference"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment__boe_replaced_payment_id
+msgid "Boe Replaced Payment"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment__boe_settlement_ids
+msgid "Boe Settlement"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment__boe_settlement_status
+msgid "Boe Settlement Status"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment__boe_signed_document
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment_register__boe_signed_document
+msgid "Boe Signed Document"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment__boe_signed_filename
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment_register__boe_signed_filename
+msgid "Boe Signed Filename"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment__boe_source_settlement_id
+msgid "Boe Source Settlement"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment_register__boe_user_id
+msgid "Boe User"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields.selection,name:l10n_tn_account_payment_bill_of_exchange.selection__l10n_tn_boe_operation__operation__cancel
+msgid "Cancel"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/boe_settlement.py:0
+msgid "Cancel bill collection: %(ref)s"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__canceled
+#: model:ir.model.fields.selection,name:l10n_tn_account_payment_bill_of_exchange.selection__account_payment__boe_settlement_status__canceled
+#: model:ir.model.fields.selection,name:l10n_tn_account_payment_bill_of_exchange.selection__l10n_tn_boe_settlement__state__canceled
+msgid "Canceled"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/wizard/boe_operation.py:0
+msgid "Choose a miscellaneous journal in the bill company."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_search
+msgid "Client"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields.selection,name:l10n_tn_account_payment_bill_of_exchange.selection__l10n_tn_boe_operation__operation__collect
+msgid "Collect"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_payment.py:0
+msgid "Collect the outstanding principal before marking a bill as paid."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields.selection,name:l10n_tn_account_payment_bill_of_exchange.selection__account_payment__boe_settlement_status__collected
+msgid "Collected"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__collected_amount
+msgid "Collected Amount"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment__boe_collected_amount
+msgid "Collected Principal"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_move_line.py:0
+msgid "Collection allocations are managed by the bill workflow."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/boe_settlement.py:0
+msgid "Collection confirmed against the actual payment."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/boe_settlement.py:0
+msgid "Collection confirmed: %(reference)s"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/boe_settlement.py:0
+msgid "Collection reversed: %(reference)s"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/boe_settlement.py:0
+msgid "Collections must be canceled, not deleted."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model,name:l10n_tn_account_payment_bill_of_exchange.model_res_company
+msgid "Companies"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__company_id
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_operation__company_id
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__company_id
+msgid "Company"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_payment.py:0
+msgid ""
+"Complete the reference, dates, acceptance proof, responsible and invoices."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_payment.py:0
+msgid ""
+"Configure a separate reconcilable bills receivable account on the bill "
+"method."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/wizard/boe_operation.py:0
+msgid "Confirm receipt of the bill first."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_partial_reconcile.py:0
+msgid ""
+"Confirm the actual collection and match only its designated bill or unpaid "
+"invoice."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_payment.py:0
+msgid "Confirm the pending collection."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields.selection,name:l10n_tn_account_payment_bill_of_exchange.selection__l10n_tn_boe_settlement__state__confirmed
+msgid "Confirmed"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_payment.py:0
+msgid ""
+"Confirmed bill details are locked; reverse the operation before correcting "
+"it."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_collection_list
+msgid "Confirmer"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_collection_form
+msgid "Confirmer l'encaissement"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model,name:l10n_tn_account_payment_bill_of_exchange.model_res_partner
+msgid "Contact"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_collection_form
+msgid "Contrepasser"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_collection_form
+msgid "Contrepasser le règlement et rétablir le solde à suivre ?"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.report_bill_document
+msgid "Copie de suivi — se référer au titre original signé"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model,name:l10n_tn_account_payment_bill_of_exchange.model_spreadsheet_dashboard_share
+msgid "Copy of a shared dashboard"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.report_invoice_boe
+msgid "Couvert par traite le"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__create_uid
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_operation__create_uid
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__create_date
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_operation__create_date
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_company_boe
+msgid ""
+"Créer uniquement les éléments Traites manquants, sans recharger le plan "
+"comptable ?"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__currency_id
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_operation__currency_id
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__currency_id
+msgid "Currency"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/chart_template.py:0
+msgid "Customer Bills of Exchange"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__partner_id
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__partner_id
+msgid "Customer/Vendor"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.actions.client,name:l10n_tn_account_payment_bill_of_exchange.action_dashboard_boe
+msgid "Dashboard des traites"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.ui.menu,name:l10n_tn_account_payment_bill_of_exchange.menu_boe_dashboard
+msgid "Dashboard et spreadsheet"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__date
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_operation__date
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__date
+msgid "Date"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_collection_search
+msgid "Date de règlement"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.report_bill_document
+msgid "Date et lieu d'émission"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields.selection,name:l10n_tn_account_payment_bill_of_exchange.selection__l10n_tn_boe_operation__operation__unpaid
+msgid "Declare Unpaid"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_chart_template__display_name
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_journal__display_name
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_move__display_name
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_move_line__display_name
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_partial_reconcile__display_name
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment__display_name
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment_method__display_name
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment_register__display_name
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__display_name
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_operation__display_name
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__display_name
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_res_company__display_name
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_res_partner__display_name
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_spreadsheet_dashboard__display_name
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_spreadsheet_dashboard_share__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_operation__document
+msgid "Document"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_operation__document_name
+msgid "Document Name"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.report_bill_document
+msgid "Domiciliation"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_operation__done
+msgid "Done"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_incident_list
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_list
+msgid "Dont en attente"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_payment_boe_form
+msgid "Déclarer un impayé"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_collection_search
+msgid "En attente"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_search
+msgid "En portefeuille"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_collection_pivot
+msgid "Encaissements et recouvrements"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_collection_list
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_list
+msgid "Encaissé"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_payment_boe_form
+msgid "Enregistrer le règlement"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_incident_form
+msgid "Enregistrer un recouvrement"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_list
+msgid "Exposition liée aux traites"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_payment_boe_form
+msgid "Factures couvertes"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_operation
+msgid "Fermer"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment__boe_user_id
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__responsible_id
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__responsible_id
+msgid "Follow-up Responsible"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_payment.py:0
+msgid "Follow-up action due."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/res_company.py:0
+msgid "Follow-up delays cannot be negative."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__message_follower_ids
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__message_follower_ids
+msgid "Followers"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__message_partner_ids
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__message_partner_ids
+msgid "Followers (Partners)"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,help:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__activity_type_icon
+#: model:ir.model.fields,help:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_search
+msgid "Garde"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__has_message
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__has_message
+msgid "Has Message"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_chart_template__id
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_journal__id
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_move__id
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_move_line__id
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_partial_reconcile__id
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment__id
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment_method__id
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment_register__id
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__id
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_operation__id
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__id
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_res_company__id
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_res_partner__id
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_spreadsheet_dashboard__id
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_spreadsheet_dashboard_share__id
+msgid "ID"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__activity_exception_icon
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__activity_exception_icon
+msgid "Icon"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,help:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__activity_exception_icon
+#: model:ir.model.fields,help:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,help:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__message_needaction
+#: model:ir.model.fields,help:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,help:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__message_has_error
+#: model:ir.model.fields,help:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__message_has_sms_error
+#: model:ir.model.fields,help:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__message_has_error
+#: model:ir.model.fields,help:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.actions.act_window,name:l10n_tn_account_payment_bill_of_exchange.action_boe_incidents
+#: model:ir.ui.menu,name:l10n_tn_account_payment_bill_of_exchange.menu_boe_incidents
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_payment_boe_form
+msgid "Impayés et recouvrement"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_search
+msgid "Impayés à recouvrer"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields.selection,name:l10n_tn_account_payment_bill_of_exchange.selection__account_payment__boe_custody__portfolio
+msgid "In Portfolio"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_operation__incident_id
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__incident_id
+msgid "Incident"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__invoice_id
+msgid "Invoice"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__invoice_line_id
+msgid "Invoice Line"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__message_is_follower
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__message_is_follower
+msgid "Is Follower"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model,name:l10n_tn_account_payment_bill_of_exchange.model_account_journal
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_operation__journal_id
+msgid "Journal"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model,name:l10n_tn_account_payment_bill_of_exchange.model_account_move
+msgid "Journal Entry"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model,name:l10n_tn_account_payment_bill_of_exchange.model_account_move_line
+msgid "Journal Item"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_operation
+msgid "Journal de retour"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_operation
+msgid "Justificatif"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_payment.py:0
+msgid ""
+"Keep the bill history; reverse posted operations instead of deleting them."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/boe_incident.py:0
+msgid "Keep unpaid bill history instead of deleting it."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__write_uid
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_operation__write_uid
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__write_date
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_operation__write_date
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.actions.report,name:l10n_tn_account_payment_bill_of_exchange.report_bill
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.report_bill_document
+msgid "Lettre de change"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.report_bill_document
+msgid "Lieu de paiement"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_payment.py:0
+msgid "Maturity cannot precede the issue date."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_search
+msgid "Mes dossiers"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__message_has_error
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__message_has_error
+msgid "Message Delivery error"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__message_ids
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__message_ids
+msgid "Messages"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_search
+msgid "Mois d'échéance"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_payment_boe_form
+msgid "Montants"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__my_activity_date_deadline
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__activity_date_deadline
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__activity_summary
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__activity_summary
+msgid "Next Activity Summary"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__activity_type_id
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__activity_type_id
+msgid "Next Activity Type"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_list
+msgid "Nominal"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields.selection,name:l10n_tn_account_payment_bill_of_exchange.selection__account_payment__boe_settlement_status__open
+msgid "Not Collected"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields.selection,name:l10n_tn_account_payment_bill_of_exchange.selection__account_payment__boe_settlement_status__draft
+msgid "Not Confirmed"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields.selection,name:l10n_tn_account_payment_bill_of_exchange.selection__account_payment__boe_custody__not_received
+msgid "Not Received"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_operation
+msgid "Nouveau paiement"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__message_needaction_counter
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__message_needaction_counter
+msgid "Number of Actions"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__message_has_error_counter
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__message_has_error_counter
+msgid "Number of errors"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,help:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__message_needaction_counter
+#: model:ir.model.fields,help:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,help:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__message_has_error_counter
+#: model:ir.model.fields,help:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_payment.py:0
+msgid "Only a draft payment can be converted into a bill of exchange."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/res_company.py:0
+msgid "Only accounting managers can configure bills."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/boe_settlement.py:0
+msgid "Only pending collections can be confirmed."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_operation__operation
+msgid "Operation"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,help:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_operation__source_line_id
+msgid ""
+"Optional existing payment or bank transaction; its available credit must "
+"equal the principal."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_operation
+msgid "Opération sur traite"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment__boe_invoice_ids
+msgid "Original Invoices"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model,name:l10n_tn_account_payment_bill_of_exchange.model_account_partial_reconcile
+msgid "Partial Reconcile"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields.selection,name:l10n_tn_account_payment_bill_of_exchange.selection__account_payment__boe_settlement_status__partial
+msgid "Partially Collected"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model,name:l10n_tn_account_payment_bill_of_exchange.model_account_payment_register
+msgid "Pay"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__payment_id
+msgid "Payment"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_operation__payment_method_line_id
+msgid "Payment Method Line"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model,name:l10n_tn_account_payment_bill_of_exchange.model_account_payment_method
+msgid "Payment Methods"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model,name:l10n_tn_account_payment_bill_of_exchange.model_account_payment
+msgid "Payments"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields.selection,name:l10n_tn_account_payment_bill_of_exchange.selection__account_payment__boe_acceptance__pending
+msgid "Pending"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__pending_amount
+msgid "Pending Amount"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment__boe_pending_amount
+msgid "Pending Collection"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields.selection,name:l10n_tn_account_payment_bill_of_exchange.selection__l10n_tn_boe_settlement__state__pending
+msgid "Pending Confirmation"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_pivot
+msgid "Portefeuille des traites"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.ui.menu,name:l10n_tn_account_payment_bill_of_exchange.menu_boe_list
+msgid "Portefeuille et suivi"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/boe_settlement.py:0
+msgid "Post a valid actual payment before confirming the bill collection."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields.selection,name:l10n_tn_account_payment_bill_of_exchange.selection__l10n_tn_boe_incident__state__posted
+msgid "Posted"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_collection_list
+msgid "Principal"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.report_bill_document
+msgid "Projet à faire signer — aucune preuve d'acceptation ou d'encaissement"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_search
+msgid "Promesse dépassée"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/wizard/boe_operation.py:0
+msgid "Provide a cancellation reason for an active or draft bill."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/wizard/boe_operation.py:0
+msgid ""
+"Provide an incident reason and an available positive principal; resolve "
+"pending collections first."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_collection_search
+msgid "Prêts à confirmer"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__ready_to_confirm
+msgid "Ready To Confirm"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__reason
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_operation__reason
+msgid "Reason"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_payment.py:0
+msgid "Record and confirm the actual collection to settle a bill."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_incident_list
+msgid "Recouvrer"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_collection_list
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_incident_list
+msgid "Recouvré"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields.selection,name:l10n_tn_account_payment_bill_of_exchange.selection__l10n_tn_boe_operation__operation__recover
+msgid "Recover Unpaid Principal"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_payment.py:0
+msgid "Recover the unpaid principal."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__recovered_amount
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__recovered_amount
+msgid "Recovered Amount"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment__boe_recovery_amount
+msgid "Recoveries"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__recovery_ids
+msgid "Recovery"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__recovery_residual
+msgid "Recovery Residual"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_operation__reference
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__reference
+msgid "Reference"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields.selection,name:l10n_tn_account_payment_bill_of_exchange.selection__account_payment__boe_acceptance__refused
+msgid "Refused"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_incident_list
+msgid "Remplacé"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__replacement_amount
+msgid "Replacement Amount"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__replacement_bill_id
+msgid "Replacement Bill"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_search
+msgid "Responsable"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__activity_user_id
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__activity_user_id
+msgid "Responsible User"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_operation
+msgid "Retour en créance"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_incident_list
+msgid "Retourné"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__return_line_id
+msgid "Return Line"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__return_move_id
+msgid "Return Move"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_payment.py:0
+msgid "Return or cancel the previous bill before replacing it."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields.selection,name:l10n_tn_account_payment_bill_of_exchange.selection__account_payment__boe_custody__returned
+msgid "Returned"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment__boe_unpaid_amount
+msgid "Returned Principal"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__reversal_move_id
+msgid "Reversal Move"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/wizard/boe_operation.py:0
+msgid ""
+"Reverse collections and use the unpaid procedure for a bill with financial "
+"history."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_move.py:0
+msgid "Reverse the bill operation instead of resetting its entry."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/boe_settlement.py:0
+msgid "Reverse the source bank transaction using the accounting workflow."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields.selection,name:l10n_tn_account_payment_bill_of_exchange.selection__l10n_tn_boe_incident__state__reversed
+msgid "Reversed"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_search
+msgid "Règlement"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_payment_boe_form
+msgid "Règlement d'une traite"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_operation
+msgid "Règlement effectif"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_search
+msgid "Règlement à confirmer"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_payment_boe_form
+msgid "Règlements"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.actions.act_window,name:l10n_tn_account_payment_bill_of_exchange.action_boe_collections
+msgid "Règlements des traites"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.ui.menu,name:l10n_tn_account_payment_bill_of_exchange.menu_boe_collections
+msgid "Règlements à confirmer"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.report_bill_document
+msgid "Référence :"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__message_has_sms_error
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_search
+msgid "Sans prochaine action"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_payment.py:0
+msgid "Select a bill of exchange."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/wizard/boe_operation.py:0
+msgid "Select a posted unpaid incident for this bill."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/wizard/boe_operation.py:0
+msgid "Select a supported bill operation."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/wizard/boe_operation.py:0
+msgid "Select an actual payment or bank transaction credit."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/res_company.py:0
+msgid "Select an authorized Tunisian chart company."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/wizard/boe_operation.py:0
+msgid "Select an authorized bill of exchange."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/wizard/boe_operation.py:0
+msgid ""
+"Select an incoming payment method from a real bank/cash journal in the bill "
+"company and currency."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/wizard/account_payment_register.py:0
+msgid ""
+"Select posted customer invoices for one customer, company and receivable "
+"account, group the payment and keep differences open. Early discounts are "
+"not supported."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_payment.py:0
+msgid "Signed bill received and allocated to the original invoices."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_collection_search
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_search
+msgid "Société"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_operation__source_line_id
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__source_line_id
+msgid "Source Line"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model,name:l10n_tn_account_payment_bill_of_exchange.model_spreadsheet_dashboard
+msgid "Spreadsheet Dashboard"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__state
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__state
+msgid "State"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,help:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__activity_state
+#: model:ir.model.fields,help:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_payment_boe_form
+msgid "Suivi"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:mail.activity.type,name:l10n_tn_account_payment_bill_of_exchange.activity_boe
+msgid "Suivi de traite"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/wizard/boe_operation.py:0
+msgid "The actual payment must have one receivable counterpart."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/wizard/boe_operation.py:0
+msgid "The actual payment needs a posted entry to settle the bill."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_payment.py:0
+msgid "The bill exceeds the remaining invoice balance."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_payment.py:0
+msgid "The bill must be fully allocated to its invoices."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/boe_settlement.py:0
+msgid "The collection exceeds the remaining principal."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/wizard/boe_operation.py:0
+msgid "The collection must be positive and within the available principal."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/boe_settlement.py:0
+msgid "The collection source, principal and bill must match."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/wizard/boe_operation.py:0
+msgid "The original invoice allocations no longer cover this return."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/wizard/boe_operation.py:0
+msgid ""
+"The payment collection account must be distinct from the bill counterpart "
+"account."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/boe_settlement.py:0
+msgid "The payment must be posted before reversal."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,help:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__currency_id
+#: model:ir.model.fields,help:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_operation__currency_id
+#: model:ir.model.fields,help:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__currency_id
+msgid "The payment's currency."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_payment.py:0
+msgid "The promised payment date has passed."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_move_line.py:0
+msgid "The replacement allocation exceeds the available TND principal."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/wizard/boe_operation.py:0
+msgid "The source credit must match the bill account, customer and principal."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/boe_settlement.py:0
+msgid "The source must have exactly the selected principal still available."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_payment.py:0
+msgid "This bill has already been confirmed."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.constraint,message:l10n_tn_account_payment_bill_of_exchange.constraint_account_payment_boe_reference_unique
+msgid "This bill reference already exists for this customer and company."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/boe_settlement.py:0
+msgid "This collection has already been canceled."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/wizard/boe_operation.py:0
+msgid "This operation has already been applied."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/wizard/boe_operation.py:0
+msgid "This payment already belongs to a collection."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.constraint,message:l10n_tn_account_payment_bill_of_exchange.constraint_l10n_tn_boe_settlement_source_line_unique
+msgid "This payment credit already belongs to a bill collection."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.report_bill_document
+msgid "Tireur / bénéficiaire"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.report_bill_document
+msgid "Tiré"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_move_line__tn_boe_collection_id
+msgid "Tn Boe Collection"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_res_company__tn_boe_escalation_days
+msgid "Tn Boe Escalation Days"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_bank_statement_line__tn_boe_incident_id
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_move__tn_boe_incident_id
+msgid "Tn Boe Incident"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_res_company__tn_boe_reminder_days
+msgid "Tn Boe Reminder Days"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_payment__boe_recovery_residual
+msgid "To Recover"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:account.payment.method,name:l10n_tn_account_payment_bill_of_exchange.payment_method_boe
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_payment_boe_form
+msgid "Traite"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_register_boe
+msgid "Traite reçue et acceptée"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_move_boe
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_partner_boe
+msgid "Traites"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.actions.server,name:l10n_tn_account_payment_bill_of_exchange.cron_boe_followup_ir_actions_server
+msgid "Traites : échéances et recouvrement"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.actions.act_window,name:l10n_tn_account_payment_bill_of_exchange.action_boe
+#: model:ir.ui.menu,name:l10n_tn_account_payment_bill_of_exchange.menu_boe_root
+msgid "Traites clients"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:spreadsheet.dashboard,name:l10n_tn_account_payment_bill_of_exchange.dashboard_boe
+msgid "Traites clients — suivi et recouvrement"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_company_boe
+msgid "Traites tunisiennes"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__transferred_amount
+msgid "Transferred Amount"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_account_journal__tn_boe_journal
+msgid "Tunisian Bills Journal"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,help:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__activity_exception_decoration
+#: model:ir.model.fields,help:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields.selection,name:l10n_tn_account_payment_bill_of_exchange.selection__account_payment__boe_settlement_status__unpaid
+msgid "Unpaid"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model,name:l10n_tn_account_payment_bill_of_exchange.model_l10n_tn_boe_incident
+msgid "Unpaid Bill"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/boe_settlement.py:0
+msgid "Use a posted bank transaction or an actual payment as evidence."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/spreadsheet_dashboard.py:0
+msgid ""
+"Use the authenticated bill dashboard. Public snapshots cannot preserve each "
+"viewer's accounting access rights."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_move.py:0
+msgid "Use the bill cancellation or collection reversal action."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_partial_reconcile.py:0
+msgid ""
+"Use the bill collection wizard to record the payment evidence before "
+"reconciling this effect."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_payment.py:0
+msgid "Use the bill workflow actions."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_move_line.py:0
+msgid "Use the bill workflow to correct its posted accounting lines."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_payment.py:0
+msgid "Use the cancellation procedure and prepare a new bill."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_move.py:0
+msgid ""
+"Use the documented bill operation instead of reversing its entry directly."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_payment.py:0
+msgid "Use the linked bill collection to modify this payment."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/wizard/boe_operation.py:0
+msgid "Use the recovery operation for an unpaid incident."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#. odoo-python
+#: code:addons/l10n_tn_account_payment_bill_of_exchange/models/account_partial_reconcile.py:0
+msgid "Use the unpaid or cancellation action to reopen a bill invoice."
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__website_message_ids
+#: model:ir.model.fields,field_description:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__website_message_ids
+msgid "Website Messages"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model:ir.model.fields,help:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_incident__website_message_ids
+#: model:ir.model.fields,help:l10n_tn_account_payment_bill_of_exchange.field_l10n_tn_boe_settlement__website_message_ids
+msgid "Website communication history"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.report_bill_document
+msgid "la somme de"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_list
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_search
+msgid "À encaisser"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.report_bill_document
+msgid "À l'échéance du"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_incident_list
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_list
+msgid "À recouvrer"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_search
+msgid "À traiter aujourd'hui"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_search
+msgid "Échues sans confirmation"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_search
+msgid "Échéance"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_search
+msgid "Échéance dans 7 jours"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.view_boe_graph
+msgid "Échéancier des traites"
+msgstr ""
+
+#. module: l10n_tn_account_payment_bill_of_exchange
+#: model_terms:ir.ui.view,arch_db:l10n_tn_account_payment_bill_of_exchange.report_invoice_boe
+msgid "— échéance"
+msgstr ""

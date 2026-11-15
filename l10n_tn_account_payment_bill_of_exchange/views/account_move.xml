@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright 2026 Sobware
+     License LGPL-3.0 or later (https://www.gnu.org/licenses/agpl-3.0). -->
+<odoo>
+    <record id="view_move_boe" model="ir.ui.view">
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Traites" invisible="not boe_payment_ids">
+                    <field name="boe_payment_ids" readonly="1">
+                        <list create="0" delete="0">
+                            <field name="boe_reference" />
+                            <field name="boe_maturity_date" />
+                            <field name="amount" />
+                            <field name="boe_active_amount" />
+                            <field name="boe_settlement_status" />
+                            <field name="boe_recovery_residual" />
+                            <field name="currency_id" column_invisible="True" />
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

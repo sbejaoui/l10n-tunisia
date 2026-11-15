@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright 2026 Sobware
+     License LGPL-3.0 or later (https://www.gnu.org/licenses/agpl-3.0). -->
+<odoo>
+    <record id="action_dashboard_boe" model="ir.actions.client">
+        <field name="name">Dashboard des traites</field>
+        <field name="tag">action_spreadsheet_dashboard</field>
+        <field name="params" eval="{'dashboard_id': ref('dashboard_boe')}" />
+    </record>
+    <record id="menu_boe_root" model="ir.ui.menu">
+        <field name="name">Traites clients</field>
+        <field name="parent_id" ref="account.menu_finance" />
+        <field name="sequence" eval="35" />
+        <field
+            name="group_ids"
+            eval="[Command.link(ref('account.group_account_readonly')), Command.link(ref('account.group_account_invoice'))]"
+        />
+    </record>
+    <record id="menu_boe_dashboard" model="ir.ui.menu">
+        <field name="name">Dashboard et spreadsheet</field>
+        <field name="parent_id" ref="menu_boe_root" />
+        <field name="action" ref="action_dashboard_boe" />
+        <field name="sequence" eval="1" />
+    </record>
+    <record id="menu_boe_list" model="ir.ui.menu">
+        <field name="name">Portefeuille et suivi</field>
+        <field name="parent_id" ref="menu_boe_root" />
+        <field name="action" ref="action_boe" />
+        <field name="sequence" eval="10" />
+    </record>
+    <record id="menu_boe_collections" model="ir.ui.menu">
+        <field name="name">Règlements à confirmer</field>
+        <field name="parent_id" ref="menu_boe_root" />
+        <field name="action" ref="action_boe_collections" />
+        <field name="sequence" eval="20" />
+    </record>
+    <record id="menu_boe_incidents" model="ir.ui.menu">
+        <field name="name">Impayés et recouvrement</field>
+        <field name="parent_id" ref="menu_boe_root" />
+        <field name="action" ref="action_boe_incidents" />
+        <field name="sequence" eval="30" />
+    </record>
+</odoo>

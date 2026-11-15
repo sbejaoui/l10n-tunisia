@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright 2026 Sobware
+     License LGPL-3.0 or later (https://www.gnu.org/licenses/agpl-3.0). -->
+<odoo>
+    <record id="view_payment_boe_form" model="ir.ui.view">
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <field name="tn_boe" invisible="1" />
+                <button
+                    name="action_boe_operation"
+                    string="Enregistrer le règlement"
+                    type="object"
+                    class="oe_highlight"
+                    invisible="not tn_boe or boe_available_amount &lt;= 0 or state == 'draft'"
+                    groups="account.group_account_invoice"
+                />
+                <button
+                    name="action_boe_unpaid"
+                    string="Déclarer un impayé"
+                    type="object"
+                    invisible="not tn_boe or boe_active_amount &lt;= 0"
+                    groups="account.group_account_invoice"
+                />
+                <button
+                    name="action_boe_cancel"
+                    string="Annuler la traite"
+                    type="object"
+                    invisible="not tn_boe or state in ['canceled', 'rejected']"
+                    groups="account.group_account_manager"
+                />
+            </xpath>
+            <xpath expr="//button[@name='action_draft']" position="attributes">
+                <attribute
+                    name="invisible"
+                    add="tn_boe or boe_source_settlement_id"
+                    separator=" or "
+                />
+            </xpath>
+            <xpath expr="//button[@name='action_cancel']" position="attributes">
+                <attribute
+                    name="invisible"
+                    add="boe_source_settlement_id"
+                    separator=" or "
+                />
+            </xpath>
+            <xpath expr="//sheet" position="inside">
+                <group
+                    string="Règlement d'une traite"
+                    invisible="not boe_source_settlement_id"
+                >
+                    <field name="boe_source_settlement_id" readonly="1" />
+                </group>
+                <notebook invisible="not tn_boe">
+                    <page string="Traite">
+                        <group>
+                            <group>
+                                <field
+                                    name="boe_reference"
+                                    readonly="state != 'draft'"
+                                    required="tn_boe"
+                                />
+                                <field
+                                    name="boe_issue_date"
+                                    readonly="state != 'draft'"
+                                />
+                                <field
+                                    name="boe_issue_place"
+                                    readonly="state != 'draft'"
+                                />
+                                <field
+                                    name="boe_payment_place"
+                                    readonly="state != 'draft'"
+                                />
+                                <field
+                                    name="boe_maturity_date"
+                                    readonly="state != 'draft'"
+                                    required="tn_boe"
+                                />
+                                <field
+                                    name="boe_received_date"
+                                    readonly="state != 'draft'"
+                                />
+                            </group>
+                            <group>
+                                <field
+                                    name="boe_acceptance"
+                                    readonly="state != 'draft'"
+                                />
+                                <field
+                                    name="boe_acceptance_date"
+                                    readonly="state != 'draft'"
+                                />
+                                <field name="boe_signed_filename" invisible="1" />
+                                <field
+                                    name="boe_signed_document"
+                                    filename="boe_signed_filename"
+                                    readonly="state != 'draft'"
+                                />
+                                <field name="boe_custody" readonly="1" />
+                                <field name="boe_settlement_status" />
+                                <field
+                                    name="boe_replaced_payment_id"
+                                    readonly="state != 'draft'"
+                                />
+                            </group>
+                        </group>
+                        <group string="Factures couvertes">
+                            <field
+                                name="boe_invoice_ids"
+                                widget="many2many_tags"
+                                readonly="state != 'draft'"
+                                domain="[('move_type', '=', 'out_invoice'), ('state', '=', 'posted'), ('company_id', '=', company_id)]"
+                            />
+                        </group>
+                        <group string="Montants">
+                            <field name="boe_active_amount" />
+                            <field name="boe_pending_amount" />
+                            <field name="boe_available_amount" />
+                            <field name="boe_collected_amount" />
+                            <field name="boe_unpaid_amount" />
+                            <field name="boe_recovery_amount" />
+                            <field name="boe_recovery_residual" />
+                        </group>
+                    </page>
+                    <page string="Suivi">
+                        <group>
+                            <group>
+                                <field name="boe_user_id" />
+                                <field name="boe_next_action" />
+                                <field name="boe_next_action_date" />
+                                <field name="boe_last_contact_date" />
+                                <field name="boe_promise_date" />
+                                <field name="boe_promise_amount" />
+                                <field name="boe_days_overdue" />
+                            </group>
+                        </group>
+                    </page>
+                    <page string="Règlements">
+                        <field name="boe_settlement_ids" readonly="1" />
+                    </page>
+                    <page string="Impayés et recouvrement">
+                        <field name="boe_incident_ids" readonly="1" />
+                    </page>
+                </notebook>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_boe_list" model="ir.ui.view">
+        <field name="model">account.payment</field>
+        <field name="arch" type="xml">
+            <list
+                decoration-danger="boe_overdue or boe_recovery_residual &gt; 0"
+                decoration-muted="state == 'canceled'"
+                default_order="boe_maturity_date,id"
+            >
+                <field name="tn_boe" column_invisible="True" />
+                <field name="boe_overdue" column_invisible="True" />
+                <field name="boe_reference" />
+                <field name="partner_id" />
+                <field name="boe_maturity_date" />
+                <field name="boe_days_overdue" />
+                <field name="amount" sum="Nominal" />
+                <field name="currency_id" column_invisible="True" />
+                <field name="boe_active_amount" sum="À encaisser" />
+                <field name="boe_pending_amount" sum="Dont en attente" />
+                <field name="boe_collected_amount" sum="Encaissé" />
+                <field name="boe_recovery_residual" sum="À recouvrer" />
+                <field
+                    name="boe_exposure_amount"
+                    sum="Exposition liée aux traites"
+                    optional="hide"
+                />
+                <field name="boe_custody" widget="badge" />
+                <field name="boe_settlement_status" widget="badge" />
+                <field name="boe_user_id" />
+                <field name="boe_next_action" />
+                <field name="boe_next_action_date" />
+                <field name="boe_promise_date" optional="hide" />
+                <field name="company_id" groups="base.group_multi_company" />
+                <field name="activity_ids" widget="list_activity" />
+            </list>
+        </field>
+    </record>
+    <record id="view_boe_search" model="ir.ui.view">
+        <field name="model">account.payment</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="boe_reference" />
+                <field name="partner_id" />
+                <field name="boe_invoice_ids" />
+                <field name="boe_user_id" />
+                <filter
+                    name="active_bills"
+                    string="À encaisser"
+                    domain="[('boe_active_amount', '&gt;', 0)]"
+                />
+                <filter
+                    name="portfolio"
+                    string="En portefeuille"
+                    domain="[('boe_custody', '=', 'portfolio'), ('boe_active_amount', '&gt;', 0)]"
+                />
+                <separator />
+                <filter
+                    name="my_bills"
+                    string="Mes dossiers"
+                    domain="[('boe_user_id', '=', uid)]"
+                />
+                <filter
+                    name="today"
+                    string="À traiter aujourd'hui"
+                    domain="[('boe_next_action_date', '&lt;=', context_today().strftime('%Y-%m-%d')), '|', ('boe_active_amount', '&gt;', 0), ('boe_recovery_residual', '&gt;', 0)]"
+                />
+                <filter
+                    name="overdue"
+                    string="Échues sans confirmation"
+                    domain="[('boe_overdue', '=', True)]"
+                />
+                <filter
+                    name="soon"
+                    string="Échéance dans 7 jours"
+                    domain="[('boe_active_amount', '&gt;', 0), ('boe_maturity_date', '&gt;=', context_today().strftime('%Y-%m-%d')), ('boe_maturity_date', '&lt;=', (context_today() + relativedelta(days=7)).strftime('%Y-%m-%d'))]"
+                />
+                <filter
+                    name="pending"
+                    string="Règlement à confirmer"
+                    domain="[('boe_pending_amount', '&gt;', 0)]"
+                />
+                <filter
+                    name="unpaid"
+                    string="Impayés à recouvrer"
+                    domain="[('boe_recovery_residual', '&gt;', 0)]"
+                />
+                <filter
+                    name="no_action"
+                    string="Sans prochaine action"
+                    domain="[('boe_next_action_date', '=', False), '|', ('boe_active_amount', '&gt;', 0), ('boe_recovery_residual', '&gt;', 0)]"
+                />
+                <filter
+                    name="broken_promise"
+                    string="Promesse dépassée"
+                    domain="[('boe_promise_date', '&lt;', context_today().strftime('%Y-%m-%d')), '|', ('boe_active_amount', '&gt;', 0), ('boe_recovery_residual', '&gt;', 0)]"
+                />
+                <separator />
+                <filter name="maturity" string="Échéance" date="boe_maturity_date" />
+                <filter
+                    name="customer"
+                    string="Client"
+                    context="{'group_by': 'partner_id'}"
+                />
+                <filter
+                    name="custody"
+                    string="Garde"
+                    context="{'group_by': 'boe_custody'}"
+                />
+                <filter
+                    name="settlement"
+                    string="Règlement"
+                    context="{'group_by': 'boe_settlement_status'}"
+                />
+                <filter
+                    name="responsible"
+                    string="Responsable"
+                    context="{'group_by': 'boe_user_id'}"
+                />
+                <filter
+                    name="month"
+                    string="Mois d'échéance"
+                    context="{'group_by': 'boe_maturity_date:month'}"
+                />
+                <filter
+                    name="company"
+                    string="Société"
+                    context="{'group_by': 'company_id'}"
+                />
+            </search>
+        </field>
+    </record>
+    <record id="view_boe_pivot" model="ir.ui.view">
+        <field name="model">account.payment</field>
+        <field name="arch" type="xml">
+            <pivot string="Portefeuille des traites">
+                <field name="partner_id" type="row" />
+                <field name="boe_maturity_date" type="col" interval="month" />
+                <field name="boe_active_amount" type="measure" />
+                <field name="boe_pending_amount" type="measure" />
+                <field name="boe_recovery_residual" type="measure" />
+            </pivot>
+        </field>
+    </record>
+    <record id="view_boe_graph" model="ir.ui.view">
+        <field name="model">account.payment</field>
+        <field name="arch" type="xml">
+            <graph string="Échéancier des traites" type="bar">
+                <field name="boe_maturity_date" interval="month" />
+                <field name="boe_active_amount" type="measure" />
+            </graph>
+        </field>
+    </record>
+    <record id="action_boe" model="ir.actions.act_window">
+        <field name="name">Traites clients</field>
+        <field name="res_model">account.payment</field>
+        <field name="view_mode">list,form,pivot,graph,activity</field>
+        <field name="view_id" ref="view_boe_list" />
+        <field name="search_view_id" ref="view_boe_search" />
+        <field name="domain">[('tn_boe', '=', True)]</field>
+        <field
+            name="context"
+        >{'default_payment_type': 'inbound', 'default_partner_type': 'customer', 'tn_boe_creation': True}</field>
+    </record>
+    <record id="action_boe_list_view" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1" />
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_boe_list" />
+        <field name="act_window_id" ref="action_boe" />
+    </record>
+    <record id="action_boe_form_view" model="ir.actions.act_window.view">
+        <field name="sequence" eval="2" />
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="account.view_account_payment_form" />
+        <field name="act_window_id" ref="action_boe" />
+    </record>
+    <record id="action_boe_pivot_view" model="ir.actions.act_window.view">
+        <field name="sequence" eval="3" />
+        <field name="view_mode">pivot</field>
+        <field name="view_id" ref="view_boe_pivot" />
+        <field name="act_window_id" ref="action_boe" />
+    </record>
+    <record id="action_boe_graph_view" model="ir.actions.act_window.view">
+        <field name="sequence" eval="4" />
+        <field name="view_mode">graph</field>
+        <field name="view_id" ref="view_boe_graph" />
+        <field name="act_window_id" ref="action_boe" />
+    </record>
+</odoo>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright 2026 Sobware
+     License LGPL-3.0 or later (https://www.gnu.org/licenses/agpl-3.0). -->
+<odoo>
+    <record id="view_boe_operation" model="ir.ui.view">
+        <field name="model">l10n_tn.boe.operation</field>
+        <field name="arch" type="xml">
+            <form string="Opération sur traite">
+                <field name="company_id" invisible="1" />
+                <field name="currency_id" invisible="1" />
+                <group>
+                    <group>
+                        <field name="bill_id" readonly="1" />
+                        <field name="operation" readonly="1" />
+                        <field
+                            name="incident_id"
+                            readonly="1"
+                            invisible="operation != 'recover'"
+                        />
+                    </group>
+                    <group>
+                        <field name="date" />
+                        <field name="reference" />
+                        <field
+                            name="amount"
+                            invisible="operation == 'cancel'"
+                            required="operation in ['collect', 'recover', 'unpaid']"
+                        />
+                    </group>
+                </group>
+                <group
+                    string="Règlement effectif"
+                    invisible="operation not in ['collect', 'recover']"
+                >
+                    <field name="source_line_id" />
+                    <group string="Nouveau paiement" invisible="source_line_id">
+                        <field
+                            name="journal_id"
+                            domain="[('company_id', '=', company_id), ('type', 'in', ['bank', 'cash']), ('tn_boe_journal', '=', False)]"
+                            required="operation in ['collect', 'recover'] and not source_line_id"
+                        />
+                        <field
+                            name="payment_method_line_id"
+                            required="operation in ['collect', 'recover'] and not source_line_id"
+                        />
+                    </group>
+                </group>
+                <group string="Retour en créance" invisible="operation != 'unpaid'">
+                    <field name="reason" required="operation == 'unpaid'" />
+                    <field
+                        name="journal_id"
+                        string="Journal de retour"
+                        domain="[('company_id', '=', company_id), ('type', '=', 'general')]"
+                        required="operation == 'unpaid'"
+                    />
+                </group>
+                <group string="Annulation" invisible="operation != 'cancel'">
+                    <field name="reason" required="operation == 'cancel'" />
+                </group>
+                <group string="Justificatif">
+                    <field name="document_name" invisible="1" />
+                    <field name="document" filename="document_name" />
+                </group>
+                <footer>
+                    <button
+                        name="action_apply"
+                        string="Appliquer"
+                        type="object"
+                        class="oe_highlight"
+                    />
+                    <button string="Fermer" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

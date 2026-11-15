@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright 2026 Sobware
+     License LGPL-3.0 or later (https://www.gnu.org/licenses/agpl-3.0). -->
+<odoo>
+    <record id="view_company_boe" model="ir.ui.view">
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page
+                    string="Traites tunisiennes"
+                    groups="account.group_account_manager"
+                >
+                    <group>
+                        <field name="tn_boe_manager_id" />
+                        <field name="tn_boe_reminder_days" />
+                        <field name="tn_boe_escalation_days" />
+                    </group>
+                    <button
+                        name="action_setup_tn_boe"
+                        type="object"
+                        string="Ajouter le journal Traites depuis le plan comptable"
+                        confirm="Créer uniquement les éléments Traites manquants, sans recharger le plan comptable ?"
+                    />
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

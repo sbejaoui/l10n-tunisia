@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright 2026 Sobware
+     License LGPL-3.0 or later (https://www.gnu.org/licenses/agpl-3.0). -->
+<odoo>
+    <record id="view_register_boe" model="ir.ui.view">
+        <field name="model">account.payment.register</field>
+        <field name="inherit_id" ref="account.view_account_payment_register_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='group_payment']" position="attributes">
+                <attribute
+                    name="readonly"
+                >payment_method_code == 'tn_bill_of_exchange'</attribute>
+                <attribute name="force_save">1</attribute>
+            </xpath>
+            <xpath expr="//form/group" position="after">
+                <group
+                    string="Traite reçue et acceptée"
+                    invisible="payment_method_code != 'tn_bill_of_exchange'"
+                >
+                    <group>
+                        <field
+                            name="boe_reference"
+                            required="payment_method_code == 'tn_bill_of_exchange'"
+                        />
+                        <field name="boe_issue_date" />
+                        <field
+                            name="boe_maturity_date"
+                            required="payment_method_code == 'tn_bill_of_exchange'"
+                        />
+                        <field name="boe_received_date" />
+                    </group>
+                    <group>
+                        <field name="boe_acceptance_date" />
+                        <field name="boe_signed_filename" invisible="1" />
+                        <field
+                            name="boe_signed_document"
+                            filename="boe_signed_filename"
+                            required="payment_method_code == 'tn_bill_of_exchange'"
+                        />
+                        <field name="boe_user_id" />
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

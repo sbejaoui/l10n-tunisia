@@ -1,0 +1,2591 @@
+{
+  "version": "18.5.10",
+  "sheets": [
+    {
+      "id": "summary",
+      "name": "Synthèse",
+      "colNumber": 12,
+      "rowNumber": 160,
+      "rows": {
+        "0": {
+          "size": 42
+        },
+        "1": {
+          "size": 28
+        },
+        "2": {
+          "size": 28
+        }
+      },
+      "cols": {
+        "0": {
+          "size": 280
+        },
+        "1": {
+          "size": 180
+        },
+        "2": {
+          "size": 180
+        },
+        "3": {
+          "size": 180
+        },
+        "4": {
+          "size": 180
+        },
+        "5": {
+          "size": 180
+        },
+        "6": {
+          "size": 180
+        }
+      },
+      "merges": ["A1:G1", "A3:G3", "A33:G33"],
+      "cells": {
+        "A1": "Synthèse",
+        "A2": "Dernier chargement",
+        "B2": "Chargement en cours",
+        "A3": "TND — stocks courants et flux de période séparés ; ouvrir les sources depuis les pivots.",
+        "A5": "Principal actif",
+        "B5": "=PIVOT.VALUE(1,\"boe_active_amount\")",
+        "C5": "=PIVOT.VALUE(1,\"__count\")",
+        "A6": "En portefeuille",
+        "B6": "=PIVOT.VALUE(2,\"boe_active_amount\")",
+        "C6": "=PIVOT.VALUE(2,\"__count\")",
+        "A7": "Exposition liée aux traites",
+        "B7": "=PIVOT.VALUE(3,\"boe_exposure_amount\")",
+        "C7": "=PIVOT.VALUE(3,\"__count\")",
+        "A8": "Échues sans confirmation",
+        "B8": "=PIVOT.VALUE(4,\"boe_active_amount\")",
+        "C8": "=PIVOT.VALUE(4,\"__count\")",
+        "A9": "Dont règlements en attente",
+        "B9": "=PIVOT.VALUE(5,\"boe_pending_amount\")",
+        "C9": "=PIVOT.VALUE(5,\"__count\")",
+        "A10": "Impayés à recouvrer",
+        "B10": "=PIVOT.VALUE(6,\"boe_recovery_residual\")",
+        "C10": "=PIVOT.VALUE(6,\"__count\")",
+        "A11": "À échéance aujourd'hui",
+        "B11": "=PIVOT.VALUE(7,\"boe_active_amount\")",
+        "C11": "=PIVOT.VALUE(7,\"__count\")",
+        "A12": "Échéances J+1 à J+7",
+        "B12": "=PIVOT.VALUE(8,\"boe_active_amount\")",
+        "C12": "=PIVOT.VALUE(8,\"__count\")",
+        "A13": "Échéances J+8 à J+30",
+        "B13": "=PIVOT.VALUE(9,\"boe_active_amount\")",
+        "C13": "=PIVOT.VALUE(9,\"__count\")",
+        "A14": "Actions en retard",
+        "B14": "=PIVOT.VALUE(10,\"__count\")",
+        "C14": "=PIVOT.VALUE(10,\"__count\")",
+        "A15": "Dossiers sans responsable",
+        "B15": "=PIVOT.VALUE(11,\"__count\")",
+        "C15": "=PIVOT.VALUE(11,\"__count\")",
+        "A16": "Dossiers sans prochaine action",
+        "B16": "=PIVOT.VALUE(12,\"__count\")",
+        "C16": "=PIVOT.VALUE(12,\"__count\")",
+        "C4": "Nombre de titres",
+        "B4": "Solde / nombre",
+        "A33": "Les montants en attente sont inclus dans le principal actif : ne pas les additionner.",
+        "A36": "Dossiers à suivre — ouvrir un titre pour agir (50 premiers ; utiliser la liste Odoo pour tous les dossiers)",
+        "A37": "=ODOO.LIST.HEADER(1,\"boe_reference\")",
+        "A38": "=ODOO.LIST(1,1,\"boe_reference\")",
+        "A39": "=ODOO.LIST(1,2,\"boe_reference\")",
+        "A40": "=ODOO.LIST(1,3,\"boe_reference\")",
+        "A41": "=ODOO.LIST(1,4,\"boe_reference\")",
+        "A42": "=ODOO.LIST(1,5,\"boe_reference\")",
+        "A43": "=ODOO.LIST(1,6,\"boe_reference\")",
+        "A44": "=ODOO.LIST(1,7,\"boe_reference\")",
+        "A45": "=ODOO.LIST(1,8,\"boe_reference\")",
+        "A46": "=ODOO.LIST(1,9,\"boe_reference\")",
+        "A47": "=ODOO.LIST(1,10,\"boe_reference\")",
+        "A48": "=ODOO.LIST(1,11,\"boe_reference\")",
+        "A49": "=ODOO.LIST(1,12,\"boe_reference\")",
+        "A50": "=ODOO.LIST(1,13,\"boe_reference\")",
+        "A51": "=ODOO.LIST(1,14,\"boe_reference\")",
+        "A52": "=ODOO.LIST(1,15,\"boe_reference\")",
+        "A53": "=ODOO.LIST(1,16,\"boe_reference\")",
+        "A54": "=ODOO.LIST(1,17,\"boe_reference\")",
+        "A55": "=ODOO.LIST(1,18,\"boe_reference\")",
+        "A56": "=ODOO.LIST(1,19,\"boe_reference\")",
+        "A57": "=ODOO.LIST(1,20,\"boe_reference\")",
+        "A58": "=ODOO.LIST(1,21,\"boe_reference\")",
+        "A59": "=ODOO.LIST(1,22,\"boe_reference\")",
+        "A60": "=ODOO.LIST(1,23,\"boe_reference\")",
+        "A61": "=ODOO.LIST(1,24,\"boe_reference\")",
+        "A62": "=ODOO.LIST(1,25,\"boe_reference\")",
+        "A63": "=ODOO.LIST(1,26,\"boe_reference\")",
+        "A64": "=ODOO.LIST(1,27,\"boe_reference\")",
+        "A65": "=ODOO.LIST(1,28,\"boe_reference\")",
+        "A66": "=ODOO.LIST(1,29,\"boe_reference\")",
+        "A67": "=ODOO.LIST(1,30,\"boe_reference\")",
+        "A68": "=ODOO.LIST(1,31,\"boe_reference\")",
+        "A69": "=ODOO.LIST(1,32,\"boe_reference\")",
+        "A70": "=ODOO.LIST(1,33,\"boe_reference\")",
+        "A71": "=ODOO.LIST(1,34,\"boe_reference\")",
+        "A72": "=ODOO.LIST(1,35,\"boe_reference\")",
+        "A73": "=ODOO.LIST(1,36,\"boe_reference\")",
+        "A74": "=ODOO.LIST(1,37,\"boe_reference\")",
+        "A75": "=ODOO.LIST(1,38,\"boe_reference\")",
+        "A76": "=ODOO.LIST(1,39,\"boe_reference\")",
+        "A77": "=ODOO.LIST(1,40,\"boe_reference\")",
+        "A78": "=ODOO.LIST(1,41,\"boe_reference\")",
+        "A79": "=ODOO.LIST(1,42,\"boe_reference\")",
+        "A80": "=ODOO.LIST(1,43,\"boe_reference\")",
+        "A81": "=ODOO.LIST(1,44,\"boe_reference\")",
+        "A82": "=ODOO.LIST(1,45,\"boe_reference\")",
+        "A83": "=ODOO.LIST(1,46,\"boe_reference\")",
+        "A84": "=ODOO.LIST(1,47,\"boe_reference\")",
+        "A85": "=ODOO.LIST(1,48,\"boe_reference\")",
+        "A86": "=ODOO.LIST(1,49,\"boe_reference\")",
+        "A87": "=ODOO.LIST(1,50,\"boe_reference\")",
+        "B37": "=ODOO.LIST.HEADER(1,\"partner_id\")",
+        "B38": "=ODOO.LIST(1,1,\"partner_id\")",
+        "B39": "=ODOO.LIST(1,2,\"partner_id\")",
+        "B40": "=ODOO.LIST(1,3,\"partner_id\")",
+        "B41": "=ODOO.LIST(1,4,\"partner_id\")",
+        "B42": "=ODOO.LIST(1,5,\"partner_id\")",
+        "B43": "=ODOO.LIST(1,6,\"partner_id\")",
+        "B44": "=ODOO.LIST(1,7,\"partner_id\")",
+        "B45": "=ODOO.LIST(1,8,\"partner_id\")",
+        "B46": "=ODOO.LIST(1,9,\"partner_id\")",
+        "B47": "=ODOO.LIST(1,10,\"partner_id\")",
+        "B48": "=ODOO.LIST(1,11,\"partner_id\")",
+        "B49": "=ODOO.LIST(1,12,\"partner_id\")",
+        "B50": "=ODOO.LIST(1,13,\"partner_id\")",
+        "B51": "=ODOO.LIST(1,14,\"partner_id\")",
+        "B52": "=ODOO.LIST(1,15,\"partner_id\")",
+        "B53": "=ODOO.LIST(1,16,\"partner_id\")",
+        "B54": "=ODOO.LIST(1,17,\"partner_id\")",
+        "B55": "=ODOO.LIST(1,18,\"partner_id\")",
+        "B56": "=ODOO.LIST(1,19,\"partner_id\")",
+        "B57": "=ODOO.LIST(1,20,\"partner_id\")",
+        "B58": "=ODOO.LIST(1,21,\"partner_id\")",
+        "B59": "=ODOO.LIST(1,22,\"partner_id\")",
+        "B60": "=ODOO.LIST(1,23,\"partner_id\")",
+        "B61": "=ODOO.LIST(1,24,\"partner_id\")",
+        "B62": "=ODOO.LIST(1,25,\"partner_id\")",
+        "B63": "=ODOO.LIST(1,26,\"partner_id\")",
+        "B64": "=ODOO.LIST(1,27,\"partner_id\")",
+        "B65": "=ODOO.LIST(1,28,\"partner_id\")",
+        "B66": "=ODOO.LIST(1,29,\"partner_id\")",
+        "B67": "=ODOO.LIST(1,30,\"partner_id\")",
+        "B68": "=ODOO.LIST(1,31,\"partner_id\")",
+        "B69": "=ODOO.LIST(1,32,\"partner_id\")",
+        "B70": "=ODOO.LIST(1,33,\"partner_id\")",
+        "B71": "=ODOO.LIST(1,34,\"partner_id\")",
+        "B72": "=ODOO.LIST(1,35,\"partner_id\")",
+        "B73": "=ODOO.LIST(1,36,\"partner_id\")",
+        "B74": "=ODOO.LIST(1,37,\"partner_id\")",
+        "B75": "=ODOO.LIST(1,38,\"partner_id\")",
+        "B76": "=ODOO.LIST(1,39,\"partner_id\")",
+        "B77": "=ODOO.LIST(1,40,\"partner_id\")",
+        "B78": "=ODOO.LIST(1,41,\"partner_id\")",
+        "B79": "=ODOO.LIST(1,42,\"partner_id\")",
+        "B80": "=ODOO.LIST(1,43,\"partner_id\")",
+        "B81": "=ODOO.LIST(1,44,\"partner_id\")",
+        "B82": "=ODOO.LIST(1,45,\"partner_id\")",
+        "B83": "=ODOO.LIST(1,46,\"partner_id\")",
+        "B84": "=ODOO.LIST(1,47,\"partner_id\")",
+        "B85": "=ODOO.LIST(1,48,\"partner_id\")",
+        "B86": "=ODOO.LIST(1,49,\"partner_id\")",
+        "B87": "=ODOO.LIST(1,50,\"partner_id\")",
+        "C37": "=ODOO.LIST.HEADER(1,\"boe_maturity_date\")",
+        "C38": "=ODOO.LIST(1,1,\"boe_maturity_date\")",
+        "C39": "=ODOO.LIST(1,2,\"boe_maturity_date\")",
+        "C40": "=ODOO.LIST(1,3,\"boe_maturity_date\")",
+        "C41": "=ODOO.LIST(1,4,\"boe_maturity_date\")",
+        "C42": "=ODOO.LIST(1,5,\"boe_maturity_date\")",
+        "C43": "=ODOO.LIST(1,6,\"boe_maturity_date\")",
+        "C44": "=ODOO.LIST(1,7,\"boe_maturity_date\")",
+        "C45": "=ODOO.LIST(1,8,\"boe_maturity_date\")",
+        "C46": "=ODOO.LIST(1,9,\"boe_maturity_date\")",
+        "C47": "=ODOO.LIST(1,10,\"boe_maturity_date\")",
+        "C48": "=ODOO.LIST(1,11,\"boe_maturity_date\")",
+        "C49": "=ODOO.LIST(1,12,\"boe_maturity_date\")",
+        "C50": "=ODOO.LIST(1,13,\"boe_maturity_date\")",
+        "C51": "=ODOO.LIST(1,14,\"boe_maturity_date\")",
+        "C52": "=ODOO.LIST(1,15,\"boe_maturity_date\")",
+        "C53": "=ODOO.LIST(1,16,\"boe_maturity_date\")",
+        "C54": "=ODOO.LIST(1,17,\"boe_maturity_date\")",
+        "C55": "=ODOO.LIST(1,18,\"boe_maturity_date\")",
+        "C56": "=ODOO.LIST(1,19,\"boe_maturity_date\")",
+        "C57": "=ODOO.LIST(1,20,\"boe_maturity_date\")",
+        "C58": "=ODOO.LIST(1,21,\"boe_maturity_date\")",
+        "C59": "=ODOO.LIST(1,22,\"boe_maturity_date\")",
+        "C60": "=ODOO.LIST(1,23,\"boe_maturity_date\")",
+        "C61": "=ODOO.LIST(1,24,\"boe_maturity_date\")",
+        "C62": "=ODOO.LIST(1,25,\"boe_maturity_date\")",
+        "C63": "=ODOO.LIST(1,26,\"boe_maturity_date\")",
+        "C64": "=ODOO.LIST(1,27,\"boe_maturity_date\")",
+        "C65": "=ODOO.LIST(1,28,\"boe_maturity_date\")",
+        "C66": "=ODOO.LIST(1,29,\"boe_maturity_date\")",
+        "C67": "=ODOO.LIST(1,30,\"boe_maturity_date\")",
+        "C68": "=ODOO.LIST(1,31,\"boe_maturity_date\")",
+        "C69": "=ODOO.LIST(1,32,\"boe_maturity_date\")",
+        "C70": "=ODOO.LIST(1,33,\"boe_maturity_date\")",
+        "C71": "=ODOO.LIST(1,34,\"boe_maturity_date\")",
+        "C72": "=ODOO.LIST(1,35,\"boe_maturity_date\")",
+        "C73": "=ODOO.LIST(1,36,\"boe_maturity_date\")",
+        "C74": "=ODOO.LIST(1,37,\"boe_maturity_date\")",
+        "C75": "=ODOO.LIST(1,38,\"boe_maturity_date\")",
+        "C76": "=ODOO.LIST(1,39,\"boe_maturity_date\")",
+        "C77": "=ODOO.LIST(1,40,\"boe_maturity_date\")",
+        "C78": "=ODOO.LIST(1,41,\"boe_maturity_date\")",
+        "C79": "=ODOO.LIST(1,42,\"boe_maturity_date\")",
+        "C80": "=ODOO.LIST(1,43,\"boe_maturity_date\")",
+        "C81": "=ODOO.LIST(1,44,\"boe_maturity_date\")",
+        "C82": "=ODOO.LIST(1,45,\"boe_maturity_date\")",
+        "C83": "=ODOO.LIST(1,46,\"boe_maturity_date\")",
+        "C84": "=ODOO.LIST(1,47,\"boe_maturity_date\")",
+        "C85": "=ODOO.LIST(1,48,\"boe_maturity_date\")",
+        "C86": "=ODOO.LIST(1,49,\"boe_maturity_date\")",
+        "C87": "=ODOO.LIST(1,50,\"boe_maturity_date\")",
+        "D37": "=ODOO.LIST.HEADER(1,\"boe_active_amount\")",
+        "D38": "=ODOO.LIST(1,1,\"boe_active_amount\")",
+        "D39": "=ODOO.LIST(1,2,\"boe_active_amount\")",
+        "D40": "=ODOO.LIST(1,3,\"boe_active_amount\")",
+        "D41": "=ODOO.LIST(1,4,\"boe_active_amount\")",
+        "D42": "=ODOO.LIST(1,5,\"boe_active_amount\")",
+        "D43": "=ODOO.LIST(1,6,\"boe_active_amount\")",
+        "D44": "=ODOO.LIST(1,7,\"boe_active_amount\")",
+        "D45": "=ODOO.LIST(1,8,\"boe_active_amount\")",
+        "D46": "=ODOO.LIST(1,9,\"boe_active_amount\")",
+        "D47": "=ODOO.LIST(1,10,\"boe_active_amount\")",
+        "D48": "=ODOO.LIST(1,11,\"boe_active_amount\")",
+        "D49": "=ODOO.LIST(1,12,\"boe_active_amount\")",
+        "D50": "=ODOO.LIST(1,13,\"boe_active_amount\")",
+        "D51": "=ODOO.LIST(1,14,\"boe_active_amount\")",
+        "D52": "=ODOO.LIST(1,15,\"boe_active_amount\")",
+        "D53": "=ODOO.LIST(1,16,\"boe_active_amount\")",
+        "D54": "=ODOO.LIST(1,17,\"boe_active_amount\")",
+        "D55": "=ODOO.LIST(1,18,\"boe_active_amount\")",
+        "D56": "=ODOO.LIST(1,19,\"boe_active_amount\")",
+        "D57": "=ODOO.LIST(1,20,\"boe_active_amount\")",
+        "D58": "=ODOO.LIST(1,21,\"boe_active_amount\")",
+        "D59": "=ODOO.LIST(1,22,\"boe_active_amount\")",
+        "D60": "=ODOO.LIST(1,23,\"boe_active_amount\")",
+        "D61": "=ODOO.LIST(1,24,\"boe_active_amount\")",
+        "D62": "=ODOO.LIST(1,25,\"boe_active_amount\")",
+        "D63": "=ODOO.LIST(1,26,\"boe_active_amount\")",
+        "D64": "=ODOO.LIST(1,27,\"boe_active_amount\")",
+        "D65": "=ODOO.LIST(1,28,\"boe_active_amount\")",
+        "D66": "=ODOO.LIST(1,29,\"boe_active_amount\")",
+        "D67": "=ODOO.LIST(1,30,\"boe_active_amount\")",
+        "D68": "=ODOO.LIST(1,31,\"boe_active_amount\")",
+        "D69": "=ODOO.LIST(1,32,\"boe_active_amount\")",
+        "D70": "=ODOO.LIST(1,33,\"boe_active_amount\")",
+        "D71": "=ODOO.LIST(1,34,\"boe_active_amount\")",
+        "D72": "=ODOO.LIST(1,35,\"boe_active_amount\")",
+        "D73": "=ODOO.LIST(1,36,\"boe_active_amount\")",
+        "D74": "=ODOO.LIST(1,37,\"boe_active_amount\")",
+        "D75": "=ODOO.LIST(1,38,\"boe_active_amount\")",
+        "D76": "=ODOO.LIST(1,39,\"boe_active_amount\")",
+        "D77": "=ODOO.LIST(1,40,\"boe_active_amount\")",
+        "D78": "=ODOO.LIST(1,41,\"boe_active_amount\")",
+        "D79": "=ODOO.LIST(1,42,\"boe_active_amount\")",
+        "D80": "=ODOO.LIST(1,43,\"boe_active_amount\")",
+        "D81": "=ODOO.LIST(1,44,\"boe_active_amount\")",
+        "D82": "=ODOO.LIST(1,45,\"boe_active_amount\")",
+        "D83": "=ODOO.LIST(1,46,\"boe_active_amount\")",
+        "D84": "=ODOO.LIST(1,47,\"boe_active_amount\")",
+        "D85": "=ODOO.LIST(1,48,\"boe_active_amount\")",
+        "D86": "=ODOO.LIST(1,49,\"boe_active_amount\")",
+        "D87": "=ODOO.LIST(1,50,\"boe_active_amount\")",
+        "E37": "=ODOO.LIST.HEADER(1,\"boe_recovery_residual\")",
+        "E38": "=ODOO.LIST(1,1,\"boe_recovery_residual\")",
+        "E39": "=ODOO.LIST(1,2,\"boe_recovery_residual\")",
+        "E40": "=ODOO.LIST(1,3,\"boe_recovery_residual\")",
+        "E41": "=ODOO.LIST(1,4,\"boe_recovery_residual\")",
+        "E42": "=ODOO.LIST(1,5,\"boe_recovery_residual\")",
+        "E43": "=ODOO.LIST(1,6,\"boe_recovery_residual\")",
+        "E44": "=ODOO.LIST(1,7,\"boe_recovery_residual\")",
+        "E45": "=ODOO.LIST(1,8,\"boe_recovery_residual\")",
+        "E46": "=ODOO.LIST(1,9,\"boe_recovery_residual\")",
+        "E47": "=ODOO.LIST(1,10,\"boe_recovery_residual\")",
+        "E48": "=ODOO.LIST(1,11,\"boe_recovery_residual\")",
+        "E49": "=ODOO.LIST(1,12,\"boe_recovery_residual\")",
+        "E50": "=ODOO.LIST(1,13,\"boe_recovery_residual\")",
+        "E51": "=ODOO.LIST(1,14,\"boe_recovery_residual\")",
+        "E52": "=ODOO.LIST(1,15,\"boe_recovery_residual\")",
+        "E53": "=ODOO.LIST(1,16,\"boe_recovery_residual\")",
+        "E54": "=ODOO.LIST(1,17,\"boe_recovery_residual\")",
+        "E55": "=ODOO.LIST(1,18,\"boe_recovery_residual\")",
+        "E56": "=ODOO.LIST(1,19,\"boe_recovery_residual\")",
+        "E57": "=ODOO.LIST(1,20,\"boe_recovery_residual\")",
+        "E58": "=ODOO.LIST(1,21,\"boe_recovery_residual\")",
+        "E59": "=ODOO.LIST(1,22,\"boe_recovery_residual\")",
+        "E60": "=ODOO.LIST(1,23,\"boe_recovery_residual\")",
+        "E61": "=ODOO.LIST(1,24,\"boe_recovery_residual\")",
+        "E62": "=ODOO.LIST(1,25,\"boe_recovery_residual\")",
+        "E63": "=ODOO.LIST(1,26,\"boe_recovery_residual\")",
+        "E64": "=ODOO.LIST(1,27,\"boe_recovery_residual\")",
+        "E65": "=ODOO.LIST(1,28,\"boe_recovery_residual\")",
+        "E66": "=ODOO.LIST(1,29,\"boe_recovery_residual\")",
+        "E67": "=ODOO.LIST(1,30,\"boe_recovery_residual\")",
+        "E68": "=ODOO.LIST(1,31,\"boe_recovery_residual\")",
+        "E69": "=ODOO.LIST(1,32,\"boe_recovery_residual\")",
+        "E70": "=ODOO.LIST(1,33,\"boe_recovery_residual\")",
+        "E71": "=ODOO.LIST(1,34,\"boe_recovery_residual\")",
+        "E72": "=ODOO.LIST(1,35,\"boe_recovery_residual\")",
+        "E73": "=ODOO.LIST(1,36,\"boe_recovery_residual\")",
+        "E74": "=ODOO.LIST(1,37,\"boe_recovery_residual\")",
+        "E75": "=ODOO.LIST(1,38,\"boe_recovery_residual\")",
+        "E76": "=ODOO.LIST(1,39,\"boe_recovery_residual\")",
+        "E77": "=ODOO.LIST(1,40,\"boe_recovery_residual\")",
+        "E78": "=ODOO.LIST(1,41,\"boe_recovery_residual\")",
+        "E79": "=ODOO.LIST(1,42,\"boe_recovery_residual\")",
+        "E80": "=ODOO.LIST(1,43,\"boe_recovery_residual\")",
+        "E81": "=ODOO.LIST(1,44,\"boe_recovery_residual\")",
+        "E82": "=ODOO.LIST(1,45,\"boe_recovery_residual\")",
+        "E83": "=ODOO.LIST(1,46,\"boe_recovery_residual\")",
+        "E84": "=ODOO.LIST(1,47,\"boe_recovery_residual\")",
+        "E85": "=ODOO.LIST(1,48,\"boe_recovery_residual\")",
+        "E86": "=ODOO.LIST(1,49,\"boe_recovery_residual\")",
+        "E87": "=ODOO.LIST(1,50,\"boe_recovery_residual\")",
+        "F37": "=ODOO.LIST.HEADER(1,\"boe_user_id\")",
+        "F38": "=ODOO.LIST(1,1,\"boe_user_id\")",
+        "F39": "=ODOO.LIST(1,2,\"boe_user_id\")",
+        "F40": "=ODOO.LIST(1,3,\"boe_user_id\")",
+        "F41": "=ODOO.LIST(1,4,\"boe_user_id\")",
+        "F42": "=ODOO.LIST(1,5,\"boe_user_id\")",
+        "F43": "=ODOO.LIST(1,6,\"boe_user_id\")",
+        "F44": "=ODOO.LIST(1,7,\"boe_user_id\")",
+        "F45": "=ODOO.LIST(1,8,\"boe_user_id\")",
+        "F46": "=ODOO.LIST(1,9,\"boe_user_id\")",
+        "F47": "=ODOO.LIST(1,10,\"boe_user_id\")",
+        "F48": "=ODOO.LIST(1,11,\"boe_user_id\")",
+        "F49": "=ODOO.LIST(1,12,\"boe_user_id\")",
+        "F50": "=ODOO.LIST(1,13,\"boe_user_id\")",
+        "F51": "=ODOO.LIST(1,14,\"boe_user_id\")",
+        "F52": "=ODOO.LIST(1,15,\"boe_user_id\")",
+        "F53": "=ODOO.LIST(1,16,\"boe_user_id\")",
+        "F54": "=ODOO.LIST(1,17,\"boe_user_id\")",
+        "F55": "=ODOO.LIST(1,18,\"boe_user_id\")",
+        "F56": "=ODOO.LIST(1,19,\"boe_user_id\")",
+        "F57": "=ODOO.LIST(1,20,\"boe_user_id\")",
+        "F58": "=ODOO.LIST(1,21,\"boe_user_id\")",
+        "F59": "=ODOO.LIST(1,22,\"boe_user_id\")",
+        "F60": "=ODOO.LIST(1,23,\"boe_user_id\")",
+        "F61": "=ODOO.LIST(1,24,\"boe_user_id\")",
+        "F62": "=ODOO.LIST(1,25,\"boe_user_id\")",
+        "F63": "=ODOO.LIST(1,26,\"boe_user_id\")",
+        "F64": "=ODOO.LIST(1,27,\"boe_user_id\")",
+        "F65": "=ODOO.LIST(1,28,\"boe_user_id\")",
+        "F66": "=ODOO.LIST(1,29,\"boe_user_id\")",
+        "F67": "=ODOO.LIST(1,30,\"boe_user_id\")",
+        "F68": "=ODOO.LIST(1,31,\"boe_user_id\")",
+        "F69": "=ODOO.LIST(1,32,\"boe_user_id\")",
+        "F70": "=ODOO.LIST(1,33,\"boe_user_id\")",
+        "F71": "=ODOO.LIST(1,34,\"boe_user_id\")",
+        "F72": "=ODOO.LIST(1,35,\"boe_user_id\")",
+        "F73": "=ODOO.LIST(1,36,\"boe_user_id\")",
+        "F74": "=ODOO.LIST(1,37,\"boe_user_id\")",
+        "F75": "=ODOO.LIST(1,38,\"boe_user_id\")",
+        "F76": "=ODOO.LIST(1,39,\"boe_user_id\")",
+        "F77": "=ODOO.LIST(1,40,\"boe_user_id\")",
+        "F78": "=ODOO.LIST(1,41,\"boe_user_id\")",
+        "F79": "=ODOO.LIST(1,42,\"boe_user_id\")",
+        "F80": "=ODOO.LIST(1,43,\"boe_user_id\")",
+        "F81": "=ODOO.LIST(1,44,\"boe_user_id\")",
+        "F82": "=ODOO.LIST(1,45,\"boe_user_id\")",
+        "F83": "=ODOO.LIST(1,46,\"boe_user_id\")",
+        "F84": "=ODOO.LIST(1,47,\"boe_user_id\")",
+        "F85": "=ODOO.LIST(1,48,\"boe_user_id\")",
+        "F86": "=ODOO.LIST(1,49,\"boe_user_id\")",
+        "F87": "=ODOO.LIST(1,50,\"boe_user_id\")",
+        "G37": "=ODOO.LIST.HEADER(1,\"boe_next_action\")",
+        "G38": "=ODOO.LIST(1,1,\"boe_next_action\")",
+        "G39": "=ODOO.LIST(1,2,\"boe_next_action\")",
+        "G40": "=ODOO.LIST(1,3,\"boe_next_action\")",
+        "G41": "=ODOO.LIST(1,4,\"boe_next_action\")",
+        "G42": "=ODOO.LIST(1,5,\"boe_next_action\")",
+        "G43": "=ODOO.LIST(1,6,\"boe_next_action\")",
+        "G44": "=ODOO.LIST(1,7,\"boe_next_action\")",
+        "G45": "=ODOO.LIST(1,8,\"boe_next_action\")",
+        "G46": "=ODOO.LIST(1,9,\"boe_next_action\")",
+        "G47": "=ODOO.LIST(1,10,\"boe_next_action\")",
+        "G48": "=ODOO.LIST(1,11,\"boe_next_action\")",
+        "G49": "=ODOO.LIST(1,12,\"boe_next_action\")",
+        "G50": "=ODOO.LIST(1,13,\"boe_next_action\")",
+        "G51": "=ODOO.LIST(1,14,\"boe_next_action\")",
+        "G52": "=ODOO.LIST(1,15,\"boe_next_action\")",
+        "G53": "=ODOO.LIST(1,16,\"boe_next_action\")",
+        "G54": "=ODOO.LIST(1,17,\"boe_next_action\")",
+        "G55": "=ODOO.LIST(1,18,\"boe_next_action\")",
+        "G56": "=ODOO.LIST(1,19,\"boe_next_action\")",
+        "G57": "=ODOO.LIST(1,20,\"boe_next_action\")",
+        "G58": "=ODOO.LIST(1,21,\"boe_next_action\")",
+        "G59": "=ODOO.LIST(1,22,\"boe_next_action\")",
+        "G60": "=ODOO.LIST(1,23,\"boe_next_action\")",
+        "G61": "=ODOO.LIST(1,24,\"boe_next_action\")",
+        "G62": "=ODOO.LIST(1,25,\"boe_next_action\")",
+        "G63": "=ODOO.LIST(1,26,\"boe_next_action\")",
+        "G64": "=ODOO.LIST(1,27,\"boe_next_action\")",
+        "G65": "=ODOO.LIST(1,28,\"boe_next_action\")",
+        "G66": "=ODOO.LIST(1,29,\"boe_next_action\")",
+        "G67": "=ODOO.LIST(1,30,\"boe_next_action\")",
+        "G68": "=ODOO.LIST(1,31,\"boe_next_action\")",
+        "G69": "=ODOO.LIST(1,32,\"boe_next_action\")",
+        "G70": "=ODOO.LIST(1,33,\"boe_next_action\")",
+        "G71": "=ODOO.LIST(1,34,\"boe_next_action\")",
+        "G72": "=ODOO.LIST(1,35,\"boe_next_action\")",
+        "G73": "=ODOO.LIST(1,36,\"boe_next_action\")",
+        "G74": "=ODOO.LIST(1,37,\"boe_next_action\")",
+        "G75": "=ODOO.LIST(1,38,\"boe_next_action\")",
+        "G76": "=ODOO.LIST(1,39,\"boe_next_action\")",
+        "G77": "=ODOO.LIST(1,40,\"boe_next_action\")",
+        "G78": "=ODOO.LIST(1,41,\"boe_next_action\")",
+        "G79": "=ODOO.LIST(1,42,\"boe_next_action\")",
+        "G80": "=ODOO.LIST(1,43,\"boe_next_action\")",
+        "G81": "=ODOO.LIST(1,44,\"boe_next_action\")",
+        "G82": "=ODOO.LIST(1,45,\"boe_next_action\")",
+        "G83": "=ODOO.LIST(1,46,\"boe_next_action\")",
+        "G84": "=ODOO.LIST(1,47,\"boe_next_action\")",
+        "G85": "=ODOO.LIST(1,48,\"boe_next_action\")",
+        "G86": "=ODOO.LIST(1,49,\"boe_next_action\")",
+        "G87": "=ODOO.LIST(1,50,\"boe_next_action\")",
+        "H37": "=ODOO.LIST.HEADER(1,\"boe_next_action_date\")",
+        "H38": "=ODOO.LIST(1,1,\"boe_next_action_date\")",
+        "H39": "=ODOO.LIST(1,2,\"boe_next_action_date\")",
+        "H40": "=ODOO.LIST(1,3,\"boe_next_action_date\")",
+        "H41": "=ODOO.LIST(1,4,\"boe_next_action_date\")",
+        "H42": "=ODOO.LIST(1,5,\"boe_next_action_date\")",
+        "H43": "=ODOO.LIST(1,6,\"boe_next_action_date\")",
+        "H44": "=ODOO.LIST(1,7,\"boe_next_action_date\")",
+        "H45": "=ODOO.LIST(1,8,\"boe_next_action_date\")",
+        "H46": "=ODOO.LIST(1,9,\"boe_next_action_date\")",
+        "H47": "=ODOO.LIST(1,10,\"boe_next_action_date\")",
+        "H48": "=ODOO.LIST(1,11,\"boe_next_action_date\")",
+        "H49": "=ODOO.LIST(1,12,\"boe_next_action_date\")",
+        "H50": "=ODOO.LIST(1,13,\"boe_next_action_date\")",
+        "H51": "=ODOO.LIST(1,14,\"boe_next_action_date\")",
+        "H52": "=ODOO.LIST(1,15,\"boe_next_action_date\")",
+        "H53": "=ODOO.LIST(1,16,\"boe_next_action_date\")",
+        "H54": "=ODOO.LIST(1,17,\"boe_next_action_date\")",
+        "H55": "=ODOO.LIST(1,18,\"boe_next_action_date\")",
+        "H56": "=ODOO.LIST(1,19,\"boe_next_action_date\")",
+        "H57": "=ODOO.LIST(1,20,\"boe_next_action_date\")",
+        "H58": "=ODOO.LIST(1,21,\"boe_next_action_date\")",
+        "H59": "=ODOO.LIST(1,22,\"boe_next_action_date\")",
+        "H60": "=ODOO.LIST(1,23,\"boe_next_action_date\")",
+        "H61": "=ODOO.LIST(1,24,\"boe_next_action_date\")",
+        "H62": "=ODOO.LIST(1,25,\"boe_next_action_date\")",
+        "H63": "=ODOO.LIST(1,26,\"boe_next_action_date\")",
+        "H64": "=ODOO.LIST(1,27,\"boe_next_action_date\")",
+        "H65": "=ODOO.LIST(1,28,\"boe_next_action_date\")",
+        "H66": "=ODOO.LIST(1,29,\"boe_next_action_date\")",
+        "H67": "=ODOO.LIST(1,30,\"boe_next_action_date\")",
+        "H68": "=ODOO.LIST(1,31,\"boe_next_action_date\")",
+        "H69": "=ODOO.LIST(1,32,\"boe_next_action_date\")",
+        "H70": "=ODOO.LIST(1,33,\"boe_next_action_date\")",
+        "H71": "=ODOO.LIST(1,34,\"boe_next_action_date\")",
+        "H72": "=ODOO.LIST(1,35,\"boe_next_action_date\")",
+        "H73": "=ODOO.LIST(1,36,\"boe_next_action_date\")",
+        "H74": "=ODOO.LIST(1,37,\"boe_next_action_date\")",
+        "H75": "=ODOO.LIST(1,38,\"boe_next_action_date\")",
+        "H76": "=ODOO.LIST(1,39,\"boe_next_action_date\")",
+        "H77": "=ODOO.LIST(1,40,\"boe_next_action_date\")",
+        "H78": "=ODOO.LIST(1,41,\"boe_next_action_date\")",
+        "H79": "=ODOO.LIST(1,42,\"boe_next_action_date\")",
+        "H80": "=ODOO.LIST(1,43,\"boe_next_action_date\")",
+        "H81": "=ODOO.LIST(1,44,\"boe_next_action_date\")",
+        "H82": "=ODOO.LIST(1,45,\"boe_next_action_date\")",
+        "H83": "=ODOO.LIST(1,46,\"boe_next_action_date\")",
+        "H84": "=ODOO.LIST(1,47,\"boe_next_action_date\")",
+        "H85": "=ODOO.LIST(1,48,\"boe_next_action_date\")",
+        "H86": "=ODOO.LIST(1,49,\"boe_next_action_date\")",
+        "H87": "=ODOO.LIST(1,50,\"boe_next_action_date\")",
+        "I37": "=ODOO.LIST.HEADER(1,\"boe_promise_date\")",
+        "I38": "=ODOO.LIST(1,1,\"boe_promise_date\")",
+        "I39": "=ODOO.LIST(1,2,\"boe_promise_date\")",
+        "I40": "=ODOO.LIST(1,3,\"boe_promise_date\")",
+        "I41": "=ODOO.LIST(1,4,\"boe_promise_date\")",
+        "I42": "=ODOO.LIST(1,5,\"boe_promise_date\")",
+        "I43": "=ODOO.LIST(1,6,\"boe_promise_date\")",
+        "I44": "=ODOO.LIST(1,7,\"boe_promise_date\")",
+        "I45": "=ODOO.LIST(1,8,\"boe_promise_date\")",
+        "I46": "=ODOO.LIST(1,9,\"boe_promise_date\")",
+        "I47": "=ODOO.LIST(1,10,\"boe_promise_date\")",
+        "I48": "=ODOO.LIST(1,11,\"boe_promise_date\")",
+        "I49": "=ODOO.LIST(1,12,\"boe_promise_date\")",
+        "I50": "=ODOO.LIST(1,13,\"boe_promise_date\")",
+        "I51": "=ODOO.LIST(1,14,\"boe_promise_date\")",
+        "I52": "=ODOO.LIST(1,15,\"boe_promise_date\")",
+        "I53": "=ODOO.LIST(1,16,\"boe_promise_date\")",
+        "I54": "=ODOO.LIST(1,17,\"boe_promise_date\")",
+        "I55": "=ODOO.LIST(1,18,\"boe_promise_date\")",
+        "I56": "=ODOO.LIST(1,19,\"boe_promise_date\")",
+        "I57": "=ODOO.LIST(1,20,\"boe_promise_date\")",
+        "I58": "=ODOO.LIST(1,21,\"boe_promise_date\")",
+        "I59": "=ODOO.LIST(1,22,\"boe_promise_date\")",
+        "I60": "=ODOO.LIST(1,23,\"boe_promise_date\")",
+        "I61": "=ODOO.LIST(1,24,\"boe_promise_date\")",
+        "I62": "=ODOO.LIST(1,25,\"boe_promise_date\")",
+        "I63": "=ODOO.LIST(1,26,\"boe_promise_date\")",
+        "I64": "=ODOO.LIST(1,27,\"boe_promise_date\")",
+        "I65": "=ODOO.LIST(1,28,\"boe_promise_date\")",
+        "I66": "=ODOO.LIST(1,29,\"boe_promise_date\")",
+        "I67": "=ODOO.LIST(1,30,\"boe_promise_date\")",
+        "I68": "=ODOO.LIST(1,31,\"boe_promise_date\")",
+        "I69": "=ODOO.LIST(1,32,\"boe_promise_date\")",
+        "I70": "=ODOO.LIST(1,33,\"boe_promise_date\")",
+        "I71": "=ODOO.LIST(1,34,\"boe_promise_date\")",
+        "I72": "=ODOO.LIST(1,35,\"boe_promise_date\")",
+        "I73": "=ODOO.LIST(1,36,\"boe_promise_date\")",
+        "I74": "=ODOO.LIST(1,37,\"boe_promise_date\")",
+        "I75": "=ODOO.LIST(1,38,\"boe_promise_date\")",
+        "I76": "=ODOO.LIST(1,39,\"boe_promise_date\")",
+        "I77": "=ODOO.LIST(1,40,\"boe_promise_date\")",
+        "I78": "=ODOO.LIST(1,41,\"boe_promise_date\")",
+        "I79": "=ODOO.LIST(1,42,\"boe_promise_date\")",
+        "I80": "=ODOO.LIST(1,43,\"boe_promise_date\")",
+        "I81": "=ODOO.LIST(1,44,\"boe_promise_date\")",
+        "I82": "=ODOO.LIST(1,45,\"boe_promise_date\")",
+        "I83": "=ODOO.LIST(1,46,\"boe_promise_date\")",
+        "I84": "=ODOO.LIST(1,47,\"boe_promise_date\")",
+        "I85": "=ODOO.LIST(1,48,\"boe_promise_date\")",
+        "I86": "=ODOO.LIST(1,49,\"boe_promise_date\")",
+        "I87": "=ODOO.LIST(1,50,\"boe_promise_date\")",
+        "A17": "Encaissements confirmés de la période",
+        "B17": "=PIVOT.VALUE(22,\"collected_amount\")",
+        "A18": "Recouvrements confirmés de la période",
+        "B18": "=PIVOT.VALUE(22,\"recovered_amount\")"
+      },
+      "styles": {
+        "A1:G1": 1,
+        "A2": 2,
+        "A3:G3": 3,
+        "A5": 2,
+        "A6": 2,
+        "A7": 2,
+        "A8": 2,
+        "A9": 2,
+        "A10": 2,
+        "A11": 2,
+        "A12": 2,
+        "A13": 2,
+        "A14": 2,
+        "A15": 2,
+        "A16": 2,
+        "A4:C4": 2,
+        "A37": 2,
+        "B37": 2,
+        "C37": 2,
+        "D37": 2,
+        "E37": 2,
+        "F37": 2,
+        "G37": 2,
+        "H37": 2,
+        "I37": 2
+      },
+      "formats": {
+        "B5": "#,##0.000",
+        "B6": "#,##0.000",
+        "B7": "#,##0.000",
+        "B8": "#,##0.000",
+        "B9": "#,##0.000",
+        "B10": "#,##0.000",
+        "B11": "#,##0.000",
+        "B12": "#,##0.000",
+        "B13": "#,##0.000",
+        "B14": "0",
+        "B15": "0",
+        "B16": "0"
+      },
+      "borders": {},
+      "conditionalFormats": [],
+      "dataValidationRules": [],
+      "figures": [
+        {
+          "id": "score-0",
+          "width": 300,
+          "height": 105,
+          "tag": "chart",
+          "col": 0,
+          "row": 19,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "data": {
+            "type": "scorecard",
+            "title": {
+              "text": "Principal actif",
+              "color": "#174D45",
+              "bold": true
+            },
+            "background": "#EEF7F4",
+            "keyValue": "Synthèse!B5",
+            "baseline": "Synthèse!C5",
+            "baselineDescr": {
+              "text": "titres distincts"
+            },
+            "baselineMode": "text",
+            "humanize": false,
+            "chartId": "score-0"
+          }
+        },
+        {
+          "id": "score-1",
+          "width": 300,
+          "height": 105,
+          "tag": "chart",
+          "col": 3,
+          "row": 19,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "data": {
+            "type": "scorecard",
+            "title": {
+              "text": "En portefeuille",
+              "color": "#174D45",
+              "bold": true
+            },
+            "background": "#EEF7F4",
+            "keyValue": "Synthèse!B6",
+            "baseline": "Synthèse!C6",
+            "baselineDescr": {
+              "text": "titres distincts"
+            },
+            "baselineMode": "text",
+            "humanize": false,
+            "chartId": "score-1"
+          }
+        },
+        {
+          "id": "score-2",
+          "width": 300,
+          "height": 105,
+          "tag": "chart",
+          "col": 6,
+          "row": 19,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "data": {
+            "type": "scorecard",
+            "title": {
+              "text": "Exposition liée aux traites",
+              "color": "#174D45",
+              "bold": true
+            },
+            "background": "#EEF7F4",
+            "keyValue": "Synthèse!B7",
+            "baseline": "Synthèse!C7",
+            "baselineDescr": {
+              "text": "titres distincts"
+            },
+            "baselineMode": "text",
+            "humanize": false,
+            "chartId": "score-2"
+          }
+        },
+        {
+          "id": "score-3",
+          "width": 300,
+          "height": 105,
+          "tag": "chart",
+          "col": 0,
+          "row": 24,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "data": {
+            "type": "scorecard",
+            "title": {
+              "text": "Échues sans confirmation",
+              "color": "#174D45",
+              "bold": true
+            },
+            "background": "#FFF1F0",
+            "keyValue": "Synthèse!B8",
+            "baseline": "Synthèse!C8",
+            "baselineDescr": {
+              "text": "titres distincts"
+            },
+            "baselineMode": "text",
+            "humanize": false,
+            "chartId": "score-3"
+          }
+        },
+        {
+          "id": "score-4",
+          "width": 300,
+          "height": 105,
+          "tag": "chart",
+          "col": 3,
+          "row": 24,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "data": {
+            "type": "scorecard",
+            "title": {
+              "text": "Dont règlements en attente",
+              "color": "#174D45",
+              "bold": true
+            },
+            "background": "#EEF7F4",
+            "keyValue": "Synthèse!B9",
+            "baseline": "Synthèse!C9",
+            "baselineDescr": {
+              "text": "titres distincts"
+            },
+            "baselineMode": "text",
+            "humanize": false,
+            "chartId": "score-4"
+          }
+        },
+        {
+          "id": "score-5",
+          "width": 300,
+          "height": 105,
+          "tag": "chart",
+          "col": 6,
+          "row": 24,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "data": {
+            "type": "scorecard",
+            "title": {
+              "text": "Impayés à recouvrer",
+              "color": "#174D45",
+              "bold": true
+            },
+            "background": "#FFF1F0",
+            "keyValue": "Synthèse!B10",
+            "baseline": "Synthèse!C10",
+            "baselineDescr": {
+              "text": "titres distincts"
+            },
+            "baselineMode": "text",
+            "humanize": false,
+            "chartId": "score-5"
+          }
+        }
+      ]
+    },
+    {
+      "id": "schedule",
+      "name": "Échéancier",
+      "colNumber": 12,
+      "rowNumber": 160,
+      "rows": {
+        "0": {
+          "size": 42
+        },
+        "1": {
+          "size": 28
+        },
+        "2": {
+          "size": 28
+        }
+      },
+      "cols": {
+        "0": {
+          "size": 280
+        },
+        "1": {
+          "size": 180
+        },
+        "2": {
+          "size": 180
+        },
+        "3": {
+          "size": 180
+        },
+        "4": {
+          "size": 180
+        },
+        "5": {
+          "size": 180
+        },
+        "6": {
+          "size": 180
+        }
+      },
+      "merges": ["A1:G1", "A3:G3"],
+      "cells": {
+        "A1": "Échéancier",
+        "A2": "Dernier chargement",
+        "B2": "Chargement en cours",
+        "A3": "TND — stocks courants et flux de période séparés ; ouvrir les sources depuis les pivots.",
+        "A5": "Soldes attendus par mois (prévision, pas encaissement)",
+        "A6": "=PIVOT(13,100,FALSE,FALSE)",
+        "F5": "Retard 1–7 jours",
+        "G5": "=PIVOT.VALUE(14,\"boe_active_amount\")",
+        "F8": "Retard 8–30 jours",
+        "G8": "=PIVOT.VALUE(15,\"boe_active_amount\")",
+        "F11": "Retard 31–60 jours",
+        "G11": "=PIVOT.VALUE(16,\"boe_active_amount\")",
+        "F14": "Retard supérieur à 60 jours",
+        "G14": "=PIVOT.VALUE(17,\"boe_active_amount\")"
+      },
+      "styles": {
+        "A1:G1": 1,
+        "A2": 2,
+        "A3:G3": 3
+      },
+      "formats": {},
+      "borders": {},
+      "conditionalFormats": [],
+      "dataValidationRules": [],
+      "figures": []
+    },
+    {
+      "id": "portfolio",
+      "name": "Portefeuille",
+      "colNumber": 12,
+      "rowNumber": 300,
+      "rows": {
+        "0": {
+          "size": 42
+        },
+        "1": {
+          "size": 28
+        },
+        "2": {
+          "size": 28
+        }
+      },
+      "cols": {
+        "0": {
+          "size": 280
+        },
+        "1": {
+          "size": 180
+        },
+        "2": {
+          "size": 180
+        },
+        "3": {
+          "size": 180
+        },
+        "4": {
+          "size": 180
+        },
+        "5": {
+          "size": 180
+        },
+        "6": {
+          "size": 180
+        }
+      },
+      "merges": ["A1:G1", "A3:G3"],
+      "cells": {
+        "A1": "Portefeuille",
+        "A2": "Dernier chargement",
+        "B2": "Chargement en cours",
+        "A3": "TND — stocks courants et flux de période séparés ; ouvrir les sources depuis les pivots.",
+        "A5": "Portefeuille actif : soldes, hors retours en créance",
+        "A6": "=PIVOT(18,100,FALSE,FALSE)",
+        "F5": "Responsable : actif et impayés séparés",
+        "F6": "=PIVOT(19,100,FALSE,FALSE)",
+        "A115": "Principal actif par état de règlement",
+        "A116": "=PIVOT(23,100,FALSE,FALSE)",
+        "F115": "Principaux clients par exposition liée aux traites",
+        "F116": "=PIVOT(24,100,FALSE,FALSE)"
+      },
+      "styles": {
+        "A1:G1": 1,
+        "A2": 2,
+        "A3:G3": 3
+      },
+      "formats": {},
+      "borders": {},
+      "conditionalFormats": [],
+      "dataValidationRules": [],
+      "figures": []
+    },
+    {
+      "id": "incidents",
+      "name": "Impayés et recouvrement",
+      "colNumber": 12,
+      "rowNumber": 300,
+      "rows": {
+        "0": {
+          "size": 42
+        },
+        "1": {
+          "size": 28
+        },
+        "2": {
+          "size": 28
+        }
+      },
+      "cols": {
+        "0": {
+          "size": 280
+        },
+        "1": {
+          "size": 180
+        },
+        "2": {
+          "size": 180
+        },
+        "3": {
+          "size": 180
+        },
+        "4": {
+          "size": 180
+        },
+        "5": {
+          "size": 180
+        },
+        "6": {
+          "size": 180
+        }
+      },
+      "merges": ["A1:G1", "A3:G3"],
+      "cells": {
+        "A1": "Impayés et recouvrement",
+        "A2": "Dernier chargement",
+        "B2": "Chargement en cours",
+        "A3": "TND — stocks courants et flux de période séparés ; ouvrir les sources depuis les pivots.",
+        "A5": "Situation actuelle des impayés, sans filtre de date de flux",
+        "A6": "=PIVOT(20,100,FALSE,FALSE)",
+        "F5": "Incidents survenus dans la période",
+        "F6": "=PIVOT(21,100,FALSE,FALSE)",
+        "A115": "Impayés à recouvrer — détail (50 premiers ; les pivots totalisent tous les dossiers)",
+        "A116": "=ODOO.LIST.HEADER(2,\"bill_id\")",
+        "A117": "=ODOO.LIST(2,1,\"bill_id\")",
+        "A118": "=ODOO.LIST(2,2,\"bill_id\")",
+        "A119": "=ODOO.LIST(2,3,\"bill_id\")",
+        "A120": "=ODOO.LIST(2,4,\"bill_id\")",
+        "A121": "=ODOO.LIST(2,5,\"bill_id\")",
+        "A122": "=ODOO.LIST(2,6,\"bill_id\")",
+        "A123": "=ODOO.LIST(2,7,\"bill_id\")",
+        "A124": "=ODOO.LIST(2,8,\"bill_id\")",
+        "A125": "=ODOO.LIST(2,9,\"bill_id\")",
+        "A126": "=ODOO.LIST(2,10,\"bill_id\")",
+        "A127": "=ODOO.LIST(2,11,\"bill_id\")",
+        "A128": "=ODOO.LIST(2,12,\"bill_id\")",
+        "A129": "=ODOO.LIST(2,13,\"bill_id\")",
+        "A130": "=ODOO.LIST(2,14,\"bill_id\")",
+        "A131": "=ODOO.LIST(2,15,\"bill_id\")",
+        "A132": "=ODOO.LIST(2,16,\"bill_id\")",
+        "A133": "=ODOO.LIST(2,17,\"bill_id\")",
+        "A134": "=ODOO.LIST(2,18,\"bill_id\")",
+        "A135": "=ODOO.LIST(2,19,\"bill_id\")",
+        "A136": "=ODOO.LIST(2,20,\"bill_id\")",
+        "A137": "=ODOO.LIST(2,21,\"bill_id\")",
+        "A138": "=ODOO.LIST(2,22,\"bill_id\")",
+        "A139": "=ODOO.LIST(2,23,\"bill_id\")",
+        "A140": "=ODOO.LIST(2,24,\"bill_id\")",
+        "A141": "=ODOO.LIST(2,25,\"bill_id\")",
+        "A142": "=ODOO.LIST(2,26,\"bill_id\")",
+        "A143": "=ODOO.LIST(2,27,\"bill_id\")",
+        "A144": "=ODOO.LIST(2,28,\"bill_id\")",
+        "A145": "=ODOO.LIST(2,29,\"bill_id\")",
+        "A146": "=ODOO.LIST(2,30,\"bill_id\")",
+        "A147": "=ODOO.LIST(2,31,\"bill_id\")",
+        "A148": "=ODOO.LIST(2,32,\"bill_id\")",
+        "A149": "=ODOO.LIST(2,33,\"bill_id\")",
+        "A150": "=ODOO.LIST(2,34,\"bill_id\")",
+        "A151": "=ODOO.LIST(2,35,\"bill_id\")",
+        "A152": "=ODOO.LIST(2,36,\"bill_id\")",
+        "A153": "=ODOO.LIST(2,37,\"bill_id\")",
+        "A154": "=ODOO.LIST(2,38,\"bill_id\")",
+        "A155": "=ODOO.LIST(2,39,\"bill_id\")",
+        "A156": "=ODOO.LIST(2,40,\"bill_id\")",
+        "A157": "=ODOO.LIST(2,41,\"bill_id\")",
+        "A158": "=ODOO.LIST(2,42,\"bill_id\")",
+        "A159": "=ODOO.LIST(2,43,\"bill_id\")",
+        "A160": "=ODOO.LIST(2,44,\"bill_id\")",
+        "A161": "=ODOO.LIST(2,45,\"bill_id\")",
+        "A162": "=ODOO.LIST(2,46,\"bill_id\")",
+        "A163": "=ODOO.LIST(2,47,\"bill_id\")",
+        "A164": "=ODOO.LIST(2,48,\"bill_id\")",
+        "A165": "=ODOO.LIST(2,49,\"bill_id\")",
+        "A166": "=ODOO.LIST(2,50,\"bill_id\")",
+        "B116": "=ODOO.LIST.HEADER(2,\"invoice_id\")",
+        "B117": "=ODOO.LIST(2,1,\"invoice_id\")",
+        "B118": "=ODOO.LIST(2,2,\"invoice_id\")",
+        "B119": "=ODOO.LIST(2,3,\"invoice_id\")",
+        "B120": "=ODOO.LIST(2,4,\"invoice_id\")",
+        "B121": "=ODOO.LIST(2,5,\"invoice_id\")",
+        "B122": "=ODOO.LIST(2,6,\"invoice_id\")",
+        "B123": "=ODOO.LIST(2,7,\"invoice_id\")",
+        "B124": "=ODOO.LIST(2,8,\"invoice_id\")",
+        "B125": "=ODOO.LIST(2,9,\"invoice_id\")",
+        "B126": "=ODOO.LIST(2,10,\"invoice_id\")",
+        "B127": "=ODOO.LIST(2,11,\"invoice_id\")",
+        "B128": "=ODOO.LIST(2,12,\"invoice_id\")",
+        "B129": "=ODOO.LIST(2,13,\"invoice_id\")",
+        "B130": "=ODOO.LIST(2,14,\"invoice_id\")",
+        "B131": "=ODOO.LIST(2,15,\"invoice_id\")",
+        "B132": "=ODOO.LIST(2,16,\"invoice_id\")",
+        "B133": "=ODOO.LIST(2,17,\"invoice_id\")",
+        "B134": "=ODOO.LIST(2,18,\"invoice_id\")",
+        "B135": "=ODOO.LIST(2,19,\"invoice_id\")",
+        "B136": "=ODOO.LIST(2,20,\"invoice_id\")",
+        "B137": "=ODOO.LIST(2,21,\"invoice_id\")",
+        "B138": "=ODOO.LIST(2,22,\"invoice_id\")",
+        "B139": "=ODOO.LIST(2,23,\"invoice_id\")",
+        "B140": "=ODOO.LIST(2,24,\"invoice_id\")",
+        "B141": "=ODOO.LIST(2,25,\"invoice_id\")",
+        "B142": "=ODOO.LIST(2,26,\"invoice_id\")",
+        "B143": "=ODOO.LIST(2,27,\"invoice_id\")",
+        "B144": "=ODOO.LIST(2,28,\"invoice_id\")",
+        "B145": "=ODOO.LIST(2,29,\"invoice_id\")",
+        "B146": "=ODOO.LIST(2,30,\"invoice_id\")",
+        "B147": "=ODOO.LIST(2,31,\"invoice_id\")",
+        "B148": "=ODOO.LIST(2,32,\"invoice_id\")",
+        "B149": "=ODOO.LIST(2,33,\"invoice_id\")",
+        "B150": "=ODOO.LIST(2,34,\"invoice_id\")",
+        "B151": "=ODOO.LIST(2,35,\"invoice_id\")",
+        "B152": "=ODOO.LIST(2,36,\"invoice_id\")",
+        "B153": "=ODOO.LIST(2,37,\"invoice_id\")",
+        "B154": "=ODOO.LIST(2,38,\"invoice_id\")",
+        "B155": "=ODOO.LIST(2,39,\"invoice_id\")",
+        "B156": "=ODOO.LIST(2,40,\"invoice_id\")",
+        "B157": "=ODOO.LIST(2,41,\"invoice_id\")",
+        "B158": "=ODOO.LIST(2,42,\"invoice_id\")",
+        "B159": "=ODOO.LIST(2,43,\"invoice_id\")",
+        "B160": "=ODOO.LIST(2,44,\"invoice_id\")",
+        "B161": "=ODOO.LIST(2,45,\"invoice_id\")",
+        "B162": "=ODOO.LIST(2,46,\"invoice_id\")",
+        "B163": "=ODOO.LIST(2,47,\"invoice_id\")",
+        "B164": "=ODOO.LIST(2,48,\"invoice_id\")",
+        "B165": "=ODOO.LIST(2,49,\"invoice_id\")",
+        "B166": "=ODOO.LIST(2,50,\"invoice_id\")",
+        "C116": "=ODOO.LIST.HEADER(2,\"partner_id\")",
+        "C117": "=ODOO.LIST(2,1,\"partner_id\")",
+        "C118": "=ODOO.LIST(2,2,\"partner_id\")",
+        "C119": "=ODOO.LIST(2,3,\"partner_id\")",
+        "C120": "=ODOO.LIST(2,4,\"partner_id\")",
+        "C121": "=ODOO.LIST(2,5,\"partner_id\")",
+        "C122": "=ODOO.LIST(2,6,\"partner_id\")",
+        "C123": "=ODOO.LIST(2,7,\"partner_id\")",
+        "C124": "=ODOO.LIST(2,8,\"partner_id\")",
+        "C125": "=ODOO.LIST(2,9,\"partner_id\")",
+        "C126": "=ODOO.LIST(2,10,\"partner_id\")",
+        "C127": "=ODOO.LIST(2,11,\"partner_id\")",
+        "C128": "=ODOO.LIST(2,12,\"partner_id\")",
+        "C129": "=ODOO.LIST(2,13,\"partner_id\")",
+        "C130": "=ODOO.LIST(2,14,\"partner_id\")",
+        "C131": "=ODOO.LIST(2,15,\"partner_id\")",
+        "C132": "=ODOO.LIST(2,16,\"partner_id\")",
+        "C133": "=ODOO.LIST(2,17,\"partner_id\")",
+        "C134": "=ODOO.LIST(2,18,\"partner_id\")",
+        "C135": "=ODOO.LIST(2,19,\"partner_id\")",
+        "C136": "=ODOO.LIST(2,20,\"partner_id\")",
+        "C137": "=ODOO.LIST(2,21,\"partner_id\")",
+        "C138": "=ODOO.LIST(2,22,\"partner_id\")",
+        "C139": "=ODOO.LIST(2,23,\"partner_id\")",
+        "C140": "=ODOO.LIST(2,24,\"partner_id\")",
+        "C141": "=ODOO.LIST(2,25,\"partner_id\")",
+        "C142": "=ODOO.LIST(2,26,\"partner_id\")",
+        "C143": "=ODOO.LIST(2,27,\"partner_id\")",
+        "C144": "=ODOO.LIST(2,28,\"partner_id\")",
+        "C145": "=ODOO.LIST(2,29,\"partner_id\")",
+        "C146": "=ODOO.LIST(2,30,\"partner_id\")",
+        "C147": "=ODOO.LIST(2,31,\"partner_id\")",
+        "C148": "=ODOO.LIST(2,32,\"partner_id\")",
+        "C149": "=ODOO.LIST(2,33,\"partner_id\")",
+        "C150": "=ODOO.LIST(2,34,\"partner_id\")",
+        "C151": "=ODOO.LIST(2,35,\"partner_id\")",
+        "C152": "=ODOO.LIST(2,36,\"partner_id\")",
+        "C153": "=ODOO.LIST(2,37,\"partner_id\")",
+        "C154": "=ODOO.LIST(2,38,\"partner_id\")",
+        "C155": "=ODOO.LIST(2,39,\"partner_id\")",
+        "C156": "=ODOO.LIST(2,40,\"partner_id\")",
+        "C157": "=ODOO.LIST(2,41,\"partner_id\")",
+        "C158": "=ODOO.LIST(2,42,\"partner_id\")",
+        "C159": "=ODOO.LIST(2,43,\"partner_id\")",
+        "C160": "=ODOO.LIST(2,44,\"partner_id\")",
+        "C161": "=ODOO.LIST(2,45,\"partner_id\")",
+        "C162": "=ODOO.LIST(2,46,\"partner_id\")",
+        "C163": "=ODOO.LIST(2,47,\"partner_id\")",
+        "C164": "=ODOO.LIST(2,48,\"partner_id\")",
+        "C165": "=ODOO.LIST(2,49,\"partner_id\")",
+        "C166": "=ODOO.LIST(2,50,\"partner_id\")",
+        "D116": "=ODOO.LIST.HEADER(2,\"reason\")",
+        "D117": "=ODOO.LIST(2,1,\"reason\")",
+        "D118": "=ODOO.LIST(2,2,\"reason\")",
+        "D119": "=ODOO.LIST(2,3,\"reason\")",
+        "D120": "=ODOO.LIST(2,4,\"reason\")",
+        "D121": "=ODOO.LIST(2,5,\"reason\")",
+        "D122": "=ODOO.LIST(2,6,\"reason\")",
+        "D123": "=ODOO.LIST(2,7,\"reason\")",
+        "D124": "=ODOO.LIST(2,8,\"reason\")",
+        "D125": "=ODOO.LIST(2,9,\"reason\")",
+        "D126": "=ODOO.LIST(2,10,\"reason\")",
+        "D127": "=ODOO.LIST(2,11,\"reason\")",
+        "D128": "=ODOO.LIST(2,12,\"reason\")",
+        "D129": "=ODOO.LIST(2,13,\"reason\")",
+        "D130": "=ODOO.LIST(2,14,\"reason\")",
+        "D131": "=ODOO.LIST(2,15,\"reason\")",
+        "D132": "=ODOO.LIST(2,16,\"reason\")",
+        "D133": "=ODOO.LIST(2,17,\"reason\")",
+        "D134": "=ODOO.LIST(2,18,\"reason\")",
+        "D135": "=ODOO.LIST(2,19,\"reason\")",
+        "D136": "=ODOO.LIST(2,20,\"reason\")",
+        "D137": "=ODOO.LIST(2,21,\"reason\")",
+        "D138": "=ODOO.LIST(2,22,\"reason\")",
+        "D139": "=ODOO.LIST(2,23,\"reason\")",
+        "D140": "=ODOO.LIST(2,24,\"reason\")",
+        "D141": "=ODOO.LIST(2,25,\"reason\")",
+        "D142": "=ODOO.LIST(2,26,\"reason\")",
+        "D143": "=ODOO.LIST(2,27,\"reason\")",
+        "D144": "=ODOO.LIST(2,28,\"reason\")",
+        "D145": "=ODOO.LIST(2,29,\"reason\")",
+        "D146": "=ODOO.LIST(2,30,\"reason\")",
+        "D147": "=ODOO.LIST(2,31,\"reason\")",
+        "D148": "=ODOO.LIST(2,32,\"reason\")",
+        "D149": "=ODOO.LIST(2,33,\"reason\")",
+        "D150": "=ODOO.LIST(2,34,\"reason\")",
+        "D151": "=ODOO.LIST(2,35,\"reason\")",
+        "D152": "=ODOO.LIST(2,36,\"reason\")",
+        "D153": "=ODOO.LIST(2,37,\"reason\")",
+        "D154": "=ODOO.LIST(2,38,\"reason\")",
+        "D155": "=ODOO.LIST(2,39,\"reason\")",
+        "D156": "=ODOO.LIST(2,40,\"reason\")",
+        "D157": "=ODOO.LIST(2,41,\"reason\")",
+        "D158": "=ODOO.LIST(2,42,\"reason\")",
+        "D159": "=ODOO.LIST(2,43,\"reason\")",
+        "D160": "=ODOO.LIST(2,44,\"reason\")",
+        "D161": "=ODOO.LIST(2,45,\"reason\")",
+        "D162": "=ODOO.LIST(2,46,\"reason\")",
+        "D163": "=ODOO.LIST(2,47,\"reason\")",
+        "D164": "=ODOO.LIST(2,48,\"reason\")",
+        "D165": "=ODOO.LIST(2,49,\"reason\")",
+        "D166": "=ODOO.LIST(2,50,\"reason\")",
+        "E116": "=ODOO.LIST.HEADER(2,\"recovery_residual\")",
+        "E117": "=ODOO.LIST(2,1,\"recovery_residual\")",
+        "E118": "=ODOO.LIST(2,2,\"recovery_residual\")",
+        "E119": "=ODOO.LIST(2,3,\"recovery_residual\")",
+        "E120": "=ODOO.LIST(2,4,\"recovery_residual\")",
+        "E121": "=ODOO.LIST(2,5,\"recovery_residual\")",
+        "E122": "=ODOO.LIST(2,6,\"recovery_residual\")",
+        "E123": "=ODOO.LIST(2,7,\"recovery_residual\")",
+        "E124": "=ODOO.LIST(2,8,\"recovery_residual\")",
+        "E125": "=ODOO.LIST(2,9,\"recovery_residual\")",
+        "E126": "=ODOO.LIST(2,10,\"recovery_residual\")",
+        "E127": "=ODOO.LIST(2,11,\"recovery_residual\")",
+        "E128": "=ODOO.LIST(2,12,\"recovery_residual\")",
+        "E129": "=ODOO.LIST(2,13,\"recovery_residual\")",
+        "E130": "=ODOO.LIST(2,14,\"recovery_residual\")",
+        "E131": "=ODOO.LIST(2,15,\"recovery_residual\")",
+        "E132": "=ODOO.LIST(2,16,\"recovery_residual\")",
+        "E133": "=ODOO.LIST(2,17,\"recovery_residual\")",
+        "E134": "=ODOO.LIST(2,18,\"recovery_residual\")",
+        "E135": "=ODOO.LIST(2,19,\"recovery_residual\")",
+        "E136": "=ODOO.LIST(2,20,\"recovery_residual\")",
+        "E137": "=ODOO.LIST(2,21,\"recovery_residual\")",
+        "E138": "=ODOO.LIST(2,22,\"recovery_residual\")",
+        "E139": "=ODOO.LIST(2,23,\"recovery_residual\")",
+        "E140": "=ODOO.LIST(2,24,\"recovery_residual\")",
+        "E141": "=ODOO.LIST(2,25,\"recovery_residual\")",
+        "E142": "=ODOO.LIST(2,26,\"recovery_residual\")",
+        "E143": "=ODOO.LIST(2,27,\"recovery_residual\")",
+        "E144": "=ODOO.LIST(2,28,\"recovery_residual\")",
+        "E145": "=ODOO.LIST(2,29,\"recovery_residual\")",
+        "E146": "=ODOO.LIST(2,30,\"recovery_residual\")",
+        "E147": "=ODOO.LIST(2,31,\"recovery_residual\")",
+        "E148": "=ODOO.LIST(2,32,\"recovery_residual\")",
+        "E149": "=ODOO.LIST(2,33,\"recovery_residual\")",
+        "E150": "=ODOO.LIST(2,34,\"recovery_residual\")",
+        "E151": "=ODOO.LIST(2,35,\"recovery_residual\")",
+        "E152": "=ODOO.LIST(2,36,\"recovery_residual\")",
+        "E153": "=ODOO.LIST(2,37,\"recovery_residual\")",
+        "E154": "=ODOO.LIST(2,38,\"recovery_residual\")",
+        "E155": "=ODOO.LIST(2,39,\"recovery_residual\")",
+        "E156": "=ODOO.LIST(2,40,\"recovery_residual\")",
+        "E157": "=ODOO.LIST(2,41,\"recovery_residual\")",
+        "E158": "=ODOO.LIST(2,42,\"recovery_residual\")",
+        "E159": "=ODOO.LIST(2,43,\"recovery_residual\")",
+        "E160": "=ODOO.LIST(2,44,\"recovery_residual\")",
+        "E161": "=ODOO.LIST(2,45,\"recovery_residual\")",
+        "E162": "=ODOO.LIST(2,46,\"recovery_residual\")",
+        "E163": "=ODOO.LIST(2,47,\"recovery_residual\")",
+        "E164": "=ODOO.LIST(2,48,\"recovery_residual\")",
+        "E165": "=ODOO.LIST(2,49,\"recovery_residual\")",
+        "E166": "=ODOO.LIST(2,50,\"recovery_residual\")",
+        "F116": "=ODOO.LIST.HEADER(2,\"responsible_id\")",
+        "F117": "=ODOO.LIST(2,1,\"responsible_id\")",
+        "F118": "=ODOO.LIST(2,2,\"responsible_id\")",
+        "F119": "=ODOO.LIST(2,3,\"responsible_id\")",
+        "F120": "=ODOO.LIST(2,4,\"responsible_id\")",
+        "F121": "=ODOO.LIST(2,5,\"responsible_id\")",
+        "F122": "=ODOO.LIST(2,6,\"responsible_id\")",
+        "F123": "=ODOO.LIST(2,7,\"responsible_id\")",
+        "F124": "=ODOO.LIST(2,8,\"responsible_id\")",
+        "F125": "=ODOO.LIST(2,9,\"responsible_id\")",
+        "F126": "=ODOO.LIST(2,10,\"responsible_id\")",
+        "F127": "=ODOO.LIST(2,11,\"responsible_id\")",
+        "F128": "=ODOO.LIST(2,12,\"responsible_id\")",
+        "F129": "=ODOO.LIST(2,13,\"responsible_id\")",
+        "F130": "=ODOO.LIST(2,14,\"responsible_id\")",
+        "F131": "=ODOO.LIST(2,15,\"responsible_id\")",
+        "F132": "=ODOO.LIST(2,16,\"responsible_id\")",
+        "F133": "=ODOO.LIST(2,17,\"responsible_id\")",
+        "F134": "=ODOO.LIST(2,18,\"responsible_id\")",
+        "F135": "=ODOO.LIST(2,19,\"responsible_id\")",
+        "F136": "=ODOO.LIST(2,20,\"responsible_id\")",
+        "F137": "=ODOO.LIST(2,21,\"responsible_id\")",
+        "F138": "=ODOO.LIST(2,22,\"responsible_id\")",
+        "F139": "=ODOO.LIST(2,23,\"responsible_id\")",
+        "F140": "=ODOO.LIST(2,24,\"responsible_id\")",
+        "F141": "=ODOO.LIST(2,25,\"responsible_id\")",
+        "F142": "=ODOO.LIST(2,26,\"responsible_id\")",
+        "F143": "=ODOO.LIST(2,27,\"responsible_id\")",
+        "F144": "=ODOO.LIST(2,28,\"responsible_id\")",
+        "F145": "=ODOO.LIST(2,29,\"responsible_id\")",
+        "F146": "=ODOO.LIST(2,30,\"responsible_id\")",
+        "F147": "=ODOO.LIST(2,31,\"responsible_id\")",
+        "F148": "=ODOO.LIST(2,32,\"responsible_id\")",
+        "F149": "=ODOO.LIST(2,33,\"responsible_id\")",
+        "F150": "=ODOO.LIST(2,34,\"responsible_id\")",
+        "F151": "=ODOO.LIST(2,35,\"responsible_id\")",
+        "F152": "=ODOO.LIST(2,36,\"responsible_id\")",
+        "F153": "=ODOO.LIST(2,37,\"responsible_id\")",
+        "F154": "=ODOO.LIST(2,38,\"responsible_id\")",
+        "F155": "=ODOO.LIST(2,39,\"responsible_id\")",
+        "F156": "=ODOO.LIST(2,40,\"responsible_id\")",
+        "F157": "=ODOO.LIST(2,41,\"responsible_id\")",
+        "F158": "=ODOO.LIST(2,42,\"responsible_id\")",
+        "F159": "=ODOO.LIST(2,43,\"responsible_id\")",
+        "F160": "=ODOO.LIST(2,44,\"responsible_id\")",
+        "F161": "=ODOO.LIST(2,45,\"responsible_id\")",
+        "F162": "=ODOO.LIST(2,46,\"responsible_id\")",
+        "F163": "=ODOO.LIST(2,47,\"responsible_id\")",
+        "F164": "=ODOO.LIST(2,48,\"responsible_id\")",
+        "F165": "=ODOO.LIST(2,49,\"responsible_id\")",
+        "F166": "=ODOO.LIST(2,50,\"responsible_id\")"
+      },
+      "styles": {
+        "A1:G1": 1,
+        "A2": 2,
+        "A3:G3": 3,
+        "A116": 2,
+        "B116": 2,
+        "C116": 2,
+        "D116": 2,
+        "E116": 2,
+        "F116": 2
+      },
+      "formats": {},
+      "borders": {},
+      "conditionalFormats": [],
+      "dataValidationRules": [],
+      "figures": []
+    },
+    {
+      "id": "flows",
+      "name": "Encaissements et recouvrements",
+      "colNumber": 12,
+      "rowNumber": 300,
+      "rows": {
+        "0": {
+          "size": 42
+        },
+        "1": {
+          "size": 28
+        },
+        "2": {
+          "size": 28
+        }
+      },
+      "cols": {
+        "0": {
+          "size": 280
+        },
+        "1": {
+          "size": 180
+        },
+        "2": {
+          "size": 180
+        },
+        "3": {
+          "size": 180
+        },
+        "4": {
+          "size": 180
+        },
+        "5": {
+          "size": 180
+        },
+        "6": {
+          "size": 180
+        }
+      },
+      "merges": ["A1:G1", "A3:G3"],
+      "cells": {
+        "A1": "Encaissements et recouvrements",
+        "A2": "Dernier chargement",
+        "B2": "Chargement en cours",
+        "A3": "TND — stocks courants et flux de période séparés ; ouvrir les sources depuis les pivots.",
+        "A5": "Date effective du règlement — hors opérations annulées",
+        "A6": "=PIVOT(22,100,FALSE,FALSE)"
+      },
+      "styles": {
+        "A1:G1": 1,
+        "A2": 2,
+        "A3:G3": 3
+      },
+      "formats": {},
+      "borders": {},
+      "conditionalFormats": [],
+      "dataValidationRules": [],
+      "figures": []
+    }
+  ],
+  "styles": {
+    "1": {
+      "bold": true,
+      "fontSize": 20,
+      "textColor": "#FFFFFF",
+      "fillColor": "#174D45"
+    },
+    "2": {
+      "bold": true,
+      "fillColor": "#E6F1EE",
+      "textColor": "#174D45"
+    },
+    "3": {
+      "italic": true,
+      "textColor": "#58646B",
+      "fontSize": 10
+    }
+  },
+  "borders": {},
+  "formats": {},
+  "pivots": {
+    "1": {
+      "type": "ODOO",
+      "id": "1",
+      "formulaId": "1",
+      "name": "Principal actif",
+      "model": "account.payment",
+      "domain": [
+        ["tn_boe", "=", true],
+        ["boe_active_amount", ">", 0]
+      ],
+      "context": {},
+      "fieldMatching": {
+        "company": {
+          "chain": "company_id",
+          "type": "many2one"
+        },
+        "customer": {
+          "chain": "partner_id",
+          "type": "many2one"
+        },
+        "responsible": {
+          "chain": "boe_user_id",
+          "type": "many2one"
+        },
+        "maturity_period": {
+          "chain": "boe_maturity_date",
+          "type": "date",
+          "offset": 0
+        }
+      },
+      "columns": [],
+      "rows": [],
+      "measures": [
+        {
+          "id": "boe_active_amount",
+          "fieldName": "boe_active_amount"
+        },
+        {
+          "id": "__count",
+          "fieldName": "__count"
+        }
+      ],
+      "sortedColumn": null
+    },
+    "2": {
+      "type": "ODOO",
+      "id": "2",
+      "formulaId": "2",
+      "name": "En portefeuille",
+      "model": "account.payment",
+      "domain": [
+        ["tn_boe", "=", true],
+        ["boe_active_amount", ">", 0],
+        ["boe_custody", "=", "portfolio"]
+      ],
+      "context": {},
+      "fieldMatching": {
+        "company": {
+          "chain": "company_id",
+          "type": "many2one"
+        },
+        "customer": {
+          "chain": "partner_id",
+          "type": "many2one"
+        },
+        "responsible": {
+          "chain": "boe_user_id",
+          "type": "many2one"
+        },
+        "maturity_period": {
+          "chain": "boe_maturity_date",
+          "type": "date",
+          "offset": 0
+        }
+      },
+      "columns": [],
+      "rows": [],
+      "measures": [
+        {
+          "id": "boe_active_amount",
+          "fieldName": "boe_active_amount"
+        },
+        {
+          "id": "__count",
+          "fieldName": "__count"
+        }
+      ],
+      "sortedColumn": null
+    },
+    "3": {
+      "type": "ODOO",
+      "id": "3",
+      "formulaId": "3",
+      "name": "Exposition liée aux traites",
+      "model": "account.payment",
+      "domain": [
+        ["tn_boe", "=", true],
+        ["boe_exposure_amount", ">", 0]
+      ],
+      "context": {},
+      "fieldMatching": {
+        "company": {
+          "chain": "company_id",
+          "type": "many2one"
+        },
+        "customer": {
+          "chain": "partner_id",
+          "type": "many2one"
+        },
+        "responsible": {
+          "chain": "boe_user_id",
+          "type": "many2one"
+        },
+        "maturity_period": {
+          "chain": "boe_maturity_date",
+          "type": "date",
+          "offset": 0
+        }
+      },
+      "columns": [],
+      "rows": [],
+      "measures": [
+        {
+          "id": "boe_exposure_amount",
+          "fieldName": "boe_exposure_amount"
+        },
+        {
+          "id": "__count",
+          "fieldName": "__count"
+        }
+      ],
+      "sortedColumn": null
+    },
+    "4": {
+      "type": "ODOO",
+      "id": "4",
+      "formulaId": "4",
+      "name": "Échues sans confirmation",
+      "model": "account.payment",
+      "domain": [
+        ["tn_boe", "=", true],
+        ["boe_active_amount", ">", 0],
+        ["boe_maturity_date", "<", "today"]
+      ],
+      "context": {},
+      "fieldMatching": {
+        "company": {
+          "chain": "company_id",
+          "type": "many2one"
+        },
+        "customer": {
+          "chain": "partner_id",
+          "type": "many2one"
+        },
+        "responsible": {
+          "chain": "boe_user_id",
+          "type": "many2one"
+        },
+        "maturity_period": {
+          "chain": "boe_maturity_date",
+          "type": "date",
+          "offset": 0
+        }
+      },
+      "columns": [],
+      "rows": [],
+      "measures": [
+        {
+          "id": "boe_active_amount",
+          "fieldName": "boe_active_amount"
+        },
+        {
+          "id": "__count",
+          "fieldName": "__count"
+        }
+      ],
+      "sortedColumn": null
+    },
+    "5": {
+      "type": "ODOO",
+      "id": "5",
+      "formulaId": "5",
+      "name": "Dont règlements en attente",
+      "model": "account.payment",
+      "domain": [
+        ["tn_boe", "=", true],
+        ["boe_pending_amount", ">", 0]
+      ],
+      "context": {},
+      "fieldMatching": {
+        "company": {
+          "chain": "company_id",
+          "type": "many2one"
+        },
+        "customer": {
+          "chain": "partner_id",
+          "type": "many2one"
+        },
+        "responsible": {
+          "chain": "boe_user_id",
+          "type": "many2one"
+        },
+        "maturity_period": {
+          "chain": "boe_maturity_date",
+          "type": "date",
+          "offset": 0
+        }
+      },
+      "columns": [],
+      "rows": [],
+      "measures": [
+        {
+          "id": "boe_pending_amount",
+          "fieldName": "boe_pending_amount"
+        },
+        {
+          "id": "__count",
+          "fieldName": "__count"
+        }
+      ],
+      "sortedColumn": null
+    },
+    "6": {
+      "type": "ODOO",
+      "id": "6",
+      "formulaId": "6",
+      "name": "Impayés à recouvrer",
+      "model": "account.payment",
+      "domain": [
+        ["tn_boe", "=", true],
+        ["boe_recovery_residual", ">", 0]
+      ],
+      "context": {},
+      "fieldMatching": {
+        "company": {
+          "chain": "company_id",
+          "type": "many2one"
+        },
+        "customer": {
+          "chain": "partner_id",
+          "type": "many2one"
+        },
+        "responsible": {
+          "chain": "boe_user_id",
+          "type": "many2one"
+        },
+        "maturity_period": {
+          "chain": "boe_maturity_date",
+          "type": "date",
+          "offset": 0
+        }
+      },
+      "columns": [],
+      "rows": [],
+      "measures": [
+        {
+          "id": "boe_recovery_residual",
+          "fieldName": "boe_recovery_residual"
+        },
+        {
+          "id": "__count",
+          "fieldName": "__count"
+        }
+      ],
+      "sortedColumn": null
+    },
+    "7": {
+      "type": "ODOO",
+      "id": "7",
+      "formulaId": "7",
+      "name": "À échéance aujourd'hui",
+      "model": "account.payment",
+      "domain": [
+        ["tn_boe", "=", true],
+        ["boe_active_amount", ">", 0],
+        ["boe_maturity_date", "=", "today"]
+      ],
+      "context": {},
+      "fieldMatching": {
+        "company": {
+          "chain": "company_id",
+          "type": "many2one"
+        },
+        "customer": {
+          "chain": "partner_id",
+          "type": "many2one"
+        },
+        "responsible": {
+          "chain": "boe_user_id",
+          "type": "many2one"
+        },
+        "maturity_period": {
+          "chain": "boe_maturity_date",
+          "type": "date",
+          "offset": 0
+        }
+      },
+      "columns": [],
+      "rows": [],
+      "measures": [
+        {
+          "id": "boe_active_amount",
+          "fieldName": "boe_active_amount"
+        },
+        {
+          "id": "__count",
+          "fieldName": "__count"
+        }
+      ],
+      "sortedColumn": null
+    },
+    "8": {
+      "type": "ODOO",
+      "id": "8",
+      "formulaId": "8",
+      "name": "Échéances J+1 à J+7",
+      "model": "account.payment",
+      "domain": [
+        ["tn_boe", "=", true],
+        ["boe_active_amount", ">", 0],
+        ["boe_maturity_date", ">", "today"],
+        ["boe_maturity_date", "<=", "today +7d"]
+      ],
+      "context": {},
+      "fieldMatching": {
+        "company": {
+          "chain": "company_id",
+          "type": "many2one"
+        },
+        "customer": {
+          "chain": "partner_id",
+          "type": "many2one"
+        },
+        "responsible": {
+          "chain": "boe_user_id",
+          "type": "many2one"
+        },
+        "maturity_period": {
+          "chain": "boe_maturity_date",
+          "type": "date",
+          "offset": 0
+        }
+      },
+      "columns": [],
+      "rows": [],
+      "measures": [
+        {
+          "id": "boe_active_amount",
+          "fieldName": "boe_active_amount"
+        },
+        {
+          "id": "__count",
+          "fieldName": "__count"
+        }
+      ],
+      "sortedColumn": null
+    },
+    "9": {
+      "type": "ODOO",
+      "id": "9",
+      "formulaId": "9",
+      "name": "Échéances J+8 à J+30",
+      "model": "account.payment",
+      "domain": [
+        ["tn_boe", "=", true],
+        ["boe_active_amount", ">", 0],
+        ["boe_maturity_date", ">", "today +7d"],
+        ["boe_maturity_date", "<=", "today +30d"]
+      ],
+      "context": {},
+      "fieldMatching": {
+        "company": {
+          "chain": "company_id",
+          "type": "many2one"
+        },
+        "customer": {
+          "chain": "partner_id",
+          "type": "many2one"
+        },
+        "responsible": {
+          "chain": "boe_user_id",
+          "type": "many2one"
+        },
+        "maturity_period": {
+          "chain": "boe_maturity_date",
+          "type": "date",
+          "offset": 0
+        }
+      },
+      "columns": [],
+      "rows": [],
+      "measures": [
+        {
+          "id": "boe_active_amount",
+          "fieldName": "boe_active_amount"
+        },
+        {
+          "id": "__count",
+          "fieldName": "__count"
+        }
+      ],
+      "sortedColumn": null
+    },
+    "10": {
+      "type": "ODOO",
+      "id": "10",
+      "formulaId": "10",
+      "name": "Actions en retard",
+      "model": "account.payment",
+      "domain": [
+        ["tn_boe", "=", true],
+        ["boe_next_action_date", "<", "today"],
+        "|",
+        ["boe_active_amount", ">", 0],
+        ["boe_recovery_residual", ">", 0]
+      ],
+      "context": {},
+      "fieldMatching": {
+        "company": {
+          "chain": "company_id",
+          "type": "many2one"
+        },
+        "customer": {
+          "chain": "partner_id",
+          "type": "many2one"
+        },
+        "responsible": {
+          "chain": "boe_user_id",
+          "type": "many2one"
+        },
+        "maturity_period": {
+          "chain": "boe_maturity_date",
+          "type": "date",
+          "offset": 0
+        }
+      },
+      "columns": [],
+      "rows": [],
+      "measures": [
+        {
+          "id": "__count",
+          "fieldName": "__count"
+        }
+      ],
+      "sortedColumn": null
+    },
+    "11": {
+      "type": "ODOO",
+      "id": "11",
+      "formulaId": "11",
+      "name": "Dossiers sans responsable",
+      "model": "account.payment",
+      "domain": [
+        ["tn_boe", "=", true],
+        ["boe_user_id", "=", false],
+        "|",
+        ["boe_active_amount", ">", 0],
+        ["boe_recovery_residual", ">", 0]
+      ],
+      "context": {},
+      "fieldMatching": {
+        "company": {
+          "chain": "company_id",
+          "type": "many2one"
+        },
+        "customer": {
+          "chain": "partner_id",
+          "type": "many2one"
+        },
+        "responsible": {
+          "chain": "boe_user_id",
+          "type": "many2one"
+        },
+        "maturity_period": {
+          "chain": "boe_maturity_date",
+          "type": "date",
+          "offset": 0
+        }
+      },
+      "columns": [],
+      "rows": [],
+      "measures": [
+        {
+          "id": "__count",
+          "fieldName": "__count"
+        }
+      ],
+      "sortedColumn": null
+    },
+    "12": {
+      "type": "ODOO",
+      "id": "12",
+      "formulaId": "12",
+      "name": "Dossiers sans prochaine action",
+      "model": "account.payment",
+      "domain": [
+        ["tn_boe", "=", true],
+        ["boe_next_action_date", "=", false],
+        "|",
+        ["boe_active_amount", ">", 0],
+        ["boe_recovery_residual", ">", 0]
+      ],
+      "context": {},
+      "fieldMatching": {
+        "company": {
+          "chain": "company_id",
+          "type": "many2one"
+        },
+        "customer": {
+          "chain": "partner_id",
+          "type": "many2one"
+        },
+        "responsible": {
+          "chain": "boe_user_id",
+          "type": "many2one"
+        },
+        "maturity_period": {
+          "chain": "boe_maturity_date",
+          "type": "date",
+          "offset": 0
+        }
+      },
+      "columns": [],
+      "rows": [],
+      "measures": [
+        {
+          "id": "__count",
+          "fieldName": "__count"
+        }
+      ],
+      "sortedColumn": null
+    },
+    "13": {
+      "type": "ODOO",
+      "id": "13",
+      "formulaId": "13",
+      "name": "Échéancier mensuel",
+      "model": "account.payment",
+      "domain": [
+        ["tn_boe", "=", true],
+        ["boe_active_amount", ">", 0]
+      ],
+      "context": {},
+      "fieldMatching": {
+        "company": {
+          "chain": "company_id",
+          "type": "many2one"
+        },
+        "customer": {
+          "chain": "partner_id",
+          "type": "many2one"
+        },
+        "responsible": {
+          "chain": "boe_user_id",
+          "type": "many2one"
+        },
+        "maturity_period": {
+          "chain": "boe_maturity_date",
+          "type": "date",
+          "offset": 0
+        }
+      },
+      "columns": [],
+      "rows": [
+        {
+          "fieldName": "boe_maturity_date",
+          "granularity": "month"
+        }
+      ],
+      "measures": [
+        {
+          "id": "boe_active_amount",
+          "fieldName": "boe_active_amount"
+        },
+        {
+          "id": "boe_pending_amount",
+          "fieldName": "boe_pending_amount"
+        }
+      ],
+      "sortedColumn": null
+    },
+    "14": {
+      "type": "ODOO",
+      "id": "14",
+      "formulaId": "14",
+      "name": "Retard 1–7 jours",
+      "model": "account.payment",
+      "domain": [
+        ["tn_boe", "=", true],
+        ["boe_active_amount", ">", 0],
+        ["boe_maturity_date", ">=", "today -7d"],
+        ["boe_maturity_date", "<", "today"]
+      ],
+      "context": {},
+      "fieldMatching": {
+        "company": {
+          "chain": "company_id",
+          "type": "many2one"
+        },
+        "customer": {
+          "chain": "partner_id",
+          "type": "many2one"
+        },
+        "responsible": {
+          "chain": "boe_user_id",
+          "type": "many2one"
+        },
+        "maturity_period": {
+          "chain": "boe_maturity_date",
+          "type": "date",
+          "offset": 0
+        }
+      },
+      "columns": [],
+      "rows": [],
+      "measures": [
+        {
+          "id": "boe_active_amount",
+          "fieldName": "boe_active_amount"
+        }
+      ],
+      "sortedColumn": null
+    },
+    "15": {
+      "type": "ODOO",
+      "id": "15",
+      "formulaId": "15",
+      "name": "Retard 8–30 jours",
+      "model": "account.payment",
+      "domain": [
+        ["tn_boe", "=", true],
+        ["boe_active_amount", ">", 0],
+        ["boe_maturity_date", ">=", "today -30d"],
+        ["boe_maturity_date", "<", "today -7d"]
+      ],
+      "context": {},
+      "fieldMatching": {
+        "company": {
+          "chain": "company_id",
+          "type": "many2one"
+        },
+        "customer": {
+          "chain": "partner_id",
+          "type": "many2one"
+        },
+        "responsible": {
+          "chain": "boe_user_id",
+          "type": "many2one"
+        },
+        "maturity_period": {
+          "chain": "boe_maturity_date",
+          "type": "date",
+          "offset": 0
+        }
+      },
+      "columns": [],
+      "rows": [],
+      "measures": [
+        {
+          "id": "boe_active_amount",
+          "fieldName": "boe_active_amount"
+        }
+      ],
+      "sortedColumn": null
+    },
+    "16": {
+      "type": "ODOO",
+      "id": "16",
+      "formulaId": "16",
+      "name": "Retard 31–60 jours",
+      "model": "account.payment",
+      "domain": [
+        ["tn_boe", "=", true],
+        ["boe_active_amount", ">", 0],
+        ["boe_maturity_date", ">=", "today -60d"],
+        ["boe_maturity_date", "<", "today -30d"]
+      ],
+      "context": {},
+      "fieldMatching": {
+        "company": {
+          "chain": "company_id",
+          "type": "many2one"
+        },
+        "customer": {
+          "chain": "partner_id",
+          "type": "many2one"
+        },
+        "responsible": {
+          "chain": "boe_user_id",
+          "type": "many2one"
+        },
+        "maturity_period": {
+          "chain": "boe_maturity_date",
+          "type": "date",
+          "offset": 0
+        }
+      },
+      "columns": [],
+      "rows": [],
+      "measures": [
+        {
+          "id": "boe_active_amount",
+          "fieldName": "boe_active_amount"
+        }
+      ],
+      "sortedColumn": null
+    },
+    "17": {
+      "type": "ODOO",
+      "id": "17",
+      "formulaId": "17",
+      "name": "Retard supérieur à 60 jours",
+      "model": "account.payment",
+      "domain": [
+        ["tn_boe", "=", true],
+        ["boe_active_amount", ">", 0],
+        ["boe_maturity_date", "<", "today -60d"]
+      ],
+      "context": {},
+      "fieldMatching": {
+        "company": {
+          "chain": "company_id",
+          "type": "many2one"
+        },
+        "customer": {
+          "chain": "partner_id",
+          "type": "many2one"
+        },
+        "responsible": {
+          "chain": "boe_user_id",
+          "type": "many2one"
+        },
+        "maturity_period": {
+          "chain": "boe_maturity_date",
+          "type": "date",
+          "offset": 0
+        }
+      },
+      "columns": [],
+      "rows": [],
+      "measures": [
+        {
+          "id": "boe_active_amount",
+          "fieldName": "boe_active_amount"
+        }
+      ],
+      "sortedColumn": null
+    },
+    "18": {
+      "type": "ODOO",
+      "id": "18",
+      "formulaId": "18",
+      "name": "Soldes par client et garde",
+      "model": "account.payment",
+      "domain": [
+        ["tn_boe", "=", true],
+        ["boe_active_amount", ">", 0]
+      ],
+      "context": {},
+      "fieldMatching": {
+        "company": {
+          "chain": "company_id",
+          "type": "many2one"
+        },
+        "customer": {
+          "chain": "partner_id",
+          "type": "many2one"
+        },
+        "responsible": {
+          "chain": "boe_user_id",
+          "type": "many2one"
+        },
+        "maturity_period": {
+          "chain": "boe_maturity_date",
+          "type": "date",
+          "offset": 0
+        }
+      },
+      "columns": [],
+      "rows": [
+        {
+          "fieldName": "partner_id"
+        },
+        {
+          "fieldName": "boe_custody"
+        }
+      ],
+      "measures": [
+        {
+          "id": "boe_active_amount",
+          "fieldName": "boe_active_amount"
+        },
+        {
+          "id": "boe_pending_amount",
+          "fieldName": "boe_pending_amount"
+        }
+      ],
+      "sortedColumn": null
+    },
+    "19": {
+      "type": "ODOO",
+      "id": "19",
+      "formulaId": "19",
+      "name": "Exposition par responsable",
+      "model": "account.payment",
+      "domain": [["tn_boe", "=", true]],
+      "context": {},
+      "fieldMatching": {
+        "company": {
+          "chain": "company_id",
+          "type": "many2one"
+        },
+        "customer": {
+          "chain": "partner_id",
+          "type": "many2one"
+        },
+        "responsible": {
+          "chain": "boe_user_id",
+          "type": "many2one"
+        },
+        "maturity_period": {
+          "chain": "boe_maturity_date",
+          "type": "date",
+          "offset": 0
+        }
+      },
+      "columns": [],
+      "rows": [
+        {
+          "fieldName": "boe_user_id"
+        }
+      ],
+      "measures": [
+        {
+          "id": "boe_active_amount",
+          "fieldName": "boe_active_amount"
+        },
+        {
+          "id": "boe_recovery_residual",
+          "fieldName": "boe_recovery_residual"
+        }
+      ],
+      "sortedColumn": null
+    },
+    "20": {
+      "type": "ODOO",
+      "id": "20",
+      "formulaId": "20",
+      "name": "Impayés restant à recouvrer",
+      "model": "l10n_tn.boe.incident",
+      "domain": [["state", "=", "posted"]],
+      "context": {},
+      "fieldMatching": {
+        "company": {
+          "chain": "company_id",
+          "type": "many2one"
+        },
+        "customer": {
+          "chain": "partner_id",
+          "type": "many2one"
+        },
+        "responsible": {
+          "chain": "bill_id.boe_user_id",
+          "type": "many2one"
+        },
+        "maturity_period": {
+          "chain": "bill_id.boe_maturity_date",
+          "type": "date",
+          "offset": 0
+        }
+      },
+      "columns": [],
+      "rows": [
+        {
+          "fieldName": "partner_id"
+        }
+      ],
+      "measures": [
+        {
+          "id": "amount",
+          "fieldName": "amount"
+        },
+        {
+          "id": "recovered_amount",
+          "fieldName": "recovered_amount"
+        },
+        {
+          "id": "recovery_residual",
+          "fieldName": "recovery_residual"
+        },
+        {
+          "id": "pending_amount",
+          "fieldName": "pending_amount"
+        }
+      ],
+      "sortedColumn": null
+    },
+    "21": {
+      "type": "ODOO",
+      "id": "21",
+      "formulaId": "21",
+      "name": "Incidents de la période",
+      "model": "l10n_tn.boe.incident",
+      "domain": [["state", "=", "posted"]],
+      "context": {},
+      "fieldMatching": {
+        "company": {
+          "chain": "company_id",
+          "type": "many2one"
+        },
+        "customer": {
+          "chain": "partner_id",
+          "type": "many2one"
+        },
+        "responsible": {
+          "chain": "bill_id.boe_user_id",
+          "type": "many2one"
+        },
+        "maturity_period": {
+          "chain": "bill_id.boe_maturity_date",
+          "type": "date",
+          "offset": 0
+        },
+        "flow_period": {
+          "chain": "date",
+          "type": "date",
+          "offset": 0
+        }
+      },
+      "columns": [],
+      "rows": [
+        {
+          "fieldName": "date",
+          "granularity": "month"
+        }
+      ],
+      "measures": [
+        {
+          "id": "amount",
+          "fieldName": "amount"
+        }
+      ],
+      "sortedColumn": null
+    },
+    "22": {
+      "type": "ODOO",
+      "id": "22",
+      "formulaId": "22",
+      "name": "Encaissements confirmés de la période",
+      "model": "l10n_tn.boe.settlement",
+      "domain": [["state", "!=", "canceled"]],
+      "context": {},
+      "fieldMatching": {
+        "company": {
+          "chain": "company_id",
+          "type": "many2one"
+        },
+        "customer": {
+          "chain": "partner_id",
+          "type": "many2one"
+        },
+        "responsible": {
+          "chain": "bill_id.boe_user_id",
+          "type": "many2one"
+        },
+        "maturity_period": {
+          "chain": "bill_id.boe_maturity_date",
+          "type": "date",
+          "offset": 0
+        },
+        "flow_period": {
+          "chain": "date",
+          "type": "date",
+          "offset": 0
+        }
+      },
+      "columns": [],
+      "rows": [
+        {
+          "fieldName": "date",
+          "granularity": "month"
+        }
+      ],
+      "measures": [
+        {
+          "id": "collected_amount",
+          "fieldName": "collected_amount"
+        },
+        {
+          "id": "recovered_amount",
+          "fieldName": "recovered_amount"
+        }
+      ],
+      "sortedColumn": null
+    },
+    "23": {
+      "type": "ODOO",
+      "id": "23",
+      "formulaId": "23",
+      "name": "Principal actif par état de règlement",
+      "model": "account.payment",
+      "domain": [
+        ["tn_boe", "=", true],
+        ["boe_active_amount", ">", 0]
+      ],
+      "context": {},
+      "fieldMatching": {
+        "company": {
+          "chain": "company_id",
+          "type": "many2one"
+        },
+        "customer": {
+          "chain": "partner_id",
+          "type": "many2one"
+        },
+        "responsible": {
+          "chain": "boe_user_id",
+          "type": "many2one"
+        },
+        "maturity_period": {
+          "chain": "boe_maturity_date",
+          "type": "date",
+          "offset": 0
+        }
+      },
+      "columns": [],
+      "rows": [
+        {
+          "fieldName": "boe_settlement_status"
+        }
+      ],
+      "measures": [
+        {
+          "id": "boe_active_amount",
+          "fieldName": "boe_active_amount"
+        }
+      ],
+      "sortedColumn": null
+    },
+    "24": {
+      "type": "ODOO",
+      "id": "24",
+      "formulaId": "24",
+      "name": "Principaux clients par exposition",
+      "model": "account.payment",
+      "domain": [
+        ["tn_boe", "=", true],
+        ["boe_exposure_amount", ">", 0]
+      ],
+      "context": {},
+      "fieldMatching": {
+        "company": {
+          "chain": "company_id",
+          "type": "many2one"
+        },
+        "customer": {
+          "chain": "partner_id",
+          "type": "many2one"
+        },
+        "responsible": {
+          "chain": "boe_user_id",
+          "type": "many2one"
+        },
+        "maturity_period": {
+          "chain": "boe_maturity_date",
+          "type": "date",
+          "offset": 0
+        }
+      },
+      "columns": [],
+      "rows": [
+        {
+          "fieldName": "partner_id"
+        }
+      ],
+      "measures": [
+        {
+          "id": "boe_exposure_amount",
+          "fieldName": "boe_exposure_amount"
+        },
+        {
+          "id": "boe_active_amount",
+          "fieldName": "boe_active_amount"
+        },
+        {
+          "id": "boe_recovery_residual",
+          "fieldName": "boe_recovery_residual"
+        }
+      ],
+      "sortedColumn": {
+        "measure": "boe_exposure_amount",
+        "order": "desc",
+        "domain": []
+      }
+    }
+  },
+  "pivotNextId": 26,
+  "globalFilters": [
+    {
+      "id": "company",
+      "type": "relation",
+      "label": "Société",
+      "modelName": "res.company",
+      "defaultValueDisplayNames": []
+    },
+    {
+      "id": "customer",
+      "type": "relation",
+      "label": "Client",
+      "modelName": "res.partner",
+      "defaultValueDisplayNames": []
+    },
+    {
+      "id": "responsible",
+      "type": "relation",
+      "label": "Responsable",
+      "modelName": "res.users",
+      "defaultValueDisplayNames": []
+    },
+    {
+      "id": "flow_period",
+      "type": "date",
+      "label": "Période des flux (pas du portefeuille)",
+      "defaultValue": "last_90_days"
+    },
+    {
+      "id": "maturity_period",
+      "type": "date",
+      "label": "Échéance des titres"
+    }
+  ],
+  "lists": {
+    "1": {
+      "id": "1",
+      "name": "Actions à suivre",
+      "model": "account.payment",
+      "domain": [
+        ["tn_boe", "=", true],
+        "|",
+        ["boe_active_amount", ">", 0],
+        ["boe_recovery_residual", ">", 0]
+      ],
+      "columns": [
+        "boe_reference",
+        "partner_id",
+        "boe_maturity_date",
+        "boe_active_amount",
+        "boe_recovery_residual",
+        "boe_user_id",
+        "boe_next_action",
+        "boe_next_action_date",
+        "boe_promise_date"
+      ],
+      "context": {},
+      "orderBy": [
+        {
+          "name": "boe_maturity_date",
+          "asc": true
+        }
+      ],
+      "fieldMatching": {
+        "company": {
+          "chain": "company_id",
+          "type": "many2one"
+        },
+        "customer": {
+          "chain": "partner_id",
+          "type": "many2one"
+        },
+        "responsible": {
+          "chain": "boe_user_id",
+          "type": "many2one"
+        },
+        "maturity_period": {
+          "chain": "boe_maturity_date",
+          "type": "date",
+          "offset": 0
+        }
+      }
+    },
+    "2": {
+      "id": "2",
+      "name": "Dossiers impayés",
+      "model": "l10n_tn.boe.incident",
+      "domain": [["recovery_residual", ">", 0]],
+      "columns": [
+        "bill_id",
+        "invoice_id",
+        "partner_id",
+        "reason",
+        "recovery_residual",
+        "responsible_id"
+      ],
+      "context": {},
+      "orderBy": [
+        {
+          "name": "date",
+          "asc": true
+        }
+      ],
+      "fieldMatching": {
+        "company": {
+          "chain": "company_id",
+          "type": "many2one"
+        },
+        "customer": {
+          "chain": "partner_id",
+          "type": "many2one"
+        },
+        "responsible": {
+          "chain": "bill_id.boe_user_id",
+          "type": "many2one"
+        },
+        "maturity_period": {
+          "chain": "bill_id.boe_maturity_date",
+          "type": "date",
+          "offset": 0
+        }
+      }
+    }
+  },
+  "listNextId": 3,
+  "chartOdooMenusReferences": {
+    "score-0": "l10n_tn_account_payment_bill_of_exchange.menu_boe_list",
+    "score-1": "l10n_tn_account_payment_bill_of_exchange.menu_boe_list",
+    "score-2": "l10n_tn_account_payment_bill_of_exchange.menu_boe_list",
+    "score-3": "l10n_tn_account_payment_bill_of_exchange.menu_boe_list",
+    "score-4": "l10n_tn_account_payment_bill_of_exchange.menu_boe_list",
+    "score-5": "l10n_tn_account_payment_bill_of_exchange.menu_boe_list"
+  }
+}

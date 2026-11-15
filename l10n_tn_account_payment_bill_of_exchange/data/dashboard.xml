@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright 2026 Sobware
+     License LGPL-3.0 or later (https://www.gnu.org/licenses/agpl-3.0). -->
+<odoo>
+    <record id="dashboard_boe" model="spreadsheet.dashboard">
+        <field name="name">Traites clients — suivi et recouvrement</field>
+        <field
+            name="spreadsheet_binary_data"
+            type="base64"
+            file="l10n_tn_account_payment_bill_of_exchange/data/bill_dashboard.json"
+        />
+        <field
+            name="dashboard_group_id"
+            ref="spreadsheet_dashboard.spreadsheet_dashboard_group_finance"
+        />
+        <field
+            name="group_ids"
+            eval="[Command.link(ref('account.group_account_readonly')), Command.link(ref('account.group_account_invoice'))]"
+        />
+        <field
+            name="main_data_model_ids"
+            eval="[Command.link(ref('account.model_account_payment'))]"
+        />
+        <field name="tn_boe_dashboard" eval="True" />
+        <field name="sequence" eval="25" />
+        <field name="is_published" eval="True" />
+    </record>
+</odoo>

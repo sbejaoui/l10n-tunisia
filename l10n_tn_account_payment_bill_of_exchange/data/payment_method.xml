@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright 2026 Sobware
+     License LGPL-3.0 or later (https://www.gnu.org/licenses/agpl-3.0). -->
+<odoo>
+    <record id="payment_method_boe" model="account.payment.method">
+        <field name="name">Traite</field>
+        <field name="code">tn_bill_of_exchange</field>
+        <field name="payment_type">inbound</field>
+    </record>
+</odoo>

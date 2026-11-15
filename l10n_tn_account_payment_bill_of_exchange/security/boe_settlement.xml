@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright 2026 Sobware
+     License LGPL-3.0 or later (https://www.gnu.org/licenses/agpl-3.0). -->
+<odoo>
+    <record id="access_boe_settlement_read" model="ir.model.access">
+        <field name="name">boe.settlement.read</field>
+        <field name="model_id" ref="model_l10n_tn_boe_settlement" />
+        <field name="group_id" ref="account.group_account_readonly" />
+        <field name="perm_read" eval="True" />
+        <field name="perm_write" eval="False" />
+        <field name="perm_create" eval="False" />
+        <field name="perm_unlink" eval="False" />
+    </record>
+    <record id="access_boe_settlement_accountant" model="ir.model.access">
+        <field name="name">boe.settlement.accountant</field>
+        <field name="model_id" ref="model_l10n_tn_boe_settlement" />
+        <field name="group_id" ref="account.group_account_invoice" />
+        <field name="perm_read" eval="True" />
+        <field name="perm_write" eval="False" />
+        <field name="perm_create" eval="False" />
+        <field name="perm_unlink" eval="False" />
+    </record>
+    <record id="rule_boe_settlement_company" model="ir.rule">
+        <field name="name">Bills settlement: allowed companies</field>
+        <field name="model_id" ref="model_l10n_tn_boe_settlement" />
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+</odoo>

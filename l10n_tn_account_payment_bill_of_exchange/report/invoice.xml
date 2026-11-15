@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright 2026 Sobware
+     License LGPL-3.0 or later (https://www.gnu.org/licenses/agpl-3.0). -->
+<odoo>
+    <template id="report_invoice_boe" inherit_id="account.report_invoice_document">
+        <xpath expr="//t[@t-foreach='payments_vals']//i/t[@t-else]" position="before">
+            <t t-elif="payment_vals.get('boe_reference')">Couvert par traite le </t>
+        </xpath>
+        <xpath expr="//t[@t-foreach='payments_vals']//i" position="inside">
+            <t t-if="payment_vals.get('boe_reference')">
+                — <span t-out="payment_vals['boe_reference']" />
+                — échéance <span
+                t-out="payment_vals['boe_maturity_date']"
+                t-options="{'widget': 'date'}"
+            />
+            </t>
+        </xpath>
+    </template>
+</odoo>
