@@ -118,8 +118,8 @@ Authors
 Contributors
 ------------
 
-- Rami Brick <brickrami1@gmail.com>
-- Souheil Bejaoui <souheil.bejaoui@acsone.eu>
+- Rami Brick <rami.brick@sobware-tech.com>
+- Souheil Bejaoui <souheil.bejaoui@sobware-tech.com>
 
 Maintainers
 -----------
