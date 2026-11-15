@@ -400,14 +400,16 @@ that bill.</p>
 <ul class="simple">
 <li><a class="reference internal" href="#configuration" id="toc-entry-1">Configuration</a></li>
 <li><a class="reference internal" href="#usage" id="toc-entry-2">Usage</a><ul>
-<li><a class="reference internal" href="#certificate-confirmation" id="toc-entry-3">Certificate confirmation</a></li>
+<li><a class="reference internal" href="#one-receipt-for-several-invoices" id="toc-entry-3">One receipt for several invoices</a></li>
+<li><a class="reference internal" href="#individual-withholding-payments" id="toc-entry-4">Individual withholding payments</a></li>
+<li><a class="reference internal" href="#certificate-confirmation" id="toc-entry-5">Certificate confirmation</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#bug-tracker" id="toc-entry-4">Bug Tracker</a></li>
-<li><a class="reference internal" href="#credits" id="toc-entry-5">Credits</a><ul>
-<li><a class="reference internal" href="#authors" id="toc-entry-6">Authors</a></li>
-<li><a class="reference internal" href="#contributors" id="toc-entry-7">Contributors</a></li>
-<li><a class="reference internal" href="#maintainers" id="toc-entry-8">Maintainers</a></li>
+<li><a class="reference internal" href="#bug-tracker" id="toc-entry-6">Bug Tracker</a></li>
+<li><a class="reference internal" href="#credits" id="toc-entry-7">Credits</a><ul>
+<li><a class="reference internal" href="#authors" id="toc-entry-8">Authors</a></li>
+<li><a class="reference internal" href="#contributors" id="toc-entry-9">Contributors</a></li>
+<li><a class="reference internal" href="#maintainers" id="toc-entry-10">Maintainers</a></li>
 </ul>
 </li>
 </ul>
@@ -446,13 +448,53 @@ be selected.</li>
 </div>
 <div class="section" id="usage">
 <h2><a class="toc-backref" href="#toc-entry-2">Usage</a></h2>
-<p>Once the journals and rules are configured (see <em>Configuration</em>), the
-withholding tax is handled from the payment wizard:</p>
+<p>Once the journals and rules are configured (see <em>Configuration</em>),
+withholding tax is handled from the payment wizard.</p>
 <p>Withholding applies only when both the invoice company and invoice
 partner have Tunisia as their country. A missing country makes the
 document ineligible. Withholding journals and alerts are not offered for
 ineligible documents. Direct payment creation and confirmation enforce
 the same country restriction.</p>
+<div class="section" id="one-receipt-for-several-invoices">
+<h3><a class="toc-backref" href="#toc-entry-3">One receipt for several invoices</a></h3>
+<p>Select several invoices for the same customer and click <strong>Pay</strong>. Enable
+<strong>Withholding Tax Applicable</strong>, then choose <strong>Keep Unpaid</strong> or
+<strong>Register Withholding Payment</strong>.</p>
+<p>The allocation table shows each invoice’s remaining balance, applicable
+withholding journals, calculated withholding amount, and cash
+allocation. Different invoices can use different journals or several
+journals. Edit the selected journals and cash allocations as needed;
+withholding amounts are calculated from each journal’s rate and the
+invoice’s original total, rounded per journal in the invoice currency.</p>
+<p>Changing the bank/cash amount fills each invoice’s balance after
+withholding in allocation order before moving to the next invoice. Once
+the cash is exhausted, later invoices receive no cash allocation. Each
+invoice’s withholding stays reserved. Editing cash allocations directly
+updates the bank/cash total while preserving the manual distribution. An
+amount above the total net balance keeps the existing allocations and
+displays a warning; it cannot consume withholding.</p>
+<p>Exactly one bank/cash payment is created for the amount received. Its
+reconciliation follows the cash allocation of each invoice:</p>
+<ul class="simple">
+<li><strong>Keep Unpaid</strong> leaves the withholding amount outstanding on each
+invoice. No withholding payment is created.</li>
+<li><strong>Register Withholding Payment</strong> additionally creates one pending
+withholding payment per invoice/journal. Certificate confirmation
+remains a separate step.</li>
+</ul>
+<p>A warning shows differences from the suggested net total. Partial
+payments are allowed when the edited cash allocations add up to the
+bank/cash amount. Confirmation is blocked for incompatible journals,
+stale balances, negative or excess allocations, or cash totals that do
+not match the payment. Differences are never written off automatically.</p>
+<p>Allocation mode supports posted customer invoices or vendor bills in the
+company currency, for one partner, company and receivable/payable
+account. Credit notes and foreign currencies use the standard payment
+flow. Existing withholding payments are excluded from the suggested
+withholding journals to avoid duplicates.</p>
+</div>
+<div class="section" id="individual-withholding-payments">
+<h3><a class="toc-backref" href="#toc-entry-4">Individual withholding payments</a></h3>
 <ol class="arabic simple">
 <li>Open a posted vendor bill that meets a withholding rule’s conditions,
 and click <strong>Pay</strong>.</li>
@@ -471,8 +513,9 @@ journals that do not match an applicable rule are not offered in the
 <strong>Journal</strong> field.</p>
 <p>Once the withholding tax has been paid, its journal is no longer offered
 for that bill and the rule no longer appears in the wizard.</p>
+</div>
 <div class="section" id="certificate-confirmation">
-<h3><a class="toc-backref" href="#toc-entry-3">Certificate confirmation</a></h3>
+<h3><a class="toc-backref" href="#toc-entry-5">Certificate confirmation</a></h3>
 <p>Withholding payments remain <strong>In Process</strong> until the certificate is
 confirmed. The invoice or bill balance is reduced immediately, but a
 fully settled invoice or bill remains <strong>In Payment</strong> while its
@@ -498,7 +541,7 @@ historical certificate confirmation was recorded.</p>
 </div>
 </div>
 <div class="section" id="bug-tracker">
-<h2><a class="toc-backref" href="#toc-entry-4">Bug Tracker</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-6">Bug Tracker</a></h2>
 <p>Bugs are tracked on <a class="reference external" href="https://github.com/OCA/l10n-tunisia/issues">GitHub Issues</a>.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
@@ -506,22 +549,22 @@ If you spotted it first, help us to smash it by providing a detailed and welcome
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
-<h2><a class="toc-backref" href="#toc-entry-5">Credits</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-7">Credits</a></h2>
 <div class="section" id="authors">
-<h3><a class="toc-backref" href="#toc-entry-6">Authors</a></h3>
+<h3><a class="toc-backref" href="#toc-entry-8">Authors</a></h3>
 <ul class="simple">
 <li>Sobware</li>
 </ul>
 </div>
 <div class="section" id="contributors">
-<h3><a class="toc-backref" href="#toc-entry-7">Contributors</a></h3>
+<h3><a class="toc-backref" href="#toc-entry-9">Contributors</a></h3>
 <ul class="simple">
 <li>Rami Brick &lt;<a class="reference external" href="mailto:rami.brick&#64;sobware-tech.com">rami.brick&#64;sobware-tech.com</a>&gt;</li>
 <li>Souheil Bejaoui &lt;<a class="reference external" href="mailto:souheil.bejaoui&#64;sobware-tech.com">souheil.bejaoui&#64;sobware-tech.com</a>&gt;</li>
 </ul>
 </div>
 <div class="section" id="maintainers">
-<h3><a class="toc-backref" href="#toc-entry-8">Maintainers</a></h3>
+<h3><a class="toc-backref" href="#toc-entry-10">Maintainers</a></h3>
 <p>This module is maintained by the OCA.</p>
 <a class="reference external image-reference" href="https://odoo-community.org">
 <img alt="Odoo Community Association" src="https://odoo-community.org/logo.png" />

@@ -77,7 +77,18 @@ class TestAccountMove(AccountTestInvoicingCommon):
 
     def test_calculate_withholding_tax_amount2(self):
         bill = self._create_bill()
+        tax = self.env["account.tax"].create(
+            {
+                "name": "Test purchase VAT 15%",
+                "amount_type": "percent",
+                "amount": 15,
+                "type_tax_use": "purchase",
+                "company_id": bill.company_id.id,
+            }
+        )
+        bill.invoice_line_ids.tax_ids = [Command.set(tax.ids)]
         bill.action_post()
+        self.assertEqual(bill.amount_total, 2300)
         applicable_rules = self.test_withholding_rule._get_applicable_rules(bill)
         self.assertIn(self.test_withholding_rule, applicable_rules)
         withholding_amount = self.test_withholding_rule._get_withholding_amount(bill)

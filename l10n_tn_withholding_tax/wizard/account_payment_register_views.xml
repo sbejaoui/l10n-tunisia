@@ -7,10 +7,63 @@
         <field name="arch" type="xml">
             <xpath expr="//group[@name='group1']/.." position="before">
                 <field name="withholding_journal_selected" invisible="1" />
+                <field name="has_multiple_bills" invisible="1" />
+                <group>
+                    <field
+                        name="withholding_tax_applicable"
+                        invisible="not has_multiple_bills"
+                    />
+                    <field
+                        name="withholding_handling"
+                        invisible="not withholding_tax_applicable"
+                        required="withholding_tax_applicable"
+                    />
+                </group>
+                <field
+                    name="withholding_allocation_line_ids"
+                    invisible="not withholding_tax_applicable"
+                    nolabel="1"
+                >
+                    <list editable="bottom" create="0" delete="0">
+                        <field
+                            name="invoice_id"
+                            options="{'no_create': True}"
+                            force_save="1"
+                        />
+                        <field name="currency_id" column_invisible="1" />
+                        <field
+                            name="invoice_balance"
+                            sum="Total Balance"
+                            force_save="1"
+                        />
+                        <field
+                            name="available_withholding_journal_ids"
+                            column_invisible="1"
+                        />
+                        <field
+                            name="withholding_journal_ids"
+                            widget="many2many_tags"
+                            options="{'no_create': True}"
+                        />
+                        <field name="withholding_amount" sum="Total Withholding" />
+                        <field name="cash_amount" sum="Total Cash" />
+                    </list>
+                </field>
+                <div
+                    class="alert alert-warning"
+                    role="alert"
+                    invisible="not withholding_allocation_warning"
+                >
+                    <field
+                        name="withholding_allocation_warning"
+                        readonly="1"
+                        nolabel="1"
+                    />
+                </div>
                 <div
                     class="alert alert-info"
                     role="alert"
-                    invisible="not withholding_tax_alert"
+                    invisible="withholding_tax_applicable or not withholding_tax_alert"
                 >
                     <field name="withholding_tax_alert" readonly="1" nolabel="1" />
                 </div>
@@ -21,6 +74,33 @@
                 >
                     <field name="multiple_bills_alert" readonly="1" nolabel="1" />
                 </div>
+            </xpath>
+            <xpath expr="//field[@name='group_payment']" position="attributes">
+                <attribute name="readonly">withholding_tax_applicable</attribute>
+                <attribute name="force_save">1</attribute>
+            </xpath>
+            <xpath
+                expr="//div[@name='amount_div']/field[@name='currency_id']"
+                position="attributes"
+            >
+                <attribute name="readonly">withholding_tax_applicable</attribute>
+            </xpath>
+            <xpath
+                expr="//field[@name='payment_difference_handling']"
+                position="attributes"
+            >
+                <attribute name="readonly">withholding_tax_applicable</attribute>
+                <attribute name="force_save">1</attribute>
+            </xpath>
+            <xpath
+                expr="//field[@name='installments_switch_html']"
+                position="attributes"
+            >
+                <attribute
+                    name="invisible"
+                    add="withholding_tax_applicable"
+                    separator=" or "
+                />
             </xpath>
         </field>
     </record>

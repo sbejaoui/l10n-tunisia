@@ -11,6 +11,46 @@ from .common import WithholdingTaxTestCommon
 
 @tagged("post_install", "-at_install")
 class TestWithholdingTaxModels(WithholdingTaxTestCommon):
+    def test_rules_and_available_journals_are_scoped_to_invoice_company(self):
+        company = self.company_data["company"]
+        other_company = self.setup_other_company()["company"]
+        other_journal = (
+            self.env["account.journal"]
+            .with_company(other_company)
+            .create(
+                {
+                    "name": "Other company withholding",
+                    "code": "OTHRS",
+                    "type": "bank",
+                    "company_id": other_company.id,
+                    "is_withholding_tax_journal": True,
+                    "withholding_tax_rate": 0.01,
+                }
+            )
+        )
+        self.env["l10n.tn.withholding.rule"].with_company(other_company).create(
+            [
+                {"withholding_journal_id": other_journal.id},
+                {
+                    "product_id": [Command.set(self.product_a.ids)],
+                    "withholding_journal_id": other_journal.id,
+                },
+            ]
+        )
+        bill = self._create_move(self.product_a, 2000)
+        unruled_bill = self._create_move(self.unruled_product, 2000)
+        rules = self.env["l10n.tn.withholding.rule"].with_context(
+            allowed_company_ids=company.ids
+        )
+
+        self.assertEqual(rules._get_applicable_rules(bill), self.withholding_rule)
+        self.assertFalse(rules._get_applicable_rules(unruled_bill))
+        wizard = self._create_payment_wizard(bill).with_context(
+            allowed_company_ids=company.ids
+        )
+        self.assertIn(self.withholding_journal, wizard.available_journal_ids)
+        self.assertNotIn(other_journal, wizard.available_journal_ids)
+
     # Purpose: a journal must retain its withholding flag and rate.
     def test_withholding_journal_configuration(self):
         self.assertTrue(self.withholding_journal.is_withholding_tax_journal)

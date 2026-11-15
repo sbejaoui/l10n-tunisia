@@ -13,6 +13,7 @@
     "depends": ["account", "l10n_tn_account_base"],
     "data": [
         "security/ir.model.access.csv",
+        "security/l10n_tn_payment_register_withholding_line.xml",
         "views/account_journal_views.xml",
         "views/account_payment_views.xml",
         "views/l10n_tn_withholding_rule_views.xml",

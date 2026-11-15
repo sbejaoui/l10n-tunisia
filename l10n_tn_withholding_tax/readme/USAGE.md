@@ -1,10 +1,51 @@
-Once the journals and rules are configured (see *Configuration*), the
-withholding tax is handled from the payment wizard:
+Once the journals and rules are configured (see *Configuration*), withholding
+tax is handled from the payment wizard.
 
 Withholding applies only when both the invoice company and invoice partner have
 Tunisia as their country. A missing country makes the document ineligible.
 Withholding journals and alerts are not offered for ineligible documents.
 Direct payment creation and confirmation enforce the same country restriction.
+
+## One receipt for several invoices
+
+Select several invoices for the same customer and click **Pay**. Enable
+**Withholding Tax Applicable**, then choose **Keep Unpaid** or **Register
+Withholding Payment**.
+
+The allocation table shows each invoice's remaining balance, applicable
+withholding journals, calculated withholding amount, and cash allocation.
+Different invoices can use different journals or several journals. Edit the
+selected journals and cash allocations as needed; withholding amounts are
+calculated from each journal's rate and the invoice's original total, rounded
+per journal in the invoice currency.
+
+Changing the bank/cash amount fills each invoice's balance after withholding in
+allocation order before moving to the next invoice. Once the cash is exhausted,
+later invoices receive no cash allocation. Each invoice's withholding stays
+reserved. Editing cash allocations directly updates the bank/cash total while
+preserving the manual distribution. An amount above the total net balance keeps
+the existing allocations and displays a warning; it cannot consume withholding.
+
+Exactly one bank/cash payment is created for the amount received. Its
+reconciliation follows the cash allocation of each invoice:
+
+- **Keep Unpaid** leaves the withholding amount outstanding on each invoice.
+  No withholding payment is created.
+- **Register Withholding Payment** additionally creates one pending withholding
+  payment per invoice/journal. Certificate confirmation remains a separate step.
+
+A warning shows differences from the suggested net total. Partial payments are
+allowed when the edited cash allocations add up to the bank/cash amount.
+Confirmation is blocked for incompatible journals, stale balances, negative or
+excess allocations, or cash totals that do not match the payment. Differences
+are never written off automatically.
+
+Allocation mode supports posted customer invoices or vendor bills in the company
+currency, for one partner, company and receivable/payable account. Credit notes
+and foreign currencies use the standard payment flow. Existing withholding
+payments are excluded from the suggested withholding journals to avoid duplicates.
+
+## Individual withholding payments
 
 1.  Open a posted vendor bill that meets a withholding rule's conditions,
     and click **Pay**.

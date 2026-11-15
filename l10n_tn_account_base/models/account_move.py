@@ -19,7 +19,7 @@ class AccountMove(models.Model):
             and self.partner_id.country_id.code == "TN"
         )
 
-    @api.depends("company_id.country_id.code", "partner_id.country_id.code")
+    @api.depends("company_id.country_id", "partner_id.country_id")
     def _compute_l10n_tn_is_domestic_transaction(self):
         for move in self:
             move.l10n_tn_is_domestic_transaction = (

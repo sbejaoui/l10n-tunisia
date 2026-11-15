@@ -8,6 +8,7 @@ from odoo.tools.misc import formatLang
 
 class WithholdingRule(models.Model):
     _name = "l10n.tn.withholding.rule"
+    _description = "Tunisian Withholding Tax Rule"
 
     product_id = fields.Many2many(
         comodel_name="product.product",
@@ -27,8 +28,16 @@ class WithholdingRule(models.Model):
         for invoice in invoices:
             if not invoice._is_withholding_tax_applicable():
                 continue
+            journals = self.env["account.journal"].search(
+                [
+                    ("company_id", "=", invoice.company_id.id),
+                    ("is_withholding_tax_journal", "=", True),
+                ]
+            )
+            journal_domain = [("withholding_journal_id", "in", journals.ids)]
             amount_rules = self.search(
-                [("product_id", "=", False), ("amount", "<=", invoice.amount_total)]
+                journal_domain
+                + [("product_id", "=", False), ("amount", "<=", invoice.amount_total)]
             )
             applicable_rules |= amount_rules.filtered(
                 lambda rule, bill=invoice: not bill.is_withholding_tax_rule_applied(
@@ -38,7 +47,10 @@ class WithholdingRule(models.Model):
             for line in invoice.invoice_line_ids:
                 if not line.product_id:
                     continue
-                rule = self.search([("product_id", "=", line.product_id.id)], limit=1)
+                rule = self.search(
+                    journal_domain + [("product_id", "=", line.product_id.id)],
+                    limit=1,
+                )
                 if (
                     rule
                     and not invoice.is_withholding_tax_rule_applied(rule)

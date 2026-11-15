@@ -5,6 +5,7 @@ from odoo import Command
 from odoo.exceptions import UserError
 from odoo.tests import Form
 from odoo.tests.common import tagged
+from odoo.tools.misc import formatLang
 
 from .common import WithholdingTaxTestCommon
 
@@ -39,7 +40,12 @@ class TestAccountPaymentRegisterWithholding(WithholdingTaxTestCommon):
         foreign_partner = self.partner_a.copy(
             {"country_id": self.env.ref("base.fr").id}
         )
-        foreign_bill = domestic_bill.copy({"partner_id": foreign_partner.id})
+        foreign_bill = domestic_bill.copy(
+            {
+                "partner_id": foreign_partner.id,
+                "invoice_date": domestic_bill.invoice_date,
+            }
+        )
         foreign_bill.action_post()
         wizard = self._create_payment_wizard(domestic_bill | foreign_bill)
         with Form(wizard) as form:
@@ -77,8 +83,19 @@ class TestAccountPaymentRegisterWithholding(WithholdingTaxTestCommon):
         )
 
         self.assertIn(self.withholding_journal.name, wizard.withholding_tax_alert)
-        self.assertIn(str(expected_amount), wizard.withholding_tax_alert)
-        self.assertNotIn(str(expected_amount * 2), wizard.withholding_tax_alert)
+        amount = formatLang(
+            self.env, expected_amount, currency_obj=eligible_bill.currency_id
+        )
+        doubled_amount = formatLang(
+            self.env, expected_amount * 2, currency_obj=eligible_bill.currency_id
+        )
+        withholding_line = next(
+            line
+            for line in wizard.withholding_tax_alert.splitlines()
+            if f": {self.withholding_journal.name} (" in line
+        )
+        self.assertIn(f"({amount})", withholding_line)
+        self.assertNotIn(f"({doubled_amount})", withholding_line)
 
     # Purpose: selecting a withholding journal must calculate from eligible bills only.
     def test_withholding_journal_amount_and_eligible_bills(self):
