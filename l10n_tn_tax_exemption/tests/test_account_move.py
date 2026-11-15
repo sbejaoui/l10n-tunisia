@@ -2,8 +2,8 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import Command
-from odoo.exceptions import ValidationError
-from odoo.tests.common import tagged
+from odoo.exceptions import UserError, ValidationError
+from odoo.tests import Form, tagged
 
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
@@ -30,6 +30,15 @@ class TestTaxExemptionCountry(AccountTestInvoicingCommon):
         cls.exemption_position = cls.env["account.fiscal.position"].create(
             {"name": "Tunisian exemption", "company_id": cls.env.company.id}
         )
+        cls.exemption_tax = cls.tax_sale_a.copy(
+            {
+                "name": "Exemption test tax",
+                "amount": 0,
+                "original_tax_ids": [Command.set(cls.tax_sale_a.ids)],
+                "fiscal_position_ids": [Command.set(cls.exemption_position.ids)],
+            }
+        )
+        cls.product_a.taxes_id = cls.tax_sale_a
         cls.exemption = cls.env["l10n_tn.tax_exemption"].create(
             {
                 "name": "TN certificate",
@@ -57,6 +66,282 @@ class TestTaxExemptionCountry(AccountTestInvoicingCommon):
         invoice = self._create_invoice()
         self.assertEqual(invoice.l10n_tn_tax_exemption_id, self.exemption)
         self.assertEqual(invoice.fiscal_position_id, self.exemption_position)
+
+    def test_exemption_dates_can_change_when_only_used_by_drafts(self):
+        invoice = self._create_invoice(invoice_date="2024-01-15")
+        self.exemption.write({"date_start": "2024-01-10", "date_end": "2024-01-31"})
+        self.assertEqual(invoice.l10n_tn_tax_exemption_id, self.exemption)
+        invoice.action_post()
+        self.assertEqual(invoice.state, "posted")
+
+    def test_posted_invoice_protects_exemption_dates_and_is_named_in_error(self):
+        self._create_invoice()
+        posted = self._create_invoice()
+        posted.action_post()
+        for values in (
+            {"date_start": "2024-01-02"},
+            {"date_end": "2024-12-30"},
+        ):
+            with self.subTest(values=values):
+                with self.assertRaises(UserError) as error, self.env.cr.savepoint():
+                    self.exemption.write(values)
+                self.assertIn(posted.name, str(error.exception))
+                self.assertIn(self.exemption.name, str(error.exception))
+
+    def test_date_changes_invalidate_draft_exemption_at_posting(self):
+        original_dates = {
+            "date_start": self.exemption.date_start,
+            "date_end": self.exemption.date_end,
+        }
+        for move_type in ("out_invoice", "out_refund"):
+            for values in (
+                {"date_start": "2024-01-02"},
+                {"date_end": "2023-12-31"},
+                {"date_start": False},
+                {"date_end": False},
+            ):
+                with self.subTest(move_type=move_type, values=values):
+                    self.exemption.write(original_dates)
+                    invoice = self._create_invoice(move_type=move_type)
+                    self.exemption.write(values)
+                    self.assertEqual(invoice.l10n_tn_tax_exemption_id, self.exemption)
+                    with (
+                        self.assertRaisesRegex(ValidationError, "Cannot post"),
+                        self.env.cr.savepoint(),
+                    ):
+                        invoice.action_post()
+                    self.assertEqual(invoice.state, "draft")
+                    self.assertEqual(invoice.l10n_tn_tax_exemption_id, self.exemption)
+
+    def test_exemption_validity_includes_start_and_end_dates_at_posting(self):
+        for date in ("2024-01-01", "2024-12-31"):
+            with self.subTest(date=date):
+                invoice = self._create_invoice(invoice_date=date)
+                invoice.action_post()
+                self.assertEqual(invoice.state, "posted")
+
+    def test_expired_exemption_reminder_uses_invoice_date(self):
+        invoice = self._create_invoice(invoice_date="2025-01-01")
+        self.assertEqual(invoice.company_id.l10n_tn_tax_exemption_reminder_months, 12)
+        self.assertIn(
+            self.exemption.name, invoice.l10n_tn_tax_exemption_reminder_warning
+        )
+        for invoice_date, expected in (
+            ("2025-12-31", True),
+            ("2026-01-01", False),
+            ("2024-12-31", False),
+        ):
+            with self.subTest(invoice_date=invoice_date):
+                invoice.invoice_date = invoice_date
+                self.assertEqual(
+                    bool(invoice.l10n_tn_tax_exemption_reminder_warning), expected
+                )
+
+    def test_expired_exemption_reminder_tracks_partner(self):
+        self.partner_b.country_id = self.env.ref("base.tn")
+        contact = self.env["res.partner"].create(
+            {
+                "name": "Invoice contact",
+                "parent_id": self.partner_a.id,
+                "country_id": self.partner_a.country_id.id,
+            }
+        )
+        invoice = self._create_invoice(partner_id=contact.id, invoice_date="2025-01-01")
+        self.assertTrue(invoice.l10n_tn_tax_exemption_reminder_warning)
+        invoice.partner_id = self.partner_b
+        self.assertFalse(invoice.l10n_tn_tax_exemption_reminder_warning)
+
+    def test_expired_exemption_reminder_is_company_specific(self):
+        company = self.env["res.company"].create(
+            {"name": "Other reminder company", "country_id": self.env.ref("base.tn").id}
+        )
+        self.assertEqual(company.l10n_tn_tax_exemption_reminder_months, 12)
+        self.env["res.config.settings"].create(
+            {"company_id": company.id, "l10n_tn_tax_exemption_reminder_months": 3}
+        )
+        self.assertEqual(company.l10n_tn_tax_exemption_reminder_months, 3)
+        invoice = self._create_invoice(invoice_date="2025-07-01")
+        self.assertTrue(
+            invoice.with_company(company).l10n_tn_tax_exemption_reminder_warning
+        )
+        invoice.company_id.l10n_tn_tax_exemption_reminder_months = 6
+        self.assertFalse(invoice.l10n_tn_tax_exemption_reminder_warning)
+        invoice.company_id.l10n_tn_tax_exemption_reminder_months = 0
+        invoice.invoice_date = "2025-01-01"
+        self.assertFalse(invoice.l10n_tn_tax_exemption_reminder_warning)
+
+    def test_expired_exemption_reminder_only_on_draft_customer_documents(self):
+        for move_type in ("out_invoice", "out_refund", "in_invoice", "out_receipt"):
+            with self.subTest(move_type=move_type):
+                invoice = self._create_invoice(
+                    move_type=move_type, invoice_date="2025-01-01"
+                )
+                self.assertEqual(
+                    bool(invoice.l10n_tn_tax_exemption_reminder_warning),
+                    move_type in ("out_invoice", "out_refund"),
+                )
+                if invoice.is_sale_document():
+                    invoice.action_post()
+                    self.assertFalse(invoice.l10n_tn_tax_exemption_reminder_warning)
+
+    def test_current_exemption_suppresses_expired_exemption_reminder(self):
+        self.env["l10n_tn.tax_exemption"].create(
+            {
+                "name": "Renewed certificate",
+                "partner_id": self.partner_a.id,
+                "date_start": "2025-01-01",
+                "date_end": "2025-12-31",
+                "fiscal_position_id": self.exemption_position.id,
+            }
+        )
+        invoice = self._create_invoice(invoice_date="2025-01-01")
+        self.assertTrue(invoice.l10n_tn_tax_exemption_id)
+        self.assertFalse(invoice.l10n_tn_tax_exemption_reminder_warning)
+
+    def test_manually_selected_expired_exemption_still_has_reminder(self):
+        invoice = self._create_invoice(
+            invoice_date="2025-01-01", l10n_tn_tax_exemption_id=self.exemption.id
+        )
+        self.assertTrue(invoice.l10n_tn_tax_exemption_reminder_warning)
+
+    def test_customer_credit_note_uses_exemption(self):
+        credit_note = self._create_invoice(move_type="out_refund")
+        self.assertEqual(credit_note.l10n_tn_tax_exemption_id, self.exemption)
+        self.assertEqual(credit_note.fiscal_position_id, self.exemption_position)
+        self.assertIn(self.exemption.name, credit_note.l10n_tn_tax_exemption_warning)
+        self.assertTrue(credit_note.l10n_tn_tax_exemption_missing_warning)
+
+    def test_other_document_types_skip_exemption(self):
+        for move_type in ("in_invoice", "in_refund", "in_receipt", "out_receipt"):
+            with self.subTest(move_type=move_type):
+                move = self._create_invoice(move_type=move_type)
+                self.assertFalse(move.l10n_tn_tax_exemption_id)
+                self.assertFalse(move.l10n_tn_tax_exemption_warning)
+                self.assertFalse(move.l10n_tn_tax_exemption_missing_warning)
+                with self.assertRaises(ValidationError), self.env.cr.savepoint():
+                    move.l10n_tn_tax_exemption_id = self.exemption
+
+    def test_journal_entry_skips_exemption(self):
+        move = self.env["account.move"].create(
+            {"partner_id": self.partner_a.id, "date": "2024-01-01"}
+        )
+        self.assertFalse(move.l10n_tn_tax_exemption_id)
+        self.assertFalse(move.l10n_tn_tax_exemption_warning)
+        self.assertFalse(move.l10n_tn_tax_exemption_missing_warning)
+
+    def test_exemption_warnings_track_missing_information(self):
+        invoice = self._create_invoice()
+        self.assertIn(self.exemption.name, invoice.l10n_tn_tax_exemption_warning)
+        self.assertTrue(invoice.l10n_tn_tax_exemption_missing_warning)
+
+        self.assertNotIn(
+            "Endorsed purchase order number:", invoice.l10n_tn_tax_exemption_warning
+        )
+        invoice.l10n_tn_endorsed_purchase_order = "BC-2024-001"
+        self.assertNotIn(
+            "Endorsed purchase order number:", invoice.l10n_tn_tax_exemption_warning
+        )
+
+        self.exemption.date_issue = "2024-01-01"
+        invoice.write(
+            {
+                "l10n_tn_endorsed_purchase_order": "BC-2024-001",
+                "l10n_tn_endorsed_purchase_order_date": "2024-01-02",
+                "l10n_tn_endorsed_purchase_order_file": b"dGVzdA==",
+            }
+        )
+        self.assertFalse(invoice.l10n_tn_tax_exemption_missing_warning)
+        self.assertIn("BC-2024-001", invoice.l10n_tn_tax_exemption_warning)
+
+        invoice.l10n_tn_endorsed_purchase_order_file = False
+        self.assertTrue(invoice.l10n_tn_tax_exemption_missing_warning)
+        invoice.action_post()
+        self.assertFalse(invoice.l10n_tn_tax_exemption_missing_warning)
+        # the legal message stays available for the posted invoice report
+        self.assertIn("BC-2024-001", invoice.l10n_tn_tax_exemption_warning)
+
+    def test_invoice_without_exemption_has_no_warnings(self):
+        invoice = self._create_invoice(l10n_tn_tax_exemption_id=False)
+        self.assertFalse(invoice.l10n_tn_tax_exemption_warning)
+        self.assertFalse(invoice.l10n_tn_tax_exemption_missing_warning)
+
+    def test_exemption_notice_matches_requested_content(self):
+        invoice = self._create_invoice(
+            l10n_tn_endorsed_purchase_order="PO-001",
+            l10n_tn_endorsed_purchase_order_date="2024-01-01",
+        )
+        lines = invoice.l10n_tn_tax_exemption_warning.splitlines()
+        self.assertEqual(len(lines), 4)
+        self.assertTrue(lines[0].startswith("Indicative suspended VAT amount:"))
+        self.assertIn(invoice.currency_id.name, lines[0])
+        self.assertEqual(lines[1], "Endorsed purchase order number: PO-001")
+        self.assertEqual(lines[2], "Tax exemption certificate No.: TN certificate")
+        self.assertTrue(lines[3].startswith("Exemption expiry date:"))
+
+    def test_suspended_vat_uses_discounted_exempt_line_amount(self):
+        self.tax_sale_a.amount = 19
+        invoice = self._create_invoice()
+        line = invoice.invoice_line_ids
+        line.write({"price_unit": 100, "quantity": 2, "discount": 10})
+        self.assertAlmostEqual(invoice.l10n_tn_suspended_vat_amount, 34.2)
+        self.assertEqual(invoice.amount_tax, 0)
+        line.discount = 0
+        self.assertAlmostEqual(invoice.l10n_tn_suspended_vat_amount, 38)
+
+    def test_suspended_vat_excludes_nonexempt_taxes(self):
+        self.tax_sale_a.amount = 19
+        invoice = self._create_invoice()
+        other_tax = self.tax_sale_a.copy({"name": "Non-exempt sales tax", "amount": 5})
+        invoice.invoice_line_ids.tax_ids += other_tax
+        self.assertAlmostEqual(invoice.l10n_tn_suspended_vat_amount, 19)
+        self.assertAlmostEqual(invoice.amount_tax, 5)
+
+    def test_suspended_vat_uses_net_base_for_price_included_source_tax(self):
+        self.tax_sale_a.write({"amount": 19, "price_include_override": "tax_included"})
+        invoice = self._create_invoice()
+        self.assertAlmostEqual(invoice.invoice_line_ids.price_subtotal, 100)
+        self.assertAlmostEqual(invoice.l10n_tn_suspended_vat_amount, 19)
+
+    def test_suspended_vat_uses_account_taxes_without_product(self):
+        self.tax_sale_a.amount = 19
+        invoice = self._create_invoice()
+        line = invoice.invoice_line_ids
+        line.account_id.tax_ids = self.tax_sale_a
+        line.product_id = False
+        self.assertAlmostEqual(invoice.l10n_tn_suspended_vat_amount, 19)
+
+    def test_fiscal_position_change_updates_existing_line_taxes(self):
+        invoice = self._create_invoice(
+            l10n_tn_tax_exemption_id=False, fiscal_position_id=False
+        )
+        self.assertEqual(invoice.invoice_line_ids.tax_ids, self.tax_sale_a)
+
+        with Form(invoice) as form:
+            form.fiscal_position_id = self.exemption_position
+        self.assertEqual(invoice.invoice_line_ids.tax_ids, self.exemption_tax)
+        self.assertEqual(invoice.amount_tax, 0)
+
+        with Form(invoice) as form:
+            form.fiscal_position_id = self.env["account.fiscal.position"]
+        self.assertEqual(invoice.invoice_line_ids.tax_ids, self.tax_sale_a)
+        self.assertGreater(invoice.amount_tax, 0)
+
+    def test_partner_change_restores_and_reapplies_line_taxes(self):
+        self.partner_b.country_id = self.env.ref("base.tn")
+        self.partner_b.property_account_position_id = False
+        invoice = self._create_invoice()
+        self.assertEqual(invoice.invoice_line_ids.tax_ids, self.exemption_tax)
+
+        with Form(invoice) as form:
+            form.partner_id = self.partner_b
+        self.assertFalse(invoice.l10n_tn_tax_exemption_id)
+        self.assertFalse(invoice.fiscal_position_id)
+        self.assertEqual(invoice.invoice_line_ids.tax_ids, self.tax_sale_a)
+
+        with Form(invoice) as form:
+            form.partner_id = self.partner_a
+        self.assertEqual(invoice.l10n_tn_tax_exemption_id, self.exemption)
+        self.assertEqual(invoice.invoice_line_ids.tax_ids, self.exemption_tax)
 
     def test_foreign_or_missing_partner_country_skips_exemption(self):
         for country in (self.env.ref("base.fr"), False):

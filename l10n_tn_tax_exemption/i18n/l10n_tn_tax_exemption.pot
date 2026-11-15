@@ -1,0 +1,360 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_tn_tax_exemption
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-15 17:00+0000\n"
+"PO-Revision-Date: 2026-11-15 17:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_tn_tax_exemption
+#: model_terms:ir.ui.view,arch_db:l10n_tn_tax_exemption.res_config_settings_view_form
+msgid "<span class=\"ms-2\">months before the invoice date</span>"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#: model:ir.model,name:l10n_tn_tax_exemption.model_account_chart_template
+msgid "Account Chart Template"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#. odoo-python
+#: code:addons/l10n_tn_tax_exemption/models/l10n_tn_tax_exemption.py:0
+msgid ""
+"Cannot change the validity dates of tax exemption %(exemption)s because it "
+"is used by posted invoice(s): %(invoices)s. Create a new tax exemption "
+"instead."
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#. odoo-python
+#: code:addons/l10n_tn_tax_exemption/models/account_move.py:0
+msgid ""
+"Cannot post %(invoice)s dated %(invoice_date)s: tax exemption %(exemption)s "
+"does not cover the invoice date (valid from %(start)s to %(end)s). Select a "
+"valid exemption, or remove it and update taxes before posting."
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#: model_terms:ir.ui.view,arch_db:l10n_tn_tax_exemption.view_partner_form_tax_exemption
+msgid "Certificate"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#. odoo-python
+#: code:addons/l10n_tn_tax_exemption/models/account_move.py:0
+msgid "Certificate Expiry Date"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#. odoo-python
+#: code:addons/l10n_tn_tax_exemption/models/account_move.py:0
+msgid "Certificate Issue Date"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#. odoo-python
+#: code:addons/l10n_tn_tax_exemption/models/account_move.py:0
+msgid "Certificate Number"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#: model:ir.model,name:l10n_tn_tax_exemption.model_res_company
+msgid "Companies"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#: model:ir.model,name:l10n_tn_tax_exemption.model_res_config_settings
+msgid "Config Settings"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#: model:ir.model,name:l10n_tn_tax_exemption.model_res_partner
+msgid "Contact"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_l10n_tn_tax_exemption__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_l10n_tn_tax_exemption__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_account_chart_template__display_name
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_account_fiscal_position__display_name
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_account_move__display_name
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_l10n_tn_tax_exemption__display_name
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_res_company__display_name
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_res_config_settings__display_name
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_res_partner__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_l10n_tn_tax_exemption__date_end
+msgid "End Date"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#. odoo-python
+#: code:addons/l10n_tn_tax_exemption/models/account_move.py:0
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_account_bank_statement_line__l10n_tn_endorsed_purchase_order
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_account_move__l10n_tn_endorsed_purchase_order
+msgid "Endorsed Purchase Order"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#. odoo-python
+#: code:addons/l10n_tn_tax_exemption/models/account_move.py:0
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_account_bank_statement_line__l10n_tn_endorsed_purchase_order_date
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_account_move__l10n_tn_endorsed_purchase_order_date
+msgid "Endorsed Purchase Order Date"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#. odoo-python
+#: code:addons/l10n_tn_tax_exemption/models/account_move.py:0
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_account_bank_statement_line__l10n_tn_endorsed_purchase_order_file
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_account_move__l10n_tn_endorsed_purchase_order_file
+msgid "Endorsed Purchase Order File"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#. odoo-python
+#: code:addons/l10n_tn_tax_exemption/models/account_move.py:0
+msgid "Endorsed purchase order number: %(order)s"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#. odoo-python
+#: code:addons/l10n_tn_tax_exemption/models/account_move.py:0
+#: model:ir.model,name:l10n_tn_tax_exemption.model_account_fiscal_position
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_l10n_tn_tax_exemption__fiscal_position_id
+msgid "Fiscal Position"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_account_chart_template__id
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_account_fiscal_position__id
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_account_move__id
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_l10n_tn_tax_exemption__id
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_res_company__id
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_res_config_settings__id
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_res_partner__id
+msgid "ID"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_account_bank_statement_line__l10n_tn_suspended_vat_amount
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_account_move__l10n_tn_suspended_vat_amount
+msgid "Indicative Suspended VAT"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#. odoo-python
+#: code:addons/l10n_tn_tax_exemption/models/account_move.py:0
+msgid "Indicative suspended VAT amount: %(amount)s %(currency)s"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_l10n_tn_tax_exemption__move_ids
+msgid "Invoices"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_l10n_tn_tax_exemption__move_count
+msgid "Invoices count"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_l10n_tn_tax_exemption__date_issue
+msgid "Issue Date"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#: model:ir.model,name:l10n_tn_tax_exemption.model_account_move
+msgid "Journal Entry"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_account_bank_statement_line__l10n_tn_endorsed_purchase_order_filename
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_account_move__l10n_tn_endorsed_purchase_order_filename
+msgid "L10N Tn Endorsed Purchase Order Filename"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_account_bank_statement_line__l10n_tn_is_exemption_fiscal_position
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_account_move__l10n_tn_is_exemption_fiscal_position
+msgid "L10N Tn Is Exemption Fiscal Position"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_l10n_tn_tax_exemption__l10n_tn_tax_exemption_filename
+msgid "L10N Tn Tax Exemption Filename"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_l10n_tn_tax_exemption__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_l10n_tn_tax_exemption__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_account_bank_statement_line__l10n_tn_tax_exemption_missing_warning
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_account_move__l10n_tn_tax_exemption_missing_warning
+msgid "Missing Tax Exemption Information"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_l10n_tn_tax_exemption__name
+msgid "Name"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#. odoo-python
+#: code:addons/l10n_tn_tax_exemption/models/account_move.py:0
+msgid "Not provided"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_l10n_tn_tax_exemption__partner_id
+msgid "Partner"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_l10n_tn_tax_exemption__posted_move_count
+msgid "Posted Invoices"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_account_bank_statement_line__l10n_tn_tax_exemption_reminder_warning
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_account_move__l10n_tn_tax_exemption_reminder_warning
+msgid "Previous Tax Exemption Reminder"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#: model_terms:ir.ui.view,arch_db:l10n_tn_tax_exemption.res_config_settings_view_form
+msgid ""
+"Remind users when a customer's exemption recently expired. Set to 0 to "
+"disable reminders."
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_l10n_tn_tax_exemption__date_start
+msgid "Start Date"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#: model:ir.model,name:l10n_tn_tax_exemption.model_l10n_tn_tax_exemption
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_account_bank_statement_line__l10n_tn_tax_exemption_id
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_account_move__l10n_tn_tax_exemption_id
+msgid "Tax Exemption"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_l10n_tn_tax_exemption__l10n_tn_tax_exemption_file
+msgid "Tax Exemption File"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_account_bank_statement_line__l10n_tn_tax_exemption_warning
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_account_move__l10n_tn_tax_exemption_warning
+msgid "Tax Exemption Notice"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#: model_terms:ir.ui.view,arch_db:l10n_tn_tax_exemption.res_config_settings_view_form
+msgid "Tax Exemption Reminder"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_res_company__l10n_tn_tax_exemption_reminder_months
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_res_config_settings__l10n_tn_tax_exemption_reminder_months
+msgid "Tax Exemption Reminder Period (Months)"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_res_partner__l10n_tn_tax_exemption_ids
+#: model:ir.model.fields,field_description:l10n_tn_tax_exemption.field_res_users__l10n_tn_tax_exemption_ids
+#: model_terms:ir.ui.view,arch_db:l10n_tn_tax_exemption.view_partner_form_tax_exemption
+msgid "Tax Exemptions"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#. odoo-python
+#: code:addons/l10n_tn_tax_exemption/models/l10n_tn_tax_exemption.py:0
+msgid ""
+"Tax exemption %(name)s is already used by %(count)s invoice(s) and can no "
+"longer be modified or deleted. Create a new tax exemption instead."
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#. odoo-python
+#: code:addons/l10n_tn_tax_exemption/models/account_move.py:0
+msgid ""
+"Tax exemption certificate No.: %(certificate)s\n"
+"Exemption expiry date: %(expiry_date)s"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#. odoo-python
+#: code:addons/l10n_tn_tax_exemption/models/account_move.py:0
+msgid "Tax exemption information is incomplete. Please fill in: %(fields)s."
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#. odoo-python
+#: code:addons/l10n_tn_tax_exemption/models/account_fiscal_position.py:0
+msgid "The Tunisian Exemption fiscal position cannot be deleted."
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#: model:ir.model.constraint,message:l10n_tn_tax_exemption.constraint_res_company_tax_exemption_reminder_months_nonnegative
+msgid "The tax exemption reminder period cannot be negative."
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#. odoo-python
+#: code:addons/l10n_tn_tax_exemption/models/account_move.py:0
+msgid ""
+"This customer was previously tax exempt. Certificate %(certificate)s expired"
+" on %(date)s. Please check whether the customer is still exempt and request "
+"an updated certificate."
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#. odoo-python
+#: code:addons/l10n_tn_tax_exemption/models/account_move.py:0
+msgid ""
+"Tunisian tax exemption is only available on customer invoices and credit "
+"notes where both the company and the invoice partner are based in Tunisia."
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#: model_terms:ir.ui.view,arch_db:l10n_tn_tax_exemption.view_partner_form_tax_exemption
+msgid "Used by"
+msgstr ""
+
+#. module: l10n_tn_tax_exemption
+#: model:ir.model.fields,help:l10n_tn_tax_exemption.field_res_company__l10n_tn_tax_exemption_reminder_months
+#: model:ir.model.fields,help:l10n_tn_tax_exemption.field_res_config_settings__l10n_tn_tax_exemption_reminder_months
+msgid ""
+"Warn when a customer's exemption expired within this many months before the "
+"invoice date. Set to 0 to disable reminders."
+msgstr ""

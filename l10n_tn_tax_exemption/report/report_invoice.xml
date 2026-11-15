@@ -8,22 +8,17 @@
     >
         <xpath expr="//p[@name='note']" position="after">
             <p
-                t-if="o.l10n_tn_tax_exemption_id"
+                t-if="o.move_type in ('out_invoice', 'out_refund') and o.l10n_tn_tax_exemption_warning"
                 name="l10n_tn_tax_exemption"
-                style="font-size: 11px; font-family: 'Courier New', monospace; color: #555555;"
+                style="font-size: 16px; color: #555555;"
             >
-                <span
-                class="font-weight-bold text-uppercase"
-                style="text-decoration: underline;"
-            >Mentions Légales Obligatoires (Régime Suspensif)</span>
-                <br />
-                • Vente en suspension de la TVA (Attestation N°: <span
-                t-field="o.l10n_tn_tax_exemption_id.name"
-            /> obtenue le <span t-field="o.l10n_tn_tax_exemption_id.date_issue" />)
-                <br />
-                • Bon de Commande Visé N°: <span
-                t-field="o.l10n_tn_bon_de_commande_vise"
-            /> du <span t-field="o.l10n_tn_bon_de_commande_vise_date" />
+                <t
+                    t-foreach="o.l10n_tn_tax_exemption_warning.split('\n')"
+                    t-as="message_line"
+                >
+                    <br t-if="not message_line_first" />
+                    <t t-out="message_line" />
+                </t>
             </p>
         </xpath>
     </template>

@@ -4,7 +4,7 @@
 {
     "name": "Tax Exemption for Tunisia",
     "summary": "Adds Tunisian Tax Exemption handling on invoices",
-    "version": "19.0.1.0.0",
+    "version": "19.0.1.0.1",
     "countries": ["tn"],
     "category": "Accounting/Localizations/Account Charts",
     "author": "Sobware, Odoo Community Association (OCA)",
@@ -15,9 +15,10 @@
         "security/ir.model.access.csv",
         "views/res_partner.xml",
         "views/account_move.xml",
+        "views/res_config_settings.xml",
         "report/report_invoice.xml",
-        "data/account_tax_data.xml",
     ],
     "installable": True,
     "application": False,
+    "post_init_hook": "post_init_hook",
 }

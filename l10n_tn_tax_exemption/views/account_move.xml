@@ -3,33 +3,68 @@
      License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
 <odoo>
     <record id="view_move_form_tax_exemption" model="ir.ui.view">
-        <field name="name">account.move.form.tax.exemption</field>
         <field name="model">account.move</field>
         <field name="inherit_id" ref="account.view_move_form" />
         <field name="arch" type="xml">
+            <xpath expr="//form/sheet" position="before">
+                <div
+                    class="alert alert-warning"
+                    role="alert"
+                    invisible="state != 'draft' or not l10n_tn_tax_exemption_reminder_warning"
+                >
+                    <field
+                        name="l10n_tn_tax_exemption_reminder_warning"
+                        nolabel="1"
+                        readonly="1"
+                    />
+                </div>
+                <div
+                    class="alert alert-info"
+                    role="status"
+                    invisible="state != 'draft' or not l10n_tn_is_exemption_fiscal_position or not l10n_tn_tax_exemption_warning"
+                >
+                    <field
+                        name="l10n_tn_tax_exemption_warning"
+                        nolabel="1"
+                        readonly="1"
+                    />
+                </div>
+                <div
+                    class="alert alert-warning"
+                    role="alert"
+                    invisible="state != 'draft' or not l10n_tn_is_exemption_fiscal_position or not l10n_tn_tax_exemption_missing_warning"
+                >
+                    <field
+                        name="l10n_tn_tax_exemption_missing_warning"
+                        nolabel="1"
+                        readonly="1"
+                    />
+                </div>
+            </xpath>
             <xpath
                 expr="//group[@name='accounting_info_group']/field[@name='fiscal_position_id']"
                 position="after"
             >
                 <field name="l10n_tn_is_domestic_transaction" invisible="1" />
+                <field name="l10n_tn_is_exemption_fiscal_position" invisible="1" />
                 <field
                     name="l10n_tn_tax_exemption_id"
-                    invisible="not l10n_tn_is_domestic_transaction"
+                    invisible="move_type not in ('out_invoice', 'out_refund') or not l10n_tn_is_domestic_transaction or not l10n_tn_is_exemption_fiscal_position"
                 />
                 <field
-                    name="l10n_tn_bon_de_commande_vise"
-                    invisible="not l10n_tn_is_domestic_transaction"
+                    name="l10n_tn_endorsed_purchase_order"
+                    invisible="move_type not in ('out_invoice', 'out_refund') or not l10n_tn_is_domestic_transaction or not l10n_tn_is_exemption_fiscal_position"
                 />
                 <field
-                    name="l10n_tn_bon_de_commande_vise_date"
-                    invisible="not l10n_tn_is_domestic_transaction"
+                    name="l10n_tn_endorsed_purchase_order_date"
+                    invisible="move_type not in ('out_invoice', 'out_refund') or not l10n_tn_is_domestic_transaction or not l10n_tn_is_exemption_fiscal_position"
                 />
-                <field name="l10n_tn_bon_de_commande_vise_filename" invisible="1" />
+                <field name="l10n_tn_endorsed_purchase_order_filename" invisible="1" />
                 <field
-                    name="l10n_tn_bon_de_commande_vise_file"
+                    name="l10n_tn_endorsed_purchase_order_file"
                     widget="binary"
-                    filename="l10n_tn_bon_de_commande_vise_filename"
-                    invisible="not l10n_tn_is_domestic_transaction"
+                    filename="l10n_tn_endorsed_purchase_order_filename"
+                    invisible="move_type not in ('out_invoice', 'out_refund') or not l10n_tn_is_domestic_transaction or not l10n_tn_is_exemption_fiscal_position"
                 />
             </xpath>
         </field>

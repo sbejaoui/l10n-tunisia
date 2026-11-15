@@ -35,19 +35,22 @@ Tax Exemption for Tunisia
 This module records Tunisian tax exemption attestations on partners. An
 attestation has a number, a validity period, and a fiscal position.
 
-When an invoice is created, the module looks for an attestation valid
-for the invoice date and the customer's commercial partner. It selects
-the attestation automatically and applies its fiscal position, which
-maps the invoice's taxes. If the invoice date is empty, today's date is
-used for the lookup.
+When a customer invoice or credit note is created, the module looks for
+an attestation valid for the invoice date and the customer's commercial
+partner. It selects the attestation automatically and applies its fiscal
+position, which maps the invoice's taxes. If the invoice date is empty,
+today's date is used for the lookup.
 
-The module creates a 0% sales tax named **Tax exonerated**. The fiscal
-position's tax mappings determine whether it is applied to invoice
-lines.
+The module creates a 0% sales tax named **Tax Exemption** through the
+Tunisian chart of accounts, with a separate tax and tax group per
+company. The **Exemption** fiscal position maps sales taxes to **Tax
+Exemption**. The **Export** fiscal position keeps the existing **0%**
+sales tax.
 
-When an attestation is selected, its number and start date are shown on
-the printed invoice, along with the Bon de Commande Visé number and
-date.
+When an attestation is selected, the printed invoice shows the
+indicative suspended VAT amount, Endorsed Purchase Order number,
+certificate number, and exemption expiry date. The same message is
+previewed on the draft form.
 
 **Table of contents**
 
@@ -57,24 +60,40 @@ date.
 Configuration
 =============
 
-This module creates a 0% sales tax named **Tax exonerated**. It does not
-create or automatically change fiscal positions. Configure the fiscal
-position and the customer's attestation before creating an invoice:
+This module creates a 0% sales tax named **Tax Exemption** for each
+company using the Tunisian chart of accounts. Existing companies receive
+it when the module is installed; new companies receive it when their
+chart is loaded. Branches share their parent company's accounting data.
+The **Exemption** fiscal position uses **Tax Exemption**, while
+**Export** keeps the existing **0%** sales tax. Configure the customer's
+attestation before creating an invoice:
 
 1. Go to *Accounting > Configuration > Fiscal Positions*. Open the
    Tunisian **Exemption** fiscal position, or create one for the
-   company. In **Tax Mapping**, set **Tax exonerated** as the tax to
-   apply for each sales tax covered by the exemption. A fiscal position
-   needs at least one tax mapping to appear in the attestation's
-   **Fiscal Position** field.
-2. If you also use the **Export** fiscal position and want it to apply
-   **Tax exonerated**, update its sales tax mappings in the same way.
+   company. Check that covered sales taxes map to **Tax Exemption**. A
+   fiscal position needs at least one tax mapping to appear in the
+   attestation's **Fiscal Position** field.
+2. If you also use the **Export** fiscal position, keep its sales tax
+   mappings to the existing **0%** tax.
 3. Go to *Contacts* and open the customer's commercial partner. If
    invoices use a child contact, configure its parent company.
 4. On the **Invoicing** tab, under **Tax Exemptions**, add the
-   **Attestation** number, **Start Date**, **End Date**, and **Fiscal
-   Position**, and attach the **Tax Exemption File**. Both dates are
-   included in the validity period.
+   **Certificate** number, **Start Date**, and **End Date**, and attach
+   the **Tax Exemption File**. The company's Tunisian **Exemption**
+   fiscal position is selected by default. The **Fiscal Position**
+   column is hidden by default and can be shown through the column
+   selector. Both dates are included in the validity period.
+
+The Tunisian **Exemption** fiscal position cannot be deleted.
+
+An exemption's start and end dates remain editable until a linked
+invoice or credit note is posted. Attempts to change them then identify
+the affected posted documents; create a new exemption instead.
+
+In *Accounting > Configuration > Settings > Taxes*, set **Tax Exemption
+Reminder** for each company. The default period is 12 calendar months
+before the invoice date. Set it to 0 to disable reminders for that
+company.
 
 Avoid overlapping validity periods for the same partner: when more than
 one attestation matches, the module selects only one of them.
@@ -89,32 +108,75 @@ Usage
 Once the attestation and its fiscal position are configured (see
 *Configuration*), the attestation is selected automatically:
 
-Exemption applies only when both the invoice company and invoice partner
-have Tunisia as their country. A missing country makes the document
-ineligible. Exemption fields are hidden for other transactions, and
-manually assigning a certificate to an ineligible document is rejected.
+Exemption applies only to customer invoices and customer credit notes
+when both the company and partner have Tunisia as their country. Vendor
+documents, receipts, journal entries, and documents with a missing
+country are ineligible. Exemption fields are hidden for other
+transactions, and manually assigning a certificate to an ineligible
+document is rejected.
 
-1. Create a customer invoice for the partner and set an **Invoice Date**
+1. Create a customer invoice or credit note and set an **Invoice Date**
    within the attestation's validity period.
 2. On the **Other Info** tab, check that **Tax Exemption** shows the
    attestation and **Fiscal Position** shows its fiscal position. Enter
-   the **Bon de Commande Visé** number and date, and attach its file if
-   available.
+   the **Endorsed Purchase Order** number and date, and attach its file
+   if available.
 3. Add the invoice lines and check their taxes. For sales taxes mapped
-   to **Tax exonerated**, the lines should show that 0% tax. If the
-   fiscal position changes after lines have been added, use **Update
-   Taxes and Accounts** and check the taxes again before posting.
-4. Preview or print the invoice to see the attestation number and start
-   date, along with the Bon de Commande Visé number and date.
+   to **Tax Exemption**, the lines should show that 0% tax. On draft
+   Tunisian invoices, changing the fiscal position in the form
+   automatically updates existing line taxes and accounts. Check the
+   taxes again before posting.
+4. Preview or print the invoice to see the indicative suspended VAT
+   amount, Endorsed Purchase Order number, certificate number, and
+   expiry date.
+
+The indicative suspended VAT is calculated from the original sales taxes
+mapped to the zero-rate exemption tax on each line, using discounted net
+line amounts and the company's tax rounding rules. It is displayed in
+the invoice currency and does not change the actual invoice taxes.
+Product sales taxes are used, with account sales taxes as a fallback for
+lines without them. The purchase order line is omitted until its number
+and date are both filled.
+
+Posting checks that the selected exemption has both validity dates and
+covers the invoice date, including the start and end dates. If a
+certificate's dates change and no longer cover an existing draft,
+posting is blocked. Select a valid exemption, or remove it and update
+the invoice taxes before posting.
 
 The lookup uses the commercial partner, so an invoice addressed to a
 child contact can use an attestation configured on its parent company.
-If no attestation matches, the **Tax Exemption** field stays empty.
-Check the fiscal position and invoice-line taxes before posting.
+If no attestation matches, the **Tax Exemption** field stays empty. For
+Tunisian companies, the invoice uses the partner's configured fiscal
+position in that case, or clears it if the partner has none. Changing
+the partner or invoice date recalculates the attestation and fiscal
+position. Check the fiscal position and invoice-line taxes before
+posting.
 
 Changing countries re-evaluates exemption on draft documents.
 Certificates and fiscal positions already recorded on posted documents
 are preserved.
+
+When an exemption is selected on a draft customer invoice or credit
+note, an information banner previews the legal message printed on the
+report. A separate warning lists missing details: attestation number or
+issue date, fiscal position, and Endorsed Purchase Order number, date,
+or attachment. These alerts are hidden outside draft state; the legal
+message remains on the printed report.
+
+The exemption fields and legal-message alerts appear only when the
+company's Tunisian **Exemption** fiscal position is selected. The
+expired-exemption reminder remains available independently of the
+selected fiscal position.
+
+If no valid exemption is selected and the customer has an exemption that
+expired within the company's reminder period before the invoice date, a
+draft-only warning asks you to check whether the customer is still
+exempt and request an updated certificate. The lookup uses the
+commercial partner and also applies to customer credit notes. An
+exemption remains valid on its end date; a certificate that expired
+exactly the configured number of months earlier still triggers the
+reminder. If the invoice date is empty, today's date is used.
 
 Bug Tracker
 ===========
@@ -137,8 +199,8 @@ Authors
 Contributors
 ------------
 
-- Rami Brick <brickrami1@gmail.com>
-- Souheil Bejaoui <souheil.bejaoui@acsone.eu>
+- Rami Brick <rami.brick@sobware-tech.com>
+- Souheil Bejaoui <souheil.bejaoui@sobware-tech.com>
 
 Maintainers
 -----------
