@@ -9,10 +9,13 @@ class AccountMove(models.Model):
 
     def _is_stamp_tax_applicable(self):
         self.ensure_one()
-        return self.l10n_tn_is_domestic_transaction
+        return (
+            self.is_invoice(include_receipts=True)
+            and self.l10n_tn_is_domestic_transaction
+        )
 
     def _clean_stamp_tax_lines(self):
-        for move in self:
+        for move in self.filtered(lambda move: move.is_invoice(include_receipts=True)):
             move.invoice_line_ids.filtered("l10n_tn_is_stamp_tax").unlink()
             tax_type = "sale" if move.is_sale_document() else "purchase"
             stamp_tax = self.env["account.tax"]._get_stamp_tax(

@@ -189,6 +189,37 @@ class TestBillOfExchange(AccountTestInvoicingCommon):
         self.assertEqual(bill.boe_active_amount, 0)
         self.assertEqual(bill.state, "paid")
 
+    def test_domestic_stamped_invoice_waits_for_bill_collection(self):
+        if "l10n_tn_is_stamp_tax" not in self.env["account.move.line"]._fields:
+            self.skipTest("Requires the optional l10n_tn_stamp_tax addon")
+        self.partner_a.country_id = self.env.ref("base.tn")
+        invoice = self._invoice()
+        self.assertEqual(
+            len(invoice.invoice_line_ids.filtered("l10n_tn_is_stamp_tax")), 1
+        )
+        bill = self._bill(invoice)
+        self.assertEqual(bill.amount, invoice.amount_total)
+        self.assertEqual(len(bill.move_id.line_ids), 2)
+        self.assertEqual(sum(bill.move_id.line_ids.mapped("debit")), bill.amount)
+        self.assertEqual(bill.boe_active_amount, bill.amount)
+        self.assertEqual(bill.boe_collected_amount, 0)
+        self.assertEqual(bill.boe_settlement_status, "open")
+        self.assertFalse(bill.is_matched)
+        self.assertEqual(bill.state, "in_process")
+        self.assertEqual(invoice.amount_residual, 0)
+        self.assertEqual(invoice.payment_state, "in_payment")
+
+        collection = self._collect(bill, bill.amount)
+        self.assertEqual(len(collection.payment_id.move_id.line_ids), 2)
+        self.assertEqual(
+            sum(collection.payment_id.move_id.line_ids.mapped("debit")), bill.amount
+        )
+        self.assertEqual(bill.boe_active_amount, 0)
+        self.assertEqual(bill.boe_collected_amount, bill.amount)
+        self.assertTrue(bill.is_matched)
+        self.assertEqual(bill.state, "paid")
+        self.assertEqual(invoice.payment_state, "paid")
+
     def test_register_payment_wizard_uses_native_entry_and_allocation(self):
         invoice = self._invoice()
         wizard = (

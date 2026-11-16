@@ -170,3 +170,44 @@ class TestAccountMove(AccountTestInvoicingCommon):
 
         for invoice in invoices:
             self.assertTrue(self._is_stamp_tax_exist(invoice))
+
+    def test_journal_entries_do_not_receive_stamp_tax(self):
+        for partner in (self.partner_a, self.env["res.partner"]):
+            with self.subTest(partner=partner.display_name):
+                move = self.env["account.move"].create(
+                    {
+                        "move_type": "entry",
+                        "journal_id": self.company_data["default_journal_misc"].id,
+                        "partner_id": partner.id,
+                        "line_ids": [
+                            Command.create(
+                                {
+                                    "account_id": self.company_data[
+                                        "default_account_receivable"
+                                    ].id,
+                                    "partner_id": partner.id,
+                                    "debit": 100,
+                                }
+                            ),
+                            Command.create(
+                                {
+                                    "account_id": self.company_data[
+                                        "default_account_revenue"
+                                    ].id,
+                                    "partner_id": partner.id,
+                                    "credit": 100,
+                                }
+                            ),
+                        ],
+                    }
+                )
+                original_lines = move.line_ids
+                invoice = self._create_invoice()
+                (move | invoice).action_post()
+
+                self.assertEqual(move.state, "posted")
+                self.assertEqual(move.line_ids, original_lines)
+                self.assertEqual(sum(move.line_ids.mapped("debit")), 100)
+                self.assertFalse(move.line_ids.filtered("l10n_tn_is_stamp_tax"))
+                self.assertFalse(move.line_ids.tax_line_id)
+                self.assertTrue(self._is_stamp_tax_exist(invoice))
