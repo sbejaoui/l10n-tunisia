@@ -347,10 +347,12 @@ class TestTaxExemptionCountry(AccountTestInvoicingCommon):
         form.fiscal_position_id = self.env["account.fiscal.position"]
         with form.invoice_line_ids.edit(0) as line:
             self.assertEqual(line.tax_ids[:], self.tax_sale_a)
-            self.assertAlmostEqual(line.price_unit, 119)
+            self.assertAlmostEqual(line.price_unit, 100)
         invoice = form.save()
-        self.assertAlmostEqual(invoice.amount_untaxed, 100)
-        self.assertAlmostEqual(invoice.amount_tax, 19)
+        untaxed = invoice.currency_id.round(100 / 1.19)
+        self.assertAlmostEqual(invoice.amount_untaxed, untaxed)
+        self.assertAlmostEqual(invoice.amount_tax, 100 - untaxed)
+        self.assertAlmostEqual(invoice.amount_total, 100)
 
     def test_partner_change_restores_and_reapplies_line_taxes(self):
         self.partner_b.country_id = self.env.ref("base.tn")

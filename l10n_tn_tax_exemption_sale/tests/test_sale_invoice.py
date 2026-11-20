@@ -76,6 +76,8 @@ class TestSaleInvoiceTaxExemption(AccountTestInvoicingCommon):
             default_invoice_date="2024-06-15"
         )._create_invoices()
 
+        self.assertEqual(str(invoice.invoice_date), "2024-06-15")
+        self.assertTrue(invoice.l10n_tn_is_domestic_transaction)
         self.assertEqual(invoice.l10n_tn_tax_exemption_id, self.exemption)
         self.assertEqual(invoice.fiscal_position_id, self.exemption_position)
         self.assertEqual(invoice.invoice_line_ids.tax_ids, self.exemption_tax)
@@ -101,6 +103,8 @@ class TestSaleInvoiceTaxExemption(AccountTestInvoicingCommon):
         partner_position = self.env["account.fiscal.position"].create(
             {"name": "Customer position", "company_id": self.env.company.id}
         )
+        # an empty fiscal position removes all taxes in Odoo 19
+        self.tax_sale_a.fiscal_position_ids = [Command.link(partner_position.id)]
         self.partner_a.property_account_position_id = partner_position
         order = self._create_order(self.exemption_position)
 
@@ -139,6 +143,8 @@ class TestSaleInvoiceTaxExemption(AccountTestInvoicingCommon):
             default_invoice_date="2024-06-15"
         )._create_invoices(order)
 
+        self.assertEqual(str(invoice.invoice_date), "2024-06-15")
+        self.assertTrue(invoice.l10n_tn_is_domestic_transaction)
         self.assertEqual(invoice.l10n_tn_tax_exemption_id, self.exemption)
         self.assertEqual(invoice.fiscal_position_id, self.exemption_position)
         product_lines = invoice.invoice_line_ids.filtered(
