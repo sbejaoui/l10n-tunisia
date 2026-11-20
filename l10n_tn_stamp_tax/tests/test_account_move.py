@@ -1,4 +1,5 @@
 from odoo import Command
+from odoo.exceptions import ValidationError
 from odoo.tests.common import tagged
 
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
@@ -154,6 +155,40 @@ class TestAccountMove(AccountTestInvoicingCommon):
         invoice.action_post()
 
         self.assertFalse(self._is_stamp_tax_exist(invoice))
+
+    def test_non_tunisian_company_without_stamp_tax_configuration(self):
+        self.env.company.country_id = self.env.ref("base.fr")
+        (self.stamp_tax_sale | self.stamp_tax_purchase).l10n_tn_is_stamp_tax = False
+        for move_type in ("out_invoice", "in_invoice", "out_refund", "in_refund"):
+            with self.subTest(move_type=move_type):
+                invoice = self._create_invoice(move_type=move_type)
+                invoice.action_post()
+                self.assertEqual(invoice.state, "posted")
+                self.assertFalse(self._is_stamp_tax_exist(invoice))
+
+    def test_foreign_partner_without_stamp_tax_configuration(self):
+        self.partner_a.country_id = self.env.ref("base.fr")
+        (self.stamp_tax_sale | self.stamp_tax_purchase).l10n_tn_is_stamp_tax = False
+        invoice = self._create_invoice()
+        invoice.action_post()
+        self.assertEqual(invoice.state, "posted")
+        self.assertFalse(self._is_stamp_tax_exist(invoice))
+
+    def test_cleanup_removes_all_applied_stamp_taxes(self):
+        self.partner_a.country_id = self.env.ref("base.fr")
+        invoice = self._create_invoice()
+        regular_taxes = invoice.invoice_line_ids.tax_ids
+        extra_stamp_tax = self._create_stamp_tax("sale")
+        invoice.invoice_line_ids.tax_ids |= self.stamp_tax_sale | extra_stamp_tax
+        invoice.action_post()
+        self.assertEqual(invoice.invoice_line_ids.tax_ids, regular_taxes)
+        self.assertFalse(self._is_stamp_tax_exist(invoice))
+
+    def test_domestic_invoice_requires_stamp_tax_configuration(self):
+        (self.stamp_tax_sale | self.stamp_tax_purchase).l10n_tn_is_stamp_tax = False
+        invoice = self._create_invoice()
+        with self.assertRaisesRegex(ValidationError, "Stamp tax not found"):
+            invoice.action_post()
 
     def test_purchase_invoice_uses_purchase_stamp_tax(self):
         bill = self._create_invoice(move_type="in_invoice")

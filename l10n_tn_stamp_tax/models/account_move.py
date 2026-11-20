@@ -17,11 +17,11 @@ class AccountMove(models.Model):
     def _clean_stamp_tax_lines(self):
         for move in self.filtered(lambda move: move.is_invoice(include_receipts=True)):
             move.invoice_line_ids.filtered("l10n_tn_is_stamp_tax").unlink()
-            tax_type = "sale" if move.is_sale_document() else "purchase"
-            stamp_tax = self.env["account.tax"]._get_stamp_tax(
-                tax_type, move.company_id.id
-            )
-            move.invoice_line_ids.write({"tax_ids": [Command.unlink(stamp_tax.id)]})
+            stamp_taxes = move.invoice_line_ids.tax_ids.filtered("l10n_tn_is_stamp_tax")
+            if stamp_taxes:
+                move.invoice_line_ids.write(
+                    {"tax_ids": [Command.unlink(tax.id) for tax in stamp_taxes]}
+                )
 
     def _post(self, soft=True):
         self._clean_stamp_tax_lines()
