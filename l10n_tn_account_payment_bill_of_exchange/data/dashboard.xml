@@ -25,4 +25,15 @@
         <field name="sequence" eval="25" />
         <field name="is_published" eval="True" />
     </record>
+    <record id="action_dashboard_boe" model="ir.actions.client">
+        <field name="name">Dashboard des traites</field>
+        <field name="tag">action_spreadsheet_dashboard</field>
+        <field name="params" eval="{'dashboard_id': ref('dashboard_boe')}" />
+    </record>
+    <record id="menu_boe_dashboard" model="ir.ui.menu">
+        <field name="name">Dashboard et spreadsheet</field>
+        <field name="parent_id" ref="menu_boe_root" />
+        <field name="action" ref="action_dashboard_boe" />
+        <field name="sequence" eval="1" />
+    </record>
 </odoo>
