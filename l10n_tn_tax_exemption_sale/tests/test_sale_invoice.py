@@ -143,8 +143,39 @@ class TestSaleInvoiceTaxExemption(AccountTestInvoicingCommon):
         product_lines = invoice.invoice_line_ids.filtered(
             lambda line: line.display_type == "product"
         )
+        self.assertTrue(product_lines.is_downpayment)
+        self.assertFalse(product_lines.product_id)
         self.assertEqual(product_lines.tax_ids, self.exemption_tax)
         self.assertEqual(invoice.amount_tax, 0)
+        self.assertEqual(
+            order.order_line.filtered("is_downpayment").tax_ids, self.tax_sale_a
+        )
+
+    def test_down_payment_invoice_restores_taxes_after_exemption_expires(self):
+        order = self._create_order(self.exemption_position)
+        self.exemption.date_end = fields.Date.subtract(fields.Date.today(), days=1)
+        wizard = self.env["sale.advance.payment.inv"].create(
+            {
+                "sale_order_ids": [Command.set(order.ids)],
+                "advance_payment_method": "percentage",
+                "amount": 50,
+            }
+        )
+
+        invoice = wizard._create_invoices(order)
+
+        self.assertFalse(invoice.l10n_tn_tax_exemption_id)
+        self.assertFalse(invoice.fiscal_position_id)
+        lines = invoice.invoice_line_ids.filtered(
+            lambda line: line.display_type == "product"
+        )
+        self.assertTrue(lines.is_downpayment)
+        self.assertFalse(lines.product_id)
+        self.assertEqual(lines.tax_ids, self.tax_sale_a)
+        self.assertGreater(invoice.amount_tax, 0)
+        self.assertEqual(
+            order.order_line.filtered("is_downpayment").tax_ids, self.exemption_tax
+        )
 
     def test_sale_invoice_uses_explicit_date_instead_of_today(self):
         self.exemption.write({"date_start": "2024-01-01", "date_end": "2024-12-31"})
