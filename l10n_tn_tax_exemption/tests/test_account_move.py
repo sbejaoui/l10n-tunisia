@@ -326,6 +326,32 @@ class TestTaxExemptionCountry(AccountTestInvoicingCommon):
         self.assertEqual(invoice.invoice_line_ids.tax_ids, self.tax_sale_a)
         self.assertGreater(invoice.amount_tax, 0)
 
+    def test_fiscal_position_change_on_unsaved_invoice_preserves_included_price(self):
+        self.tax_sale_a.write({"amount": 19, "price_include_override": "tax_included"})
+        self.partner_b.country_id = self.env.ref("base.tn")
+        self.partner_b.property_account_position_id = False
+        form = Form(
+            self.env["account.move"].with_context(default_move_type="out_invoice")
+        )
+        form.partner_id = self.partner_b
+        form.invoice_date = "2024-06-15"
+        with form.invoice_line_ids.new() as line:
+            line.product_id = self.product_a
+            line.price_unit = 119
+
+        form.fiscal_position_id = self.exemption_position
+        with form.invoice_line_ids.edit(0) as line:
+            self.assertEqual(line.tax_ids[:], self.exemption_tax)
+            self.assertAlmostEqual(line.price_unit, 100)
+
+        form.fiscal_position_id = self.env["account.fiscal.position"]
+        with form.invoice_line_ids.edit(0) as line:
+            self.assertEqual(line.tax_ids[:], self.tax_sale_a)
+            self.assertAlmostEqual(line.price_unit, 119)
+        invoice = form.save()
+        self.assertAlmostEqual(invoice.amount_untaxed, 100)
+        self.assertAlmostEqual(invoice.amount_tax, 19)
+
     def test_partner_change_restores_and_reapplies_line_taxes(self):
         self.partner_b.country_id = self.env.ref("base.tn")
         self.partner_b.property_account_position_id = False

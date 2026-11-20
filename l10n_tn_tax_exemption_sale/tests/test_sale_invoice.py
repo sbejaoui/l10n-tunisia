@@ -43,6 +43,12 @@ class TestSaleInvoiceTaxExemption(AccountTestInvoicingCommon):
             }
         )
 
+    @classmethod
+    def get_default_groups(cls):
+        return super().get_default_groups() | cls.env.ref(
+            "sales_team.group_sale_salesman"
+        )
+
     def _create_order(self, fiscal_position):
         order = self.env["sale.order"].create(
             {
