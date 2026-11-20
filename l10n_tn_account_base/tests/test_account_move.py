@@ -18,8 +18,12 @@ class TestDomesticTransaction(AccountTestInvoicingCommon):
         company = self.company_data["company"]
         tn = self.env.ref("base.tn")
         fr = self.env.ref("base.fr")
-        move = self.env["account.move"].new(
-            {"company_id": company.id, "partner_id": self.partner_a.id}
+        move = self.env["account.move"].create(
+            {
+                "move_type": "out_invoice",
+                "company_id": company.id,
+                "partner_id": self.partner_a.id,
+            }
         )
         for company_country, partner_country, expected in (
             (tn, tn, True),

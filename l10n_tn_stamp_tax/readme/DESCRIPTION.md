@@ -17,3 +17,6 @@ on the document type and the company.
 On the printed invoice (PDF), the stamp tax line is hidden from the
 invoice line table, so it does not appear as a product line; the amount
 still shows in the tax summary.
+
+Invoices outside this domestic scope can be posted without configured stamp
+taxes. Domestic Tunisian invoices still require the appropriate stamp tax.

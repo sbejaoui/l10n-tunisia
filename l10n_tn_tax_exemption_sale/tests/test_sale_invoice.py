@@ -1,7 +1,7 @@
 # Copyright 2026 Sobware
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import Command
+from odoo import Command, fields
 from odoo.tests.common import tagged
 
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
@@ -37,10 +37,16 @@ class TestSaleInvoiceTaxExemption(AccountTestInvoicingCommon):
             {
                 "name": "TN certificate",
                 "partner_id": cls.partner_a.id,
-                "date_start": "2024-01-01",
-                "date_end": "2024-12-31",
+                "date_start": fields.Date.subtract(fields.Date.today(), months=1),
+                "date_end": fields.Date.add(fields.Date.today(), months=1),
                 "fiscal_position_id": cls.exemption_position.id,
             }
+        )
+
+    @classmethod
+    def get_default_groups(cls):
+        return super().get_default_groups() | cls.env.ref(
+            "sales_team.group_sale_salesman"
         )
 
     def _create_order(self, fiscal_position):
@@ -66,10 +72,10 @@ class TestSaleInvoiceTaxExemption(AccountTestInvoicingCommon):
         order = self._create_order(self.env["account.fiscal.position"])
         self.assertEqual(order.order_line.tax_ids, self.tax_sale_a)
 
-        invoice = order.with_context(
-            default_invoice_date="2024-06-15"
-        )._create_invoices()
+        invoice = order._create_invoices()
 
+        self.assertFalse(invoice.invoice_date)
+        self.assertTrue(invoice.l10n_tn_is_domestic_transaction)
         self.assertEqual(invoice.l10n_tn_tax_exemption_id, self.exemption)
         self.assertEqual(invoice.fiscal_position_id, self.exemption_position)
         self.assertEqual(invoice.invoice_line_ids.tax_ids, self.exemption_tax)
@@ -81,9 +87,8 @@ class TestSaleInvoiceTaxExemption(AccountTestInvoicingCommon):
         order = self._create_order(self.exemption_position)
         self.assertEqual(order.order_line.tax_ids, self.exemption_tax)
 
-        invoice = order.with_context(
-            default_invoice_date="2025-01-01"
-        )._create_invoices()
+        self.exemption.date_end = fields.Date.subtract(fields.Date.today(), days=1)
+        invoice = order._create_invoices()
 
         self.assertFalse(invoice.l10n_tn_tax_exemption_id)
         self.assertFalse(invoice.fiscal_position_id)
@@ -95,12 +100,13 @@ class TestSaleInvoiceTaxExemption(AccountTestInvoicingCommon):
         partner_position = self.env["account.fiscal.position"].create(
             {"name": "Customer position", "company_id": self.env.company.id}
         )
+        # an empty fiscal position removes all taxes in Odoo 19
+        self.tax_sale_a.fiscal_position_ids = [Command.link(partner_position.id)]
         self.partner_a.property_account_position_id = partner_position
         order = self._create_order(self.exemption_position)
 
-        invoice = order.with_context(
-            default_invoice_date="2025-01-01"
-        )._create_invoices()
+        self.exemption.date_end = fields.Date.subtract(fields.Date.today(), days=1)
+        invoice = order._create_invoices()
 
         self.assertFalse(invoice.l10n_tn_tax_exemption_id)
         self.assertEqual(invoice.fiscal_position_id, partner_position)
@@ -110,11 +116,10 @@ class TestSaleInvoiceTaxExemption(AccountTestInvoicingCommon):
         orders = self._create_order(self.env["account.fiscal.position"])
         orders |= self._create_order(self.env["account.fiscal.position"])
 
-        invoice = orders.with_context(
-            default_invoice_date="2024-06-15"
-        )._create_invoices()
+        invoice = orders._create_invoices()
 
         self.assertEqual(len(invoice), 1)
+        self.assertFalse(invoice.invoice_date)
         self.assertEqual(invoice.fiscal_position_id, self.exemption_position)
         self.assertEqual(invoice.invoice_line_ids.tax_ids, self.exemption_tax)
         self.assertEqual(invoice.amount_tax, 0)
@@ -129,16 +134,67 @@ class TestSaleInvoiceTaxExemption(AccountTestInvoicingCommon):
             }
         )
 
-        invoice = wizard.with_context(
-            default_invoice_date="2024-06-15"
-        )._create_invoices(order)
+        invoice = wizard._create_invoices(order)
 
+        self.assertFalse(invoice.invoice_date)
+        self.assertTrue(invoice.l10n_tn_is_domestic_transaction)
         self.assertEqual(invoice.l10n_tn_tax_exemption_id, self.exemption)
         self.assertEqual(invoice.fiscal_position_id, self.exemption_position)
         product_lines = invoice.invoice_line_ids.filtered(
             lambda line: line.display_type == "product"
         )
+        self.assertTrue(product_lines.is_downpayment)
+        self.assertFalse(product_lines.product_id)
         self.assertEqual(product_lines.tax_ids, self.exemption_tax)
+        self.assertEqual(invoice.amount_tax, 0)
+        self.assertEqual(
+            order.order_line.filtered("is_downpayment").tax_ids, self.tax_sale_a
+        )
+
+    def test_down_payment_invoice_restores_taxes_after_exemption_expires(self):
+        order = self._create_order(self.exemption_position)
+        self.exemption.date_end = fields.Date.subtract(fields.Date.today(), days=1)
+        wizard = self.env["sale.advance.payment.inv"].create(
+            {
+                "sale_order_ids": [Command.set(order.ids)],
+                "advance_payment_method": "percentage",
+                "amount": 50,
+            }
+        )
+
+        invoice = wizard._create_invoices(order)
+
+        self.assertFalse(invoice.l10n_tn_tax_exemption_id)
+        self.assertFalse(invoice.fiscal_position_id)
+        lines = invoice.invoice_line_ids.filtered(
+            lambda line: line.display_type == "product"
+        )
+        self.assertTrue(lines.is_downpayment)
+        self.assertFalse(lines.product_id)
+        self.assertEqual(lines.tax_ids, self.tax_sale_a)
+        self.assertGreater(invoice.amount_tax, 0)
+        self.assertEqual(
+            order.order_line.filtered("is_downpayment").tax_ids, self.exemption_tax
+        )
+
+    def test_sale_invoice_uses_explicit_date_instead_of_today(self):
+        self.exemption.write({"date_start": "2024-01-01", "date_end": "2024-12-31"})
+        order = self._create_order(self.env["account.fiscal.position"])
+        values = order._prepare_invoice()
+        values.update(
+            invoice_date="2024-06-15",
+            invoice_line_ids=[
+                Command.create(line._prepare_invoice_line())
+                for line in order.order_line
+            ],
+        )
+
+        invoice = self.env["account.move"].create(values)
+
+        self.assertEqual(str(invoice.invoice_date), "2024-06-15")
+        self.assertEqual(invoice.l10n_tn_tax_exemption_id, self.exemption)
+        self.assertEqual(invoice.fiscal_position_id, self.exemption_position)
+        self.assertEqual(invoice.invoice_line_ids.tax_ids, self.exemption_tax)
         self.assertEqual(invoice.amount_tax, 0)
 
     def test_manual_invoice_keeps_explicit_position(self):
@@ -146,7 +202,7 @@ class TestSaleInvoiceTaxExemption(AccountTestInvoicingCommon):
             {
                 "move_type": "out_invoice",
                 "partner_id": self.partner_a.id,
-                "invoice_date": "2025-01-01",
+                "invoice_date": fields.Date.subtract(fields.Date.today(), years=1),
                 "fiscal_position_id": self.exemption_position.id,
                 "invoice_line_ids": [
                     Command.create({"product_id": self.product_a.id, "price_unit": 100})

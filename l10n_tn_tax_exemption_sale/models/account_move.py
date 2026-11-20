@@ -18,6 +18,8 @@ class AccountMove(models.Model):
         )
         for move in sale_invoices:
             previous_position = move.fiscal_position_id
+            # refresh the certificate against the completed invoice before its position
+            move._compute_l10n_tn_tax_exemption_id()
             # sales supplies the fiscal position explicitly, bypassing precomputation
             move._compute_fiscal_position_id()
             orders = move.invoice_line_ids.sale_line_ids.order_id
