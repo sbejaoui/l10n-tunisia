@@ -75,6 +75,45 @@ class TestAccountMove(AccountTestInvoicingCommon):
         expected_amount = bill.amount_total * self.test_journal1.withholding_tax_rate
         self.assertEqual(withholding_amount, expected_amount)
 
+    def test_invoice_report_lists_withholding_before_other_payments(self):
+        bill = self._create_bill(move_type="out_invoice")
+        bill.action_post()
+        self.assertEqual(bill._get_withholding_invoice_report_payments(), [])
+        bank = self.company_data["default_journal_bank"]
+        registered_payments = self.env["account.payment"]
+        for journal, amount in ((bank, 500), (bank, 250), (self.test_journal1, 30)):
+            wizard = (
+                self.env["account.payment.register"]
+                .with_context(active_model="account.move", active_ids=bill.ids)
+                .create({})
+            )
+            with Form(wizard) as form:
+                form.journal_id = journal
+                form.amount = amount
+            registered_payments |= wizard._create_payments()
+
+        original_payments = [
+            dict(payment) for payment in bill.invoice_payments_widget["content"]
+        ]
+        report_payments = bill._get_withholding_invoice_report_payments()
+        withholding = registered_payments.filtered("is_withholding_tax_payment")
+        self.assertEqual(report_payments[0]["account_payment_id"], withholding.id)
+        self.assertEqual(report_payments[0]["amount"], 30)
+        self.assertEqual(report_payments[0]["journal_name"], self.test_journal1.name)
+        self.assertTrue(report_payments[0]["is_withholding_tax_payment"])
+        self.assertEqual(
+            [item["account_payment_id"] for item in report_payments[1:]],
+            [
+                item["account_payment_id"]
+                for item in original_payments
+                if item["account_payment_id"] != withholding.id
+            ],
+        )
+        self.assertTrue(
+            all(not item["is_withholding_tax_payment"] for item in report_payments[1:])
+        )
+        self.assertEqual(bill.invoice_payments_widget["content"], original_payments)
+
     def test_calculate_withholding_tax_amount2(self):
         bill = self._create_bill()
         tax = self.env["account.tax"].create(

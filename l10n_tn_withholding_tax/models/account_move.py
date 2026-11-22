@@ -75,3 +75,32 @@ class AccountMove(models.Model):
     def _is_withholding_tax_applicable(self):
         self.ensure_one()
         return self.l10n_tn_is_domestic_transaction
+
+    def _get_withholding_invoice_report_payments(self):
+        self.ensure_one()
+        payments = (self.invoice_payments_widget or {}).get("content", [])
+        withholding_payment_ids = set(
+            self.env["account.payment"]
+            .browse(
+                [
+                    payment["account_payment_id"]
+                    for payment in payments
+                    if payment.get("account_payment_id")
+                ]
+            )
+            .filtered("is_withholding_tax_payment")
+            .ids
+        )
+        report_payments = [
+            dict(
+                payment,
+                is_withholding_tax_payment=(
+                    payment.get("account_payment_id") in withholding_payment_ids
+                ),
+            )
+            for payment in payments
+        ]
+        return sorted(
+            report_payments,
+            key=lambda payment: not payment["is_withholding_tax_payment"],
+        )

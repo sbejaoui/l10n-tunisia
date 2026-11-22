@@ -178,6 +178,15 @@ journals that do not match an applicable rule are not offered in the
 Once the withholding tax has been paid, its journal is no longer offered
 for that bill and the rule no longer appears in the wizard.
 
+Invoice report with payments
+----------------------------
+
+When printing an invoice with payments, withholding payments appear
+first, labelled with their journal name (for example **RS 1.5%**), with
+the reconciled amount in the invoice currency. Other payments keep their
+usual labels, dates and relative order. The invoice balance and
+accounting entries are unchanged.
+
 Certificate confirmation
 ------------------------
 

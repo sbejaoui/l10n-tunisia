@@ -18,6 +18,7 @@
         "views/account_payment_views.xml",
         "views/l10n_tn_withholding_rule_views.xml",
         "wizard/account_payment_register_views.xml",
+        "report/report_invoice.xml",
     ],
     "installable": True,
     "application": False,
