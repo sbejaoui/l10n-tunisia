@@ -125,7 +125,6 @@ class AccountPayment(models.Model):
 
     def _get_withholding_payment_account(self):
         self.ensure_one()
-        self.journal_id._check_withholding_direction()
         self.journal_id._check_withholding_configuration()
         account = self.payment_method_line_id.payment_account_id
         self.journal_id._check_withholding_account(account)

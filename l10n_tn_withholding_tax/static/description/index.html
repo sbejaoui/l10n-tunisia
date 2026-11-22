@@ -431,30 +431,20 @@ steps.</p>
 <p><strong>Withholding tax journals</strong></p>
 <ol class="arabic simple">
 <li>Go to <em>Accounting &gt; Configuration &gt; Journals</em>.</li>
-<li>Create (or open) a journal of type <strong>Bank</strong>. Use one journal per
-withholding tax rate and direction.</li>
-<li>Tick <strong>Withholding tax journal</strong>, next to the journal type. This
-displays the <strong>Withholding Tax</strong> tab.</li>
-<li>Open that tab and choose the <strong>Withholding flow</strong>: <strong>Customer
-withholding (received)</strong> or <strong>Supplier withholding (deducted)</strong>.</li>
-<li>Enter the <strong>Withholding rate</strong> as a percentage, for example <tt class="docutils literal">1.5</tt>
-for 1.5%.</li>
-<li>Select the <strong>Tax receivable account</strong> for customer withholding or the
-<strong>Tax payable account</strong> for supplier withholding. The account
-selector proposes active Current Assets or Current Liabilities
-accounts for the journal’s company. Reconciliation on the fiscal
-account is optional. If you create an account from the selector, its
-type and company are prefilled.</li>
+<li>Create (or open) a journal of type <strong>Bank</strong> for the withholding rate.
+The same journal may serve customer and supplier withholding.</li>
+<li>Tick <strong>Withholding tax journal</strong>, next to the journal type.</li>
+<li>In <strong>Withholding Tax</strong>, enter the rate as a percentage, for example
+<tt class="docutils literal">1.5</tt> for 1.5%.</li>
+<li>Configure fiscal accounts on the payment methods in Odoo’s standard
+<strong>Incoming Payments</strong> and <strong>Outgoing Payments</strong> tabs. Incoming
+payments use the customer withholding account; outgoing payments use
+the supplier withholding account. There is no additional account
+field on the journal.</li>
 </ol>
-<p>The checkbox is shown only on journals of type <strong>Bank</strong>. The dedicated
-tab appears first when withholding is enabled. The account is configured
-directly on the journal; editing a payment-method table is not required.
-The standard bank settings are hidden for withholding journals. Fiscal
-accounts are visible to accounting administrators even when the full
-accounting interface is not enabled.</p>
-<p>The account field updates the default manual payment method for the
-selected direction. If that method is missing, a message directs you to
-the standard payment tab to add it, then return to select the account.</p>
+<p>Separate journals for customer and supplier withholding are optional.
+Use the rule’s <strong>Document Type</strong> to restrict a rule to customer invoices
+or vendor bills.</p>
 <p><strong>Withholding rules</strong></p>
 <ol class="arabic simple">
 <li>Go to <em>Accounting &gt; Configuration &gt; Withholding Rules</em>.</li>
@@ -463,8 +453,8 @@ the standard payment tab to add it, then return to select the account.</p>
 the rule to any invoice meeting the minimum amount.</li>
 <li><strong>Description</strong>: a short explanation of the rule.</li>
 <li><strong>Document Type</strong>: <strong>Customer Invoice</strong> (<tt class="docutils literal">out_invoice</tt>) or
-<strong>Vendor Bill</strong> (<tt class="docutils literal">in_invoice</tt>). Leave empty to apply the rule to
-both.</li>
+<strong>Vendor Bill</strong> (<tt class="docutils literal">in_invoice</tt>). Leave empty to apply to both. The
+same journal may be used by rules for either document type.</li>
 <li><strong>Amount</strong>: the minimum bill total (taxes included) from which the
 withholding applies. The threshold is inclusive. Use 0 for no
 minimum. This amount cannot be negative.</li>
@@ -474,10 +464,15 @@ be selected.</li>
 </ul>
 </li>
 </ol>
+<p>Product rules are filtered by company, document type and minimum amount
+before selecting the highest applicable threshold (then the lowest rule
+ID in case of a tie). Rules without products follow the same
+compatibility checks. Alerts, available journals and invoice allocation
+proposals use this selection.</p>
 <p><strong>Accounting reference</strong></p>
-<p>Select the tax account directly in <strong>Withholding Tax &gt; Accounting</strong>.
-This field edits Odoo’s standard outstanding payment/receipt account on
-the manual method, with no separate stored account setting:</p>
+<p>Use Odoo’s standard outstanding receipt/payment account on each payment
+method. A shared journal can use different accounts for incoming and
+outgoing payments:</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="27%" />
@@ -529,16 +524,13 @@ chart supplies both 432 and 4341 as Current Liabilities
 (<tt class="docutils literal">liability_current</tt>), without reconciliation enabled. The module
 accepts Current Assets (<tt class="docutils literal">asset_current</tt>) and Current Liabilities for
 either flow, without requiring reconciliation on the fiscal account. The
-journal’s direction determines the debit/credit entry. Invoice
-counterpart lines are still reconciled on their customer/supplier
-account. Account types still affect financial report classification;
-accepting an account does not verify or correct its presentation in
-those reports.</p>
-<p>The journal’s default bank account is not the tax account: the
-withholding payment must use the account configured on its payment
-method. Configure separate journals for customer and supplier flows.
-Journal direction is mandatory; filtering rules and validating payment
-compatibility with that direction are subsequent roadmap steps.</p>
+payment direction determines the debit/credit entry. Invoice counterpart
+lines are still reconciled on their customer/supplier account. Account
+types still affect financial report classification; accepting an account
+does not verify or correct its presentation in those reports.</p>
+<p>The journal’s default bank account is not the tax account: withholding
+must use its selected payment method’s fiscal account, for the actual
+payment direction.</p>
 <p>A withholding journal must have type <strong>Bank</strong> and a valid rate. A
 configured payment method account must be active, available to the
 journal’s company and of type Current Assets or Current Liabilities. It
@@ -559,10 +551,9 @@ standard behavior.</p>
 <p>Configuration remains editable as long as it is valid. The module does
 not freeze the journal or its accounts after a payment has been posted.
 Changing the rate or payment method account affects future payments
-without rewriting existing journal entries. Use a separate journal when
-changing the nature or direction of a withholding flow. Changing a
-journal’s withholding flag also changes the withholding classification
-of payments linked to that journal.</p>
+without rewriting existing journal entries. Changing a journal’s
+withholding flag also changes the withholding classification of payments
+linked to that journal.</p>
 <p>For a gross invoice of 2,000 and a withholding of 30, register a
 withholding payment of 30 and a bank payment of 1,970. Reconcile both
 payment counterpart lines with the invoice. The invoice total stays

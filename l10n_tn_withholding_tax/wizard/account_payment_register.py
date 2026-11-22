@@ -50,6 +50,10 @@ class AccountPaymentRegister(models.TransientModel):
     @api.depends(
         "line_ids",
         "line_ids.move_id.l10n_tn_is_domestic_transaction",
+        "line_ids.move_id.move_type",
+        "line_ids.move_id.company_id",
+        "line_ids.move_id.amount_total",
+        "line_ids.move_id.invoice_line_ids.product_id",
         "line_ids.move_id.currency_id",
     )
     def _compute_withholding_tax_alert(self):
@@ -175,6 +179,10 @@ class AccountPaymentRegister(models.TransientModel):
         "company_id",
         "can_edit_wizard",
         "line_ids.move_id.l10n_tn_is_domestic_transaction",
+        "line_ids.move_id.move_type",
+        "line_ids.move_id.company_id",
+        "line_ids.move_id.amount_total",
+        "line_ids.move_id.invoice_line_ids.product_id",
         "withholding_tax_applicable",
         "line_ids.move_id.currency_id",
     )
@@ -210,6 +218,10 @@ class AccountPaymentRegister(models.TransientModel):
     @api.depends(
         "line_ids",
         "line_ids.move_id.l10n_tn_is_domestic_transaction",
+        "line_ids.move_id.move_type",
+        "line_ids.move_id.company_id",
+        "line_ids.move_id.amount_total",
+        "line_ids.move_id.invoice_line_ids.product_id",
         "line_ids.move_id.matched_payment_ids.state",
         "line_ids.move_id.currency_id",
     )
@@ -223,7 +235,15 @@ class AccountPaymentRegister(models.TransientModel):
                 and bool(rules._get_applicable_rules(invoices))
             )
 
-    @api.depends("line_ids", "withholding_tax_applicable")
+    @api.depends(
+        "line_ids",
+        "line_ids.move_id.move_type",
+        "line_ids.move_id.company_id",
+        "line_ids.move_id.amount_total",
+        "line_ids.move_id.invoice_line_ids.product_id",
+        "line_ids.move_id.l10n_tn_is_domestic_transaction",
+        "withholding_tax_applicable",
+    )
     def _compute_withholding_allocation_line_ids(self):
         rules = self.env["l10n.tn.withholding.rule"]
         for wizard in self:

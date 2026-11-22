@@ -167,6 +167,14 @@ class TestWithholdingAccountingReference(WithholdingTaxTestCommon):
         self._check_accounting_reference("in_invoice")
         self.assertFalse(self.tax_payable.reconcile)
 
+    def test_shared_journal_preserves_customer_and_supplier_accounting(self):
+        journal = self.withholding_journal
+        journal.inbound_payment_method_line_ids.payment_account_id = self.tax_receivable
+        self.inbound_withholding_rule.withholding_journal_id = journal
+        self.inbound_withholding_journal = journal
+        self._check_accounting_reference("out_invoice")
+        self._check_accounting_reference("in_invoice")
+
     def test_standard_refunds_keep_bank_flow(self):
         for move_type, payment_type in (
             ("out_refund", "outbound"),

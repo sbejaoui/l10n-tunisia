@@ -6,92 +6,49 @@ from lxml import etree
 from odoo import Command
 from odoo.exceptions import ValidationError
 from odoo.tests import Form
-from odoo.tests.common import new_test_user, tagged
+from odoo.tests.common import tagged
 
 from .common import WithholdingTaxTestCommon
 
 
 @tagged("post_install", "-at_install")
 class TestWithholdingJournalConfiguration(WithholdingTaxTestCommon):
-    def test_accounting_manager_can_access_fiscal_accounts_in_journal_form(self):
-        user = new_test_user(
-            self.env,
-            login="withholding_journal_manager",
-            groups="account.group_account_manager",
-            company_id=self.env.company.id,
-            company_ids=[Command.set(self.env.company.ids)],
-        )
-        view = self.inbound_withholding_journal.with_user(user).get_view(
+    def test_standard_payment_tabs_remain_available(self):
+        view = self.withholding_journal.get_view(
             view_id=self.env.ref("account.view_account_journal_form").id,
             view_type="form",
         )
         arch = etree.fromstring(view["arch"])
-        self.assertTrue(
-            arch.xpath("//sheet/group//field[@name='is_withholding_tax_journal']")
-        )
-        page = arch.xpath("//page[@name='withholding_tax']")[0]
-        self.assertTrue(page.xpath(".//field[@name='withholding_account_id']"))
-        self.assertFalse(page.xpath(".//list"))
+        for name in ("page_incoming_payments", "page_outgoing_payments"):
+            page = arch.xpath(f"//page[@name='{name}']")[0]
+            self.assertNotIn("is_withholding_tax_journal", page.get("invisible", ""))
+            self.assertTrue(page.xpath(".//field[@name='payment_account_id']"))
 
-    def test_journal_account_field_updates_the_payment_method_in_both_directions(self):
-        for journal, account, code in (
-            (self.inbound_withholding_journal, self.tax_receivable, "991506"),
-            (self.withholding_journal, self.tax_payable, "991507"),
-        ):
-            with self.subTest(direction=journal.withholding_direction):
-                replacement = account.copy({"code": code})
-                with Form(journal) as form:
-                    form.withholding_account_id = replacement
-
-                self.assertEqual(journal.withholding_account_id, replacement)
-                self.assertEqual(
-                    journal.withholding_payment_method_line_id.payment_account_id,
-                    replacement,
-                )
-                payment = self._create_payment(journal=journal)
-                payment.action_post()
-                self.assertEqual(payment.outstanding_account_id, replacement)
-
-    def test_account_field_follows_direct_method_changes_and_direction(self):
-        journal = self.inbound_withholding_journal
-        self.assertEqual(journal.withholding_account_id, self.tax_receivable)
-        replacement = self.tax_receivable.copy({"code": "991506"})
-        journal.inbound_payment_method_line_ids.payment_account_id = replacement
-        self.assertEqual(journal.withholding_account_id, replacement)
-
-        journal.inbound_payment_method_line_ids.payment_account_id = False
-        journal.outbound_payment_method_line_ids.payment_account_id = self.tax_payable
-        journal.withholding_direction = "outbound"
-        self.assertEqual(journal.withholding_account_id, self.tax_payable)
-        journal.outbound_payment_method_line_ids.payment_account_id = False
-        self.assertFalse(journal.withholding_account_id)
-
-    def test_new_withholding_journal_can_be_configured_from_the_form(self):
+    def test_new_withholding_journal_uses_standard_method_accounts(self):
         with Form(self.env["account.journal"]) as form:
-            form.name = "Customer withholding setup"
+            form.name = "Shared withholding setup"
             form.type = "bank"
             form.code = "RSNEW"
             form.is_withholding_tax_journal = True
-            form.withholding_direction = "inbound"
             form.withholding_tax_rate = 0.015
-            form.withholding_account_id = self.tax_receivable
         journal = form.record
-        payment = self._create_payment(journal=journal)
-        payment.action_post()
-        self.assertEqual(payment.outstanding_account_id, self.tax_receivable)
-
-    def test_journal_account_field_keeps_account_validation(self):
-        with (
-            self.assertRaisesRegex(ValidationError, "fiscal account"),
-            self.cr.savepoint(),
+        journal.inbound_payment_method_line_ids.payment_account_id = self.tax_receivable
+        journal.outbound_payment_method_line_ids.payment_account_id = self.tax_payable
+        for direction, account in (
+            ("inbound", self.tax_receivable),
+            ("outbound", self.tax_payable),
         ):
-            self.inbound_withholding_journal.withholding_account_id = (
-                self.partner_a.property_account_receivable_id
+            payment = self._create_payment(journal=journal, payment_type=direction)
+            payment.action_post()
+            self.assertEqual(payment.outstanding_account_id, account)
+            fiscal_line = payment.move_id.line_ids.filtered(
+                lambda line, fiscal_account=account: line.account_id == fiscal_account
             )
+            self.assertEqual(fiscal_line.balance, 30 if direction == "inbound" else -30)
 
     def _create_payment(self, journal=None, **values):
         journal = journal or self.inbound_withholding_journal
-        inbound = journal.withholding_direction != "outbound"
+        inbound = values.get("payment_type", "inbound") == "inbound"
         method = (
             journal.inbound_payment_method_line_ids
             if inbound
@@ -127,7 +84,6 @@ class TestWithholdingJournalConfiguration(WithholdingTaxTestCommon):
                             "code": "BADRS",
                             "type": "bank",
                             "is_withholding_tax_journal": True,
-                            "withholding_direction": "inbound",
                             "withholding_tax_rate": 0.015,
                             **values,
                         }
@@ -154,9 +110,7 @@ class TestWithholdingJournalConfiguration(WithholdingTaxTestCommon):
             (self.inbound_withholding_journal, self.env.company.transfer_account_id),
         ):
             with self.subTest(journal=journal.name, account=invalid_account.name):
-                method = journal._get_available_payment_method_lines(
-                    journal.withholding_direction
-                )[:1]
+                method = journal.inbound_payment_method_line_ids[:1]
                 with (
                     self.assertRaisesRegex(ValidationError, "fiscal account"),
                     self.cr.savepoint(),

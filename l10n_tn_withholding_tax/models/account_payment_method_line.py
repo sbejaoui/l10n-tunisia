@@ -11,9 +11,5 @@ class AccountPaymentMethodLine(models.Model):
     def _check_withholding_account(self):
         for method in self:
             journal = method.journal_id
-            if (
-                journal.is_withholding_tax_journal
-                and method.payment_type == journal.withholding_direction
-                and method.payment_account_id
-            ):
+            if journal.is_withholding_tax_journal and method.payment_account_id:
                 journal._check_withholding_account(method.payment_account_id)

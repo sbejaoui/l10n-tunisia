@@ -58,7 +58,6 @@ class WithholdingTaxTestCommon(AccountTestInvoicingCommon):
                 "type": "bank",
                 "code": "TRS15",
                 "is_withholding_tax_journal": True,
-                "withholding_direction": "outbound",
                 "withholding_tax_rate": 0.015,
             }
         )
@@ -68,7 +67,6 @@ class WithholdingTaxTestCommon(AccountTestInvoicingCommon):
                 "type": "bank",
                 "code": "TRS5",
                 "is_withholding_tax_journal": True,
-                "withholding_direction": "outbound",
                 "withholding_tax_rate": 0.05,
             }
         )
@@ -76,14 +74,12 @@ class WithholdingTaxTestCommon(AccountTestInvoicingCommon):
             {
                 "name": "Test Incoming RS 1.5%",
                 "code": "TIR15",
-                "withholding_direction": "inbound",
             }
         )
         cls.other_inbound_withholding_journal = cls.other_withholding_journal.copy(
             {
                 "name": "Test Incoming RS 5%",
                 "code": "TIR5",
-                "withholding_direction": "inbound",
             }
         )
         for journal in cls.withholding_journal | cls.other_withholding_journal:

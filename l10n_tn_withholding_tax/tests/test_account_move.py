@@ -20,7 +20,6 @@ class TestAccountMove(AccountTestInvoicingCommon):
                 "type": "bank",
                 "code": "RS15",
                 "is_withholding_tax_journal": True,
-                "withholding_direction": "outbound",
                 "withholding_tax_rate": 0.015,
             }
         )
@@ -30,7 +29,6 @@ class TestAccountMove(AccountTestInvoicingCommon):
                 "type": "bank",
                 "code": "RS5",
                 "is_withholding_tax_journal": True,
-                "withholding_direction": "outbound",
                 "withholding_tax_rate": 0.05,
             }
         )
@@ -38,7 +36,6 @@ class TestAccountMove(AccountTestInvoicingCommon):
             {
                 "name": "Incoming RS 1.5%",
                 "code": "IRS15",
-                "withholding_direction": "inbound",
             }
         )
         for journal in cls.test_journal1 | cls.test_journal2:

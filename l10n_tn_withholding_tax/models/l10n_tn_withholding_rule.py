@@ -31,7 +31,9 @@ class WithholdingRule(models.Model):
     def _get_applicable_rules(self, invoices):
         applicable_rules = self.env["l10n.tn.withholding.rule"]
         for invoice in invoices:
-            if not invoice._is_withholding_tax_applicable():
+            if invoice.move_type not in ("out_invoice", "in_invoice") or not (
+                invoice._is_withholding_tax_applicable()
+            ):
                 continue
             journals = self.env["account.journal"].search(
                 [
