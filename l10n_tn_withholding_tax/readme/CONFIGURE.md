@@ -108,3 +108,11 @@ payments, without new withholding. This also applies to direct ORM creation or
 updates, including a refund document linked to an otherwise normal payment.
 Reversing or settling the tax balance of an earlier withholding is a separate
 operation, outside this workflow.
+
+The certificate confirmation action is available to accounting users with write
+access to the payment and a posted journal entry. It records the current user
+and server date, and checks every payment in a batch before updating any
+certificate. Direct ORM updates are allowed under standard access rights when
+the certificate, date and user are consistent and the withholding payment has
+a posted journal entry. Clear all three fields together when resetting through
+the ORM; the standard reset, cancel and reject actions do this automatically.

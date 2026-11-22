@@ -1,10 +1,10 @@
 # Copyright 2026 Sobware
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import Command
-from odoo.exceptions import UserError, ValidationError
+from odoo import Command, fields
+from odoo.exceptions import AccessError, UserError, ValidationError
 from odoo.tests import Form
-from odoo.tests.common import tagged
+from odoo.tests.common import new_test_user, tagged
 
 from .common import WithholdingTaxTestCommon
 
@@ -213,9 +213,7 @@ class TestWithholdingPaymentReception(WithholdingTaxTestCommon):
         for state in ("draft", "canceled", "rejected"):
             with self.subTest(state=state):
                 with (
-                    self.assertRaisesRegex(
-                        ValidationError, "cannot retain certificate"
-                    ),
+                    self.assertRaises(ValidationError),
                     self.cr.savepoint(),
                 ):
                     self.env["account.payment"].create(
@@ -229,6 +227,127 @@ class TestWithholdingPaymentReception(WithholdingTaxTestCommon):
                             "withholding_reception_confirmed": True,
                         }
                     )
+
+    def test_consistent_confirmation_can_be_written_via_orm(self):
+        invoice = self._create_move(self.product_a, 2000)
+        payment = self._register_withholding(invoice)
+        date = fields.Datetime.now()
+        payment.write(
+            {
+                "withholding_reception_confirmed": True,
+                "withholding_reception_date": date,
+                "withholding_reception_user_id": self.env.user.id,
+            }
+        )
+        self.assertTrue(payment.withholding_reception_confirmed)
+        self.assertEqual(payment.withholding_reception_date, date)
+        self.assertEqual(payment.withholding_reception_user_id, self.env.user)
+        self.assertEqual(payment.state, "paid")
+        payment.write(
+            {
+                "withholding_reception_confirmed": False,
+                "withholding_reception_date": False,
+                "withholding_reception_user_id": False,
+            }
+        )
+        self.assertFalse(payment.withholding_reception_confirmed)
+        self.assertEqual(payment.state, "in_process")
+
+    def test_incomplete_confirmation_is_rejected_via_orm(self):
+        invoice = self._create_move(self.product_a, 2000)
+        payment = self._register_withholding(invoice)
+        values = {
+            "withholding_reception_confirmed": True,
+            "withholding_reception_date": fields.Datetime.now(),
+            "withholding_reception_user_id": self.env.user.id,
+        }
+        for missing_field in values:
+            with self.subTest(missing_field=missing_field):
+                incomplete = dict(values, **{missing_field: False})
+                with self.assertRaises(ValidationError), self.cr.savepoint():
+                    payment.write(incomplete)
+        self.assertFalse(payment.withholding_reception_confirmed)
+
+    def test_confirmation_without_entry_is_rejected_on_create(self):
+        with self.assertRaises(ValidationError), self.cr.savepoint():
+            self.env["account.payment"].create(
+                {
+                    "journal_id": self.withholding_journal.id,
+                    "payment_type": "outbound",
+                    "partner_type": "supplier",
+                    "partner_id": self.partner_a.id,
+                    "amount": 30,
+                    "state": "in_process",
+                    "withholding_reception_confirmed": True,
+                    "withholding_reception_date": fields.Datetime.now(),
+                    "withholding_reception_user_id": self.env.user.id,
+                }
+            )
+
+    def test_confirmation_requires_a_posted_entry(self):
+        payment = self.env["account.payment"].create(
+            {
+                "journal_id": self.withholding_journal.id,
+                "payment_type": "outbound",
+                "partner_type": "supplier",
+                "partner_id": self.partner_a.id,
+                "amount": 30,
+            }
+        )
+        self.assertEqual(payment.state, "draft")
+        self.assertFalse(payment.move_id)
+        with self.assertRaisesRegex(UserError, "Only pending withholding"):
+            payment.action_validate_withholding()
+        payment._generate_journal_entry()
+        self.assertEqual(payment.state, "in_process")
+        self.assertEqual(payment.move_id.state, "draft")
+        with self.assertRaisesRegex(UserError, "posted journal entry"):
+            payment.action_validate_withholding()
+        self.assertFalse(payment.withholding_reception_confirmed)
+
+    def test_batch_confirmation_checks_all_entries_before_writing(self):
+        invoice = self._create_move(self.product_a, 2000)
+        valid = self._register_withholding(invoice)
+        invalid = self.env["account.payment"].create(
+            {
+                "journal_id": self.withholding_journal.id,
+                "payment_type": "outbound",
+                "partner_type": "supplier",
+                "partner_id": self.partner_a.id,
+                "amount": 30,
+            }
+        )
+        invalid._generate_journal_entry()
+        self.assertEqual(invalid.state, "in_process")
+        self.assertEqual(invalid.move_id.state, "draft")
+        with self.assertRaisesRegex(UserError, "posted journal entry"):
+            (valid | invalid).action_validate_withholding()
+        self.assertFalse(valid.withholding_reception_confirmed)
+        self.assertFalse(invalid.withholding_reception_confirmed)
+
+    def test_confirmation_requires_accounting_rights_and_company_access(self):
+        invoice = self._create_move(self.product_a, 2000)
+        payment = self._register_withholding(invoice)
+        internal = new_test_user(
+            self.env, login="certificate_internal", groups="base.group_user"
+        )
+        with self.assertRaises(AccessError):
+            payment.with_user(internal).action_validate_withholding()
+        accountant = new_test_user(
+            self.env,
+            login="certificate_accountant",
+            groups="account.group_account_invoice",
+            company_id=self.env.company.id,
+            company_ids=[Command.set(self.env.company.ids)],
+        )
+        other_company = self.setup_other_company()["company"]
+        with self.assertRaises(AccessError):
+            payment.with_user(accountant).with_context(
+                allowed_company_ids=other_company.ids
+            ).action_validate_withholding()
+        payment.with_user(accountant).action_validate_withholding()
+        self.assertEqual(payment.withholding_reception_user_id, accountant)
+        self.assertTrue(payment.withholding_reception_date)
 
     def test_lifecycle_actions_clear_certificate_confirmation(self):
         for action in ("action_draft", "action_cancel", "action_reject"):

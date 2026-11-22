@@ -82,6 +82,12 @@ class AccountPayment(models.Model):
             raise UserError(
                 self.env._("Only pending withholding payments can be confirmed.")
             )
+        if any(
+            not payment.move_id or payment.move_id.state != "posted" for payment in self
+        ):
+            raise UserError(
+                self.env._("Certificate confirmation requires a posted journal entry.")
+            )
         self.write(
             {
                 "withholding_reception_confirmed": True,
@@ -204,6 +210,36 @@ class AccountPayment(models.Model):
                     self.env._(
                         "A draft, canceled or rejected withholding payment "
                         "cannot retain certificate confirmation."
+                    )
+                )
+
+    @api.constrains(
+        "journal_id",
+        "move_id",
+        "withholding_reception_confirmed",
+        "withholding_reception_date",
+        "withholding_reception_user_id",
+    )
+    def _check_withholding_certificate(self):
+        for payment in self:
+            if not (
+                payment.withholding_reception_confirmed
+                or payment.withholding_reception_date
+                or payment.withholding_reception_user_id
+            ):
+                continue
+            if (
+                not payment.is_withholding_tax_payment
+                or not payment.withholding_reception_confirmed
+                or not payment.withholding_reception_date
+                or not payment.withholding_reception_user_id
+                or not payment.move_id
+                or payment.move_id.state != "posted"
+            ):
+                raise ValidationError(
+                    self.env._(
+                        "A confirmed certificate requires a withholding payment "
+                        "with a posted journal entry, confirmation date and user."
                     )
                 )
 
