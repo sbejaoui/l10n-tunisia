@@ -1,10 +1,12 @@
 # Copyright 2026 Sobware
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+from lxml import etree
+
 from odoo import Command
 from odoo.exceptions import UserError
 from odoo.tests import Form
-from odoo.tests.common import tagged
+from odoo.tests.common import new_test_user, tagged
 
 from .common import WithholdingTaxTestCommon
 
@@ -235,6 +237,8 @@ class TestWithholdingAccountingReference(WithholdingTaxTestCommon):
                 withholding = self._register_payment(invoice, journal)
                 self._register_payment(invoice, self.bank_journal)
                 self.assertTrue(invoice.is_rs_paid)
+                self.assertTrue(invoice.withholding_certificate_pending)
+                self.assertEqual(invoice.withholding_payment_count, 1)
                 self.assertTrue(invoice.is_withholding_tax_rule_applied(rule))
                 self.assertEqual(invoice.payment_state, "in_payment")
                 _fiscal, counterpart, _writeoff = withholding._seek_for_lines()
@@ -242,6 +246,12 @@ class TestWithholdingAccountingReference(WithholdingTaxTestCommon):
                 # retain the historical association to verify it is ignored
                 invoice.matched_payment_ids = [Command.link(withholding.id)]
                 self.assertFalse(invoice._get_reconciled_withholding_payments())
+                self.assertFalse(invoice.withholding_certificate_pending)
+                self.assertEqual(invoice.withholding_payment_count, 0)
+                self.assertEqual(
+                    invoice.action_view_withholding_payments()["domain"],
+                    [("id", "in", [])],
+                )
                 self.assertFalse(invoice.is_rs_paid)
                 self.assertFalse(invoice.is_withholding_tax_rule_applied(rule))
                 self.assertAlmostEqual(invoice.amount_residual, withholding.amount)
@@ -267,13 +277,27 @@ class TestWithholdingAccountingReference(WithholdingTaxTestCommon):
         self.assertEqual(second._get_reconciled_withholding_payments(), withholding)
         self.assertFalse(first.is_rs_paid)
         self.assertTrue(second.is_rs_paid)
+        self.assertFalse(first.withholding_certificate_pending)
+        self.assertTrue(second.withholding_certificate_pending)
+        self.assertEqual(second.withholding_payment_count, 1)
         self._register_payment(first, self.bank_journal)
         self._register_payment(second, self.bank_journal)
         self.assertEqual(first.payment_state, "paid")
         self.assertEqual(second.payment_state, "in_payment")
+        action = (first | second).action_view_withholding_payments()
+        self.assertEqual(action["domain"], [("id", "in", withholding.ids)])
+        self.assertEqual(action["res_model"], "account.payment")
+        self.assertEqual(first.withholding_payment_count, 0)
+        self.assertFalse(first.withholding_certificate_pending)
+        self.assertEqual(second.withholding_payment_count, 1)
+        self.assertTrue(second.withholding_certificate_pending)
         withholding.action_validate_withholding()
         self.assertEqual(first.payment_state, "paid")
         self.assertEqual(second.payment_state, "paid")
+        self.assertFalse(first.withholding_certificate_pending)
+        self.assertFalse(second.withholding_certificate_pending)
+        self.assertEqual(first.withholding_payment_count, 0)
+        self.assertEqual(second.withholding_payment_count, 1)
 
     def test_each_reconciled_withholding_requires_confirmation(self):
         invoice = self._create_move(self.product_a, 2000, move_type="out_invoice")
@@ -290,10 +314,15 @@ class TestWithholdingAccountingReference(WithholdingTaxTestCommon):
             invoice._get_reconciled_withholding_payments().ids, (first | second).ids
         )
         self.assertEqual(invoice.payment_state, "in_payment")
+        self.assertEqual(invoice.withholding_payment_count, 2)
+        self.assertTrue(invoice.withholding_certificate_pending)
         first.action_validate_withholding()
         self.assertEqual(invoice.payment_state, "in_payment")
+        self.assertTrue(invoice.withholding_certificate_pending)
         second.action_validate_withholding()
         self.assertEqual(invoice.payment_state, "paid")
+        self.assertFalse(invoice.withholding_certificate_pending)
+        self.assertEqual(invoice.withholding_payment_count, 2)
 
     def test_one_withholding_can_be_partially_reconciled_to_two_invoices(self):
         first = self._create_move(self.product_a, 2000, move_type="out_invoice")
@@ -323,6 +352,42 @@ class TestWithholdingAccountingReference(WithholdingTaxTestCommon):
             )
             self._register_payment(invoice, self.bank_journal)
             self.assertEqual(invoice.payment_state, "in_payment")
+        action = (first | second).action_view_withholding_payments()
+        self.assertEqual(action["domain"], [("id", "in", withholding.ids)])
+        self.assertEqual(action["res_model"], "account.payment")
+        for invoice in (first, second):
+            self.assertEqual(invoice.withholding_payment_count, 1)
+            self.assertTrue(invoice.withholding_certificate_pending)
         withholding.action_validate_withholding()
         self.assertEqual(first.payment_state, "paid")
         self.assertEqual(second.payment_state, "paid")
+        self.assertFalse(first.withholding_certificate_pending)
+        self.assertFalse(second.withholding_certificate_pending)
+
+    def test_accounting_user_can_open_withholding_from_invoice(self):
+        invoice = self._create_move(self.product_a, 2000, move_type="out_invoice")
+        payment = self._register_payment(invoice, self.inbound_withholding_journal)
+        user = new_test_user(
+            self.env,
+            login="invoice_withholding_tracking",
+            groups="account.group_account_invoice",
+            company_id=self.env.company.id,
+            company_ids=[Command.set(self.env.company.ids)],
+        )
+        action = invoice.with_user(user).action_view_withholding_payments()
+        self.assertEqual(action["domain"], [("id", "in", payment.ids)])
+        self.assertFalse(action["context"]["create"])
+        view = invoice.with_user(user).get_view(
+            view_id=self.env.ref("account.view_move_form").id, view_type="form"
+        )
+        arch = etree.fromstring(view["arch"])
+        self.assertTrue(
+            arch.xpath("//button[@name='action_view_withholding_payments']")
+        )
+        self.assertTrue(arch.xpath("//field[@name='withholding_payment_count']"))
+        self.assertTrue(
+            arch.xpath(
+                "//div[@role='status']"
+                "[contains(@invisible, 'withholding_certificate_pending')]"
+            )
+        )

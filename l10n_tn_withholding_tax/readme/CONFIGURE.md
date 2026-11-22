@@ -133,3 +133,10 @@ invoice transfers certificate tracking to that invoice. A fully settled invoice
 stays **In Payment** while any currently reconciled withholding is awaiting its
 certificate; confirming one withholding does not confirm the others. The same
 withholding payment may be partially reconciled to several invoices.
+
+The withholding-specific `is_matched` behavior is retained: the certificate
+controls matching for withholding payments only. Standard Odoo matching would
+otherwise consider a non-reconcilable fiscal account matched before certificate
+confirmation. Normal bank/cash payments retain standard matching and state
+computation. No change to this behavior is required for invoice tracking, which
+uses current reconciliations and the certificate confirmation flag directly.

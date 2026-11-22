@@ -13,11 +13,29 @@ _WITHHOLDING_RECONCILIATION_DEPENDS = (
     "line_ids.matched_credit_ids.credit_move_id.move_id.origin_payment_id.state",
     "line_ids.matched_debit_ids.debit_move_id.move_id.origin_payment_id.is_withholding_tax_payment",
     "line_ids.matched_credit_ids.credit_move_id.move_id.origin_payment_id.is_withholding_tax_payment",
+    "line_ids.matched_debit_ids.debit_move_id.move_id.origin_payment_id.withholding_reception_confirmed",
+    "line_ids.matched_credit_ids.credit_move_id.move_id.origin_payment_id.withholding_reception_confirmed",
 )
 
 
 class AccountMove(models.Model):
     _inherit = "account.move"
+
+    is_rs_eligible = fields.Boolean(
+        string="RS Eligible",
+        compute="_compute_is_rs_eligible",
+    )
+    is_rs_paid = fields.Boolean(
+        string="RS Already Paid",
+        compute="_compute_is_rs_paid",
+    )
+    withholding_certificate_pending = fields.Boolean(
+        compute="_compute_withholding_status",
+    )
+    withholding_payment_count = fields.Integer(
+        string="Withholding Payments",
+        compute="_compute_withholding_status",
+    )
 
     def _post(self, soft=True):
         self.origin_payment_id._check_withholding_configuration()
@@ -45,25 +63,51 @@ class AccountMove(models.Model):
                 move.payment_state = "in_payment"
         return result
 
-    is_rs_eligible = fields.Boolean(
-        string="RS Eligible",
-        compute="_compute_is_rs_eligible",
-    )
-
     @api.depends("amount_total")
     def _compute_is_rs_eligible(self):
         for move in self:
             move.is_rs_eligible = move.amount_total >= 1000
 
-    is_rs_paid = fields.Boolean(
-        string="RS Already Paid",
-        compute="_compute_is_rs_paid",
-    )
-
     @api.depends(*_WITHHOLDING_RECONCILIATION_DEPENDS)
     def _compute_is_rs_paid(self):
         for move in self:
             move.is_rs_paid = bool(move._get_reconciled_withholding_payments())
+
+    @api.depends(*_WITHHOLDING_RECONCILIATION_DEPENDS)
+    def _compute_withholding_status(self):
+        for move in self:
+            payments = move._get_reconciled_withholding_payments()
+            move.withholding_payment_count = len(payments)
+            move.withholding_certificate_pending = any(
+                not payment.withholding_reception_confirmed for payment in payments
+            )
+
+    def action_view_withholding_payments(self):
+        self.check_access("read")
+        payments = self.env["account.payment"]
+        for move in self:
+            payments |= move._get_reconciled_withholding_payments()
+        payments.check_access("read")
+        return {
+            "type": "ir.actions.act_window",
+            "name": self.env._("Withholding Payments"),
+            "res_model": "account.payment",
+            "view_mode": "list,form",
+            "views": [
+                (
+                    self.env.ref(
+                        "l10n_tn_withholding_tax.view_withholding_payment_list"
+                    ).id,
+                    "list",
+                ),
+                (False, "form"),
+            ],
+            "search_view_id": self.env.ref(
+                "l10n_tn_withholding_tax.view_withholding_payment_search"
+            ).id,
+            "domain": [("id", "in", payments.ids)],
+            "context": {"create": False},
+        }
 
     def _get_reconciled_withholding_payments(self):
         self.ensure_one()

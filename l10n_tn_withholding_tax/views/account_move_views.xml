@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 Sobware
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="view_move_form_withholding" model="ir.ui.view">
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button
+                    name="action_view_withholding_payments"
+                    type="object"
+                    class="oe_stat_button"
+                    icon="fa-percent"
+                    groups="account.group_account_invoice"
+                    invisible="not withholding_payment_count"
+                >
+                    <field
+                        name="withholding_payment_count"
+                        widget="statinfo"
+                        string="Withholding Taxes"
+                    />
+                </button>
+            </xpath>
+            <xpath expr="/form/sheet" position="before">
+                <div
+                    class="alert alert-warning"
+                    role="status"
+                    groups="account.group_account_invoice"
+                    invisible="not withholding_certificate_pending"
+                >Withholding certificate pending</div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -17,6 +17,7 @@
         "security/l10n_tn_payment_register_withholding_line.xml",
         "views/account_journal_views.xml",
         "views/account_payment_views.xml",
+        "views/account_move_views.xml",
         "views/l10n_tn_withholding_rule_views.xml",
         "wizard/account_payment_register_views.xml",
         "report/report_invoice.xml",

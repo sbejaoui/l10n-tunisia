@@ -64,10 +64,7 @@ Installation
 ============
 
 This addon is incompatible with Odoo's native **Withholding Tax on
-Payment** (``l10n_account_withholding_tax``). Only one of these addons
-can be installed in a database, including databases with multiple
-companies. Odoo blocks installation when the other addon is already
-installed.
+Payment** (``l10n_account_withholding_tax``).
 
 Configuration
 =============
@@ -239,6 +236,14 @@ currently reconciled withholding is awaiting its certificate; confirming
 one withholding does not confirm the others. The same withholding
 payment may be partially reconciled to several invoices.
 
+The withholding-specific ``is_matched`` behavior is retained: the
+certificate controls matching for withholding payments only. Standard
+Odoo matching would otherwise consider a non-reconcilable fiscal account
+matched before certificate confirmation. Normal bank/cash payments
+retain standard matching and state computation. No change to this
+behavior is required for invoice tracking, which uses current
+reconciliations and the certificate confirmation flag directly.
+
 Usage
 =====
 
@@ -302,8 +307,8 @@ withholding journals to avoid duplicates.
 Individual withholding payments
 -------------------------------
 
-1. Open a posted vendor bill that meets a withholding rule's conditions,
-   and click **Pay**.
+1. Open a posted customer invoice or vendor bill that meets a
+   withholding rule's conditions, and click **Pay**.
 2. At the top of the wizard, a message lists the applicable withholding
    taxes, with the journal and the amount to withhold for each one.
 3. In **Journal**, select the withholding tax journal. The **Amount** is
@@ -318,8 +323,11 @@ Amount-only and matching product rules can both apply. Withholding tax
 journals that do not match an applicable rule are not offered in the
 **Journal** field.
 
-Once the withholding tax has been paid, its journal is no longer offered
-for that bill and the rule no longer appears in the wizard.
+Once withholding is currently reconciled with the invoice, its journal
+is no longer offered for that invoice and the rule no longer appears in
+the wizard. Unreconciling it makes the rule available again for the
+remaining balance. The same withholding journal can serve customer and
+supplier documents; rules can restrict its use by document type.
 
 Invoice report with payments
 ----------------------------
@@ -340,7 +348,7 @@ withholding certificate is pending.
 
 - Open **Customers > Incoming Withholding Payments** to track received
   withholding. Open a payment and click **Validate Reception** after
-  receiving its certificate.
+  receiving and checking its certificate on TEJ.
 - Open **Vendors > Outgoing Withholding Payments** to track issued
   withholding. Open a payment and click **Confirm Certificate Delivery**
   after delivering its certificate.
@@ -353,9 +361,37 @@ entry. Resetting, canceling or rejecting a payment clears its
 confirmation. Pending withholding payments still prevent duplicate
 registration; canceled payments no longer block the rule.
 
-On upgrade, existing **Paid** withholding payments are treated as
-confirmed. Their confirmation user and date stay empty because no
-historical certificate confirmation was recorded.
+Tracking certificates from an invoice
+-------------------------------------
+
+A **Withholding certificate pending** message appears while at least one
+currently reconciled withholding is unconfirmed. Use the **Withholding
+Taxes** button to open its withholding payments, including confirmed
+payments. The count includes each payment once per invoice. When several
+invoices share a payment, opening their payments together lists that
+payment once.
+
+Confirming one certificate leaves the message visible if another
+withholding still awaits confirmation. After unreconciliation, an old
+payment association does not keep the message or block the rule.
+Reassigning a withholding transfers tracking to its currently reconciled
+invoice. A partially paid invoice keeps its normal residual and payment
+state while showing any pending certificate.
+
+Confirmation requires a posted payment entry. The action records the
+current accounting user and server date. Coherent ORM updates remain
+supported under standard access rights, with a complete
+certificate/date/user and posted entry. Resetting the payment, canceling
+it or rejecting it clears the confirmation. New withholding on customer
+or supplier refunds is not supported; use normal bank/cash
+reimbursement. Fiscal reversal of an earlier withholding is outside this
+workflow.
+
+The module is under development; no migration or historical certificate
+recovery is provided. Banking integrations beyond the verified
+invoice/payment workflow remain outside the validated scope. Check the
+dashboards and financial reports used in the target installation
+separately.
 
 Bug Tracker
 ===========

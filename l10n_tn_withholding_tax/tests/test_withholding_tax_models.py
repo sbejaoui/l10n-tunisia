@@ -213,3 +213,13 @@ class TestWithholdingTaxModels(WithholdingTaxTestCommon):
         self.assertEqual(
             self.withholding_rule._get_applicable_rules(bill), lower_threshold_rule
         )
+
+    def test_equal_threshold_product_rules_keep_id_priority(self):
+        later = self.withholding_rule.copy(
+            {"withholding_journal_id": self.other_withholding_journal.id}
+        )
+        bill = self._create_move(self.product_a, 2000)
+        self.assertGreater(later.id, self.withholding_rule.id)
+        self.assertEqual(
+            self.withholding_rule._get_applicable_rules(bill), self.withholding_rule
+        )

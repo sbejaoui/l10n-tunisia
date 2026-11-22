@@ -405,13 +405,14 @@ that bill.</p>
 <li><a class="reference internal" href="#individual-withholding-payments" id="toc-entry-5">Individual withholding payments</a></li>
 <li><a class="reference internal" href="#invoice-report-with-payments" id="toc-entry-6">Invoice report with payments</a></li>
 <li><a class="reference internal" href="#certificate-confirmation" id="toc-entry-7">Certificate confirmation</a></li>
+<li><a class="reference internal" href="#tracking-certificates-from-an-invoice" id="toc-entry-8">Tracking certificates from an invoice</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#bug-tracker" id="toc-entry-8">Bug Tracker</a></li>
-<li><a class="reference internal" href="#credits" id="toc-entry-9">Credits</a><ul>
-<li><a class="reference internal" href="#authors" id="toc-entry-10">Authors</a></li>
-<li><a class="reference internal" href="#contributors" id="toc-entry-11">Contributors</a></li>
-<li><a class="reference internal" href="#maintainers" id="toc-entry-12">Maintainers</a></li>
+<li><a class="reference internal" href="#bug-tracker" id="toc-entry-9">Bug Tracker</a></li>
+<li><a class="reference internal" href="#credits" id="toc-entry-10">Credits</a><ul>
+<li><a class="reference internal" href="#authors" id="toc-entry-11">Authors</a></li>
+<li><a class="reference internal" href="#contributors" id="toc-entry-12">Contributors</a></li>
+<li><a class="reference internal" href="#maintainers" id="toc-entry-13">Maintainers</a></li>
 </ul>
 </li>
 </ul>
@@ -419,10 +420,7 @@ that bill.</p>
 <div class="section" id="installation">
 <h2><a class="toc-backref" href="#toc-entry-1">Installation</a></h2>
 <p>This addon is incompatible with Odoo’s native <strong>Withholding Tax on
-Payment</strong> (<tt class="docutils literal">l10n_account_withholding_tax</tt>). Only one of these addons
-can be installed in a database, including databases with multiple
-companies. Odoo blocks installation when the other addon is already
-installed.</p>
+Payment</strong> (<tt class="docutils literal">l10n_account_withholding_tax</tt>).</p>
 </div>
 <div class="section" id="configuration">
 <h2><a class="toc-backref" href="#toc-entry-2">Configuration</a></h2>
@@ -601,6 +599,13 @@ invoice. A fully settled invoice stays <strong>In Payment</strong> while any
 currently reconciled withholding is awaiting its certificate; confirming
 one withholding does not confirm the others. The same withholding
 payment may be partially reconciled to several invoices.</p>
+<p>The withholding-specific <tt class="docutils literal">is_matched</tt> behavior is retained: the
+certificate controls matching for withholding payments only. Standard
+Odoo matching would otherwise consider a non-reconcilable fiscal account
+matched before certificate confirmation. Normal bank/cash payments
+retain standard matching and state computation. No change to this
+behavior is required for invoice tracking, which uses current
+reconciliations and the certificate confirmation flag directly.</p>
 </div>
 <div class="section" id="usage">
 <h2><a class="toc-backref" href="#toc-entry-3">Usage</a></h2>
@@ -656,8 +661,8 @@ withholding journals to avoid duplicates.</p>
 <div class="section" id="individual-withholding-payments">
 <h3><a class="toc-backref" href="#toc-entry-5">Individual withholding payments</a></h3>
 <ol class="arabic simple">
-<li>Open a posted vendor bill that meets a withholding rule’s conditions,
-and click <strong>Pay</strong>.</li>
+<li>Open a posted customer invoice or vendor bill that meets a
+withholding rule’s conditions, and click <strong>Pay</strong>.</li>
 <li>At the top of the wizard, a message lists the applicable withholding
 taxes, with the journal and the amount to withhold for each one.</li>
 <li>In <strong>Journal</strong>, select the withholding tax journal. The <strong>Amount</strong> is
@@ -671,8 +676,11 @@ Rules without products also apply to invoice lines without a product.
 Amount-only and matching product rules can both apply. Withholding tax
 journals that do not match an applicable rule are not offered in the
 <strong>Journal</strong> field.</p>
-<p>Once the withholding tax has been paid, its journal is no longer offered
-for that bill and the rule no longer appears in the wizard.</p>
+<p>Once withholding is currently reconciled with the invoice, its journal
+is no longer offered for that invoice and the rule no longer appears in
+the wizard. Unreconciling it makes the rule available again for the
+remaining balance. The same withholding journal can serve customer and
+supplier documents; rules can restrict its use by document type.</p>
 </div>
 <div class="section" id="invoice-report-with-payments">
 <h3><a class="toc-backref" href="#toc-entry-6">Invoice report with payments</a></h3>
@@ -691,7 +699,7 @@ withholding certificate is pending.</p>
 <ul class="simple">
 <li>Open <strong>Customers &gt; Incoming Withholding Payments</strong> to track received
 withholding. Open a payment and click <strong>Validate Reception</strong> after
-receiving its certificate.</li>
+receiving and checking its certificate on TEJ.</li>
 <li>Open <strong>Vendors &gt; Outgoing Withholding Payments</strong> to track issued
 withholding. Open a payment and click <strong>Confirm Certificate Delivery</strong>
 after delivering its certificate.</li>
@@ -703,13 +711,38 @@ all payments are matched. Confirmation does not create another journal
 entry. Resetting, canceling or rejecting a payment clears its
 confirmation. Pending withholding payments still prevent duplicate
 registration; canceled payments no longer block the rule.</p>
-<p>On upgrade, existing <strong>Paid</strong> withholding payments are treated as
-confirmed. Their confirmation user and date stay empty because no
-historical certificate confirmation was recorded.</p>
+</div>
+<div class="section" id="tracking-certificates-from-an-invoice">
+<h3><a class="toc-backref" href="#toc-entry-8">Tracking certificates from an invoice</a></h3>
+<p>A <strong>Withholding certificate pending</strong> message appears while at least one
+currently reconciled withholding is unconfirmed. Use the <strong>Withholding
+Taxes</strong> button to open its withholding payments, including confirmed
+payments. The count includes each payment once per invoice. When several
+invoices share a payment, opening their payments together lists that
+payment once.</p>
+<p>Confirming one certificate leaves the message visible if another
+withholding still awaits confirmation. After unreconciliation, an old
+payment association does not keep the message or block the rule.
+Reassigning a withholding transfers tracking to its currently reconciled
+invoice. A partially paid invoice keeps its normal residual and payment
+state while showing any pending certificate.</p>
+<p>Confirmation requires a posted payment entry. The action records the
+current accounting user and server date. Coherent ORM updates remain
+supported under standard access rights, with a complete
+certificate/date/user and posted entry. Resetting the payment, canceling
+it or rejecting it clears the confirmation. New withholding on customer
+or supplier refunds is not supported; use normal bank/cash
+reimbursement. Fiscal reversal of an earlier withholding is outside this
+workflow.</p>
+<p>The module is under development; no migration or historical certificate
+recovery is provided. Banking integrations beyond the verified
+invoice/payment workflow remain outside the validated scope. Check the
+dashboards and financial reports used in the target installation
+separately.</p>
 </div>
 </div>
 <div class="section" id="bug-tracker">
-<h2><a class="toc-backref" href="#toc-entry-8">Bug Tracker</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-9">Bug Tracker</a></h2>
 <p>Bugs are tracked on <a class="reference external" href="https://github.com/OCA/l10n-tunisia/issues">GitHub Issues</a>.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
@@ -717,22 +750,22 @@ If you spotted it first, help us to smash it by providing a detailed and welcome
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
-<h2><a class="toc-backref" href="#toc-entry-9">Credits</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-10">Credits</a></h2>
 <div class="section" id="authors">
-<h3><a class="toc-backref" href="#toc-entry-10">Authors</a></h3>
+<h3><a class="toc-backref" href="#toc-entry-11">Authors</a></h3>
 <ul class="simple">
 <li>Sobware</li>
 </ul>
 </div>
 <div class="section" id="contributors">
-<h3><a class="toc-backref" href="#toc-entry-11">Contributors</a></h3>
+<h3><a class="toc-backref" href="#toc-entry-12">Contributors</a></h3>
 <ul class="simple">
 <li>Rami Brick &lt;<a class="reference external" href="mailto:rami.brick&#64;sobware-tech.com">rami.brick&#64;sobware-tech.com</a>&gt;</li>
 <li>Souheil Bejaoui &lt;<a class="reference external" href="mailto:souheil.bejaoui&#64;sobware-tech.com">souheil.bejaoui&#64;sobware-tech.com</a>&gt;</li>
 </ul>
 </div>
 <div class="section" id="maintainers">
-<h3><a class="toc-backref" href="#toc-entry-12">Maintainers</a></h3>
+<h3><a class="toc-backref" href="#toc-entry-13">Maintainers</a></h3>
 <p>This module is maintained by the OCA.</p>
 <a class="reference external image-reference" href="https://odoo-community.org">
 <img alt="Odoo Community Association" src="https://odoo-community.org/logo.png" />

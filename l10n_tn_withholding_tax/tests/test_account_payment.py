@@ -431,3 +431,50 @@ class TestWithholdingPaymentReception(WithholdingTaxTestCommon):
         ):
             payment.state = "draft"
         self.assertTrue(payment.withholding_reception_confirmed)
+
+    def test_standard_outstanding_payment_waits_for_reconciliation(self):
+        journal = self.company_data["default_journal_bank"]
+        outstanding = self.tax_receivable.copy(
+            {"code": "991508", "name": "Standard outstanding receipts"}
+        )
+        journal.inbound_payment_method_line_ids.payment_account_id = outstanding
+        payment = self.env["account.payment"].create(
+            {
+                "journal_id": journal.id,
+                "payment_type": "inbound",
+                "partner_type": "customer",
+                "partner_id": self.partner_a.id,
+                "amount": 50,
+            }
+        )
+        payment.action_post()
+        self.assertFalse(payment.is_withholding_tax_payment)
+        self.assertEqual(payment.state, "in_process")
+        self.assertFalse(payment.is_matched)
+        settlement = self.env["account.move"].create(
+            {
+                "journal_id": self.company_data["default_journal_misc"].id,
+                "date": payment.date,
+                "line_ids": [
+                    Command.create(
+                        {"account_id": journal.default_account_id.id, "debit": 50}
+                    ),
+                    Command.create(
+                        {
+                            "account_id": outstanding.id,
+                            "credit": 50,
+                            "partner_id": self.partner_a.id,
+                        }
+                    ),
+                ],
+            }
+        )
+        settlement.action_post()
+        liquidity, _counterpart, _writeoff = payment._seek_for_lines()
+        settlement_line = settlement.line_ids.filtered(
+            lambda line: line.account_id == outstanding
+        )
+        (liquidity + settlement_line).reconcile()
+        self.assertEqual(payment.state, "paid")
+        self.assertTrue(payment.is_matched)
+        self.assertFalse(payment.withholding_reception_confirmed)

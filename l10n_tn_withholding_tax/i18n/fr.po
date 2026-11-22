@@ -561,6 +561,7 @@ msgstr "Journal de retenue à la source"
 
 #. module: l10n_tn_withholding_tax
 #: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_l10n_tn_payment_register_withholding_line__withholding_journal_ids
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.view_move_form_withholding
 msgid "Withholding Taxes"
 msgstr "Retenues à la source"
 
@@ -687,3 +688,22 @@ msgid ""
 msgstr ""
 "Un certificat confirmé nécessite un paiement de retenue avec une écriture "
 "comptabilisée, une date et un utilisateur de confirmation."
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_move__withholding_certificate_pending
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_bank_statement_line__withholding_certificate_pending
+msgid "Withholding Certificate Pending"
+msgstr "Certificat de retenue en attente"
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_move__withholding_payment_count
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_bank_statement_line__withholding_payment_count
+#: code:addons/l10n_tn_withholding_tax/models/account_move.py:0
+msgid "Withholding Payments"
+msgstr "Paiements de retenue à la source"
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.view_move_form_withholding
+msgid "Withholding certificate pending"
+msgstr "Certificat de retenue en attente"
