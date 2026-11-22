@@ -284,3 +284,19 @@ class TestWithholdingJournalConfiguration(WithholdingTaxTestCommon):
         )
         self.assertEqual(len(fiscal_line), 1)
         self.assertEqual(fiscal_line.debit, 40)
+
+        # earlier entries can be reposted with the account they were created with
+        first.move_id.button_draft()
+        first.move_id.action_post()
+        self.assertEqual(first.move_id.state, "posted")
+        first.action_draft()
+        first.action_post()
+        self.assertEqual(first.state, "in_process")
+        self.assertEqual(first.move_id.state, "posted")
+        self.assertEqual(first.outstanding_account_id, self.tax_receivable)
+        self.assertEqual(
+            first.move_id.line_ids.read(
+                ["account_id", "debit", "credit", "amount_currency"], load=None
+            ),
+            before,
+        )

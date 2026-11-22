@@ -45,10 +45,12 @@ proposals use this selection.
 Use Odoo's standard outstanding receipt/payment account on each payment method.
 A shared journal can use different accounts for incoming and outgoing payments:
 
-| Withholding flow | Payment method | Example tax account | Withholding entry |
-| --- | --- | --- | --- |
-| Customer invoice | Inbound | 434100, withholding suffered | Debit tax receivable, credit the invoice's customer account |
-| Vendor bill | Outbound | 432000, withholding owed to the State | Debit the invoice's supplier account, credit tax payable |
+- **Customer invoice** (inbound payment method): example tax account 434100,
+  withholding suffered. Entry: debit tax receivable, credit the invoice's
+  customer account.
+- **Vendor bill** (outbound payment method): example tax account 432000,
+  withholding owed to the State. Entry: debit the invoice's supplier account,
+  credit tax payable.
 
 Use dedicated tax accounts, separate from the customer/supplier accounts and
 bank accounts. Configure account numbers according to the company's chart of

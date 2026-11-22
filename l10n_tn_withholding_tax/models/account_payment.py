@@ -152,10 +152,9 @@ class AccountPayment(models.Model):
         self._check_withholding_configuration()
         return super().action_post()
 
-    def _get_withholding_payment_account(self):
+    def _check_withholding_payment_account(self, account):
         self.ensure_one()
         self.journal_id._check_withholding_configuration()
-        account = self.payment_method_line_id.payment_account_id
         self.journal_id._check_withholding_account(account)
         if account.currency_id and account.currency_id != self.currency_id:
             raise ValidationError(
@@ -164,6 +163,11 @@ class AccountPayment(models.Model):
                     "the payment currency."
                 )
             )
+
+    def _get_withholding_payment_account(self):
+        self.ensure_one()
+        account = self.payment_method_line_id.payment_account_id
+        self._check_withholding_payment_account(account)
         return account
 
     @api.constrains(
@@ -174,24 +178,26 @@ class AccountPayment(models.Model):
     )
     def _check_withholding_configuration(self):
         for payment in self.filtered("is_withholding_tax_payment"):
-            outstanding_account = payment.outstanding_account_id
-            account = payment._get_withholding_payment_account()
-            if outstanding_account != account:
-                raise ValidationError(
-                    self.env._(
-                        "A withholding payment must use the fiscal account "
-                        "configured on its payment method."
-                    )
-                )
-            if payment.move_id:
-                liquidity, _counterpart, _writeoff = payment._seek_for_lines()
-                if liquidity.account_id != account:
+            account = payment.outstanding_account_id
+            if not payment.move_id:
+                if account != payment._get_withholding_payment_account():
                     raise ValidationError(
                         self.env._(
-                            "The withholding journal entry must use "
-                            "the configured fiscal account."
+                            "A withholding payment must use the fiscal account "
+                            "configured on its payment method."
                         )
                     )
+                continue
+            # an existing entry keeps its account after a method account change
+            payment._check_withholding_payment_account(account)
+            liquidity, _counterpart, _writeoff = payment._seek_for_lines()
+            if liquidity.account_id != account:
+                raise ValidationError(
+                    self.env._(
+                        "The withholding journal entry must use "
+                        "the configured fiscal account."
+                    )
+                )
 
     def _get_outstanding_account(self, payment_type):
         if self.is_withholding_tax_payment:
