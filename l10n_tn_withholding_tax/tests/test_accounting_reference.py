@@ -1,6 +1,7 @@
 # Copyright 2026 Sobware
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+from odoo.exceptions import UserError
 from odoo.tests import Form
 from odoo.tests.common import tagged
 
@@ -174,6 +175,18 @@ class TestWithholdingAccountingReference(WithholdingTaxTestCommon):
         self.inbound_withholding_journal = journal
         self._check_accounting_reference("out_invoice")
         self._check_accounting_reference("in_invoice")
+
+    def test_refund_wizard_cannot_register_new_withholding(self):
+        for move_type in ("out_refund", "in_refund"):
+            with self.subTest(move_type=move_type):
+                refund = self._create_move(self.product_a, 2000, move_type=move_type)
+                wizard = self._create_payment_wizard(refund)
+                self.assertNotIn(self.withholding_journal, wizard.available_journal_ids)
+                wizard.journal_id = self.withholding_journal
+                with self.assertRaises(UserError), self.cr.savepoint():
+                    wizard._create_payments()
+                self.assertFalse(refund.matched_payment_ids)
+                self.assertEqual(refund.amount_residual, refund.amount_total)
 
     def test_standard_refunds_keep_bank_flow(self):
         for move_type, payment_type in (

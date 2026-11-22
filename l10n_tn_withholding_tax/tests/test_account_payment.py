@@ -1,6 +1,7 @@
 # Copyright 2026 Sobware
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+from odoo import Command
 from odoo.exceptions import UserError, ValidationError
 from odoo.tests import Form
 from odoo.tests.common import tagged
@@ -143,6 +144,70 @@ class TestWithholdingPaymentReception(WithholdingTaxTestCommon):
         self.partner_a.country_id = self.env.ref("base.fr")
         with self.assertRaises(ValidationError):
             payment.action_post()
+
+    def test_direct_withholding_refund_is_rejected(self):
+        journal = self.withholding_journal
+        journal.inbound_payment_method_line_ids.payment_account_id = self.tax_receivable
+        for partner_type, direction in (
+            ("customer", "outbound"),
+            ("supplier", "inbound"),
+        ):
+            with self.subTest(partner_type=partner_type, direction=direction):
+                with (
+                    self.assertRaisesRegex(ValidationError, "refunds"),
+                    self.cr.savepoint(),
+                ):
+                    self.env["account.payment"].create(
+                        {
+                            "journal_id": journal.id,
+                            "partner_id": self.partner_a.id,
+                            "partner_type": partner_type,
+                            "payment_type": direction,
+                            "amount": 30,
+                        }
+                    )
+
+    def test_refund_document_cannot_be_hidden_by_payment_direction(self):
+        journal = self.withholding_journal
+        journal.inbound_payment_method_line_ids.payment_account_id = self.tax_receivable
+        for move_type, partner_type, direction in (
+            ("out_refund", "customer", "inbound"),
+            ("in_refund", "supplier", "outbound"),
+        ):
+            with self.subTest(move_type=move_type):
+                refund = self._create_move(self.product_a, 2000, move_type=move_type)
+                with (
+                    self.assertRaisesRegex(ValidationError, "refunds"),
+                    self.cr.savepoint(),
+                ):
+                    self.env["account.payment"].create(
+                        {
+                            "journal_id": journal.id,
+                            "partner_id": self.partner_a.id,
+                            "partner_type": partner_type,
+                            "payment_type": direction,
+                            "invoice_ids": [Command.set(refund.ids)],
+                            "amount": 30,
+                        }
+                    )
+
+    def test_payment_direction_cannot_be_changed_to_a_withholding_refund(self):
+        journal = self.withholding_journal
+        journal.inbound_payment_method_line_ids.payment_account_id = self.tax_receivable
+        payment = self.env["account.payment"].create(
+            {
+                "journal_id": journal.id,
+                "partner_id": self.partner_a.id,
+                "partner_type": "customer",
+                "payment_type": "inbound",
+                "amount": 30,
+            }
+        )
+        with (
+            self.assertRaisesRegex(ValidationError, "refunds"),
+            self.cr.savepoint(),
+        ):
+            payment.payment_type = "outbound"
 
     def test_inactive_states_cannot_keep_certificate_confirmation_via_orm(self):
         for state in ("draft", "canceled", "rejected"):

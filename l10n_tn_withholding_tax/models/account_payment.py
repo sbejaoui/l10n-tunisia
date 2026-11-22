@@ -118,8 +118,26 @@ class AccountPayment(models.Model):
                     )
                 )
 
+    @api.constrains("journal_id", "payment_type", "partner_type", "invoice_ids")
+    def _check_withholding_refund(self):
+        for payment in self.filtered("is_withholding_tax_payment"):
+            if (payment.partner_type, payment.payment_type) in (
+                ("customer", "outbound"),
+                ("supplier", "inbound"),
+            ) or any(
+                invoice.move_type in ("out_refund", "in_refund")
+                for invoice in payment.invoice_ids
+            ):
+                raise ValidationError(
+                    self.env._(
+                        "New withholding payments are not supported for refunds. "
+                        "Use a regular bank or cash payment."
+                    )
+                )
+
     def action_post(self):
         self._check_withholding_country()
+        self._check_withholding_refund()
         self._check_withholding_configuration()
         return super().action_post()
 

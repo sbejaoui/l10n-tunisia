@@ -570,6 +570,12 @@ the line’s residual amount.</p>
 confirmation and its audit fields. Direct ORM state changes that leave
 confirmation on a draft, canceled or rejected withholding payment are
 refused.</p>
+<p>New withholding payments are supported only for customer receipts and
+supplier payments. Customer refunds and supplier reimbursements use
+regular bank/cash payments, without new withholding. This also applies
+to direct ORM creation or updates, including a refund document linked to
+an otherwise normal payment. Reversing or settling the tax balance of an
+earlier withholding is a separate operation, outside this workflow.</p>
 </div>
 <div class="section" id="usage">
 <h2><a class="toc-backref" href="#toc-entry-3">Usage</a></h2>

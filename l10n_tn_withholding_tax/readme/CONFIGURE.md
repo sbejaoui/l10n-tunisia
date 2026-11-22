@@ -101,3 +101,10 @@ rather than using the line's residual amount.
 Use the payment's reset, cancel or reject actions to clear certificate
 confirmation and its audit fields. Direct ORM state changes that leave
 confirmation on a draft, canceled or rejected withholding payment are refused.
+
+New withholding payments are supported only for customer receipts and supplier
+payments. Customer refunds and supplier reimbursements use regular bank/cash
+payments, without new withholding. This also applies to direct ORM creation or
+updates, including a refund document linked to an otherwise normal payment.
+Reversing or settling the tax balance of an earlier withholding is a separate
+operation, outside this workflow.
