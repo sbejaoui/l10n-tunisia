@@ -433,16 +433,28 @@ steps.</p>
 <li>Go to <em>Accounting &gt; Configuration &gt; Journals</em>.</li>
 <li>Create (or open) a journal of type <strong>Bank</strong>. Use one journal per
 withholding tax rate and direction.</li>
-<li>Open the <strong>Advanced Settings</strong> tab and, in the <strong>Withholding Tax</strong>
-section, tick <strong>Journal includes Withholding Tax</strong>.</li>
-<li>Set <strong>Withholding Direction</strong> to <strong>Incoming</strong> for customer
-withholding or <strong>Outgoing</strong> for supplier withholding. A direction is
-required for every withholding journal, including when configured
-through the ORM.</li>
-<li>Set the <strong>Rate</strong> of the withholding tax.</li>
+<li>Tick <strong>Withholding tax journal</strong>, next to the journal type. This
+displays the <strong>Withholding Tax</strong> tab.</li>
+<li>Open that tab and choose the <strong>Withholding flow</strong>: <strong>Customer
+withholding (received)</strong> or <strong>Supplier withholding (deducted)</strong>.</li>
+<li>Enter the <strong>Withholding rate</strong> as a percentage, for example <tt class="docutils literal">1.5</tt>
+for 1.5%.</li>
+<li>Select the <strong>Tax receivable account</strong> for customer withholding or the
+<strong>Tax payable account</strong> for supplier withholding. The account
+selector proposes active Current Assets or Current Liabilities
+accounts for the journal’s company. Reconciliation on the fiscal
+account is optional. If you create an account from the selector, its
+type and company are prefilled.</li>
 </ol>
-<p>The <strong>Withholding Tax</strong> section is only shown on journals of type
-<strong>Bank</strong>.</p>
+<p>The checkbox is shown only on journals of type <strong>Bank</strong>. The dedicated
+tab appears first when withholding is enabled. The account is configured
+directly on the journal; editing a payment-method table is not required.
+The standard bank settings are hidden for withholding journals. Fiscal
+accounts are visible to accounting administrators even when the full
+accounting interface is not enabled.</p>
+<p>The account field updates the default manual payment method for the
+selected direction. If that method is missing, a message directs you to
+the standard payment tab to add it, then return to select the account.</p>
 <p><strong>Withholding rules</strong></p>
 <ol class="arabic simple">
 <li>Go to <em>Accounting &gt; Configuration &gt; Withholding Rules</em>.</li>
@@ -463,19 +475,21 @@ be selected.</li>
 </li>
 </ol>
 <p><strong>Accounting reference</strong></p>
-<p>Configure the withholding journal’s manual payment method with an
-explicit tax account in <strong>Outstanding Receipts/Payments Account</strong>:</p>
+<p>Select the tax account directly in <strong>Withholding Tax &gt; Accounting</strong>.
+This field edits Odoo’s standard outstanding payment/receipt account on
+the manual method, with no separate stored account setting:</p>
 <table border="1" class="docutils">
 <colgroup>
+<col width="27%" />
 <col width="24%" />
-<col width="21%" />
-<col width="33%" />
-<col width="21%" />
+<col width="24%" />
+<col width="24%" />
 </colgroup>
 <thead valign="bottom">
 <tr><th class="head">Withholding flow</th>
 <th class="head">Payment method</th>
-<th class="head">Tax account type</th>
+<th class="head">Example tax
+account</th>
 <th class="head">Withholding
 entry</th>
 </tr>
@@ -483,8 +497,9 @@ entry</th>
 <tbody valign="top">
 <tr><td>Customer invoice</td>
 <td>Inbound</td>
-<td>Current Assets
-(<tt class="docutils literal">asset_current</tt>)</td>
+<td>434100,
+withholding
+suffered</td>
 <td>Debit tax
 receivable,
 credit the
@@ -494,8 +509,10 @@ account</td>
 </tr>
 <tr><td>Vendor bill</td>
 <td>Outbound</td>
-<td>Current Liabilities
-(<tt class="docutils literal">liability_current</tt>)</td>
+<td>432000,
+withholding
+owed to the
+State</td>
 <td>Debit the
 invoice’s
 supplier
@@ -505,14 +522,47 @@ payable</td>
 </tr>
 </tbody>
 </table>
-<p>Use dedicated reconcilable tax accounts, separate from the
-customer/supplier accounts and bank accounts. Configure account numbers
-according to the company’s chart of accounts; the module does not
-prescribe them. The journal’s default bank account is not the tax
-account: the withholding payment must use the account configured on its
-payment method. Configure separate journals for customer and supplier
-flows. Journal direction is mandatory; filtering rules and validating
-payment compatibility with that direction are subsequent roadmap steps.</p>
+<p>Use dedicated tax accounts, separate from the customer/supplier accounts
+and bank accounts. Configure account numbers according to the company’s
+chart of accounts; these examples are not enforced. Odoo’s Tunisian
+chart supplies both 432 and 4341 as Current Liabilities
+(<tt class="docutils literal">liability_current</tt>), without reconciliation enabled. The module
+accepts Current Assets (<tt class="docutils literal">asset_current</tt>) and Current Liabilities for
+either flow, without requiring reconciliation on the fiscal account. The
+journal’s direction determines the debit/credit entry. Invoice
+counterpart lines are still reconciled on their customer/supplier
+account. Account types still affect financial report classification;
+accepting an account does not verify or correct its presentation in
+those reports.</p>
+<p>The journal’s default bank account is not the tax account: the
+withholding payment must use the account configured on its payment
+method. Configure separate journals for customer and supplier flows.
+Journal direction is mandatory; filtering rules and validating payment
+compatibility with that direction are subsequent roadmap steps.</p>
+<p>A withholding journal must have type <strong>Bank</strong> and a valid rate. A
+configured payment method account must be active, available to the
+journal’s company and of type Current Assets or Current Liabilities. It
+must differ from the journal’s default bank account and the company’s
+transfer account. A forced account currency must also match the payment
+currency.</p>
+<p>The rate is stored as a fraction: <tt class="docutils literal">0 &lt; rate &lt;= 1</tt>, where <tt class="docutils literal">0.015</tt>
+means 1.5% and <tt class="docutils literal">1</tt> means 100%. The journal form displays and accepts
+percentages.</p>
+<p>You may save a journal while its payment method account is still empty,
+to finish configuration afterward. Creating or posting a withholding
+payment requires an explicit fiscal account on the selected method.
+Direct ORM calls and forced journal entry generation follow the same
+rule; the payment’s actual account and generated entry must match that
+configured account. Withholding payments cannot fall back to a normal
+outstanding or transfer account. Regular bank/cash payments keep Odoo’s
+standard behavior.</p>
+<p>Configuration remains editable as long as it is valid. The module does
+not freeze the journal or its accounts after a payment has been posted.
+Changing the rate or payment method account affects future payments
+without rewriting existing journal entries. Use a separate journal when
+changing the nature or direction of a withholding flow. Changing a
+journal’s withholding flag also changes the withholding classification
+of payments linked to that journal.</p>
 <p>For a gross invoice of 2,000 and a withholding of 30, register a
 withholding payment of 30 and a bank payment of 1,970. Reconcile both
 payment counterpart lines with the invoice. The invoice total stays
@@ -521,8 +571,14 @@ bank or its normal outstanding account.</p>
 <p>Certificate confirmation changes the workflow and records the user and
 date. It must not change accounts, debit/credit amounts, residuals or
 reconciliations, or create another journal entry. The tax
-receivable/payable remains open after confirmation; its subsequent tax
-settlement is a separate operation.</p>
+receivable/payable balance remains after confirmation; its subsequent
+tax settlement is a separate operation. On a non-reconcilable fiscal
+account, follow this balance in the general ledger, rather than using
+the line’s residual amount.</p>
+<p>Use the payment’s reset, cancel or reject actions to clear certificate
+confirmation and its audit fields. Direct ORM state changes that leave
+confirmation on a draft, canceled or rejected withholding payment are
+refused.</p>
 </div>
 <div class="section" id="usage">
 <h2><a class="toc-backref" href="#toc-entry-3">Usage</a></h2>

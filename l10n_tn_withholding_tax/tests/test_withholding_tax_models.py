@@ -122,7 +122,12 @@ class TestWithholdingTaxModels(WithholdingTaxTestCommon):
 
     def test_withholding_journal_requires_direction_on_update(self):
         journal = self.env["account.journal"].create(
-            {"name": "Ordinary bank", "code": "DIRBK", "type": "bank"}
+            {
+                "name": "Ordinary bank",
+                "code": "DIRBK",
+                "type": "bank",
+                "withholding_tax_rate": 0.015,
+            }
         )
         self.assertFalse(journal.withholding_direction)
         with (

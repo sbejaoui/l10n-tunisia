@@ -3,24 +3,101 @@
      License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
 <odoo>
     <record id="journal_include_withholding" model="ir.ui.view">
-        <field name="name">account.journal.form.journal_include_withholding</field>
         <field name="model">account.journal</field>
         <field name="inherit_id" ref="account.view_account_journal_form" />
         <field name="arch" type="xml">
-            <xpath expr="//page[@name='advanced_settings']" position="inside">
-                <group string="Withholding Tax" invisible="type != 'bank'">
-                    <field name="is_withholding_tax_journal" />
-                    <field
-                        name="withholding_direction"
-                        invisible="not is_withholding_tax_journal"
-                        required="is_withholding_tax_journal"
-                    />
-                    <field
-                        name="withholding_tax_rate"
-                        widget="percentage"
-                        invisible="not is_withholding_tax_journal"
-                    />
-                </group>
+            <xpath expr="//sheet/group/group/field[@name='type']" position="after">
+                <field
+                    name="is_withholding_tax_journal"
+                    string="Withholding tax journal"
+                    invisible="type != 'bank'"
+                />
+            </xpath>
+            <xpath expr="//page[@name='bank_account']" position="before">
+                <page
+                    name="withholding_tax"
+                    string="Withholding Tax"
+                    invisible="type != 'bank' or not is_withholding_tax_journal"
+                >
+                    <group name="withholding_parameters">
+                        <field
+                            name="withholding_direction"
+                            string="Withholding flow"
+                            widget="radio"
+                            required="is_withholding_tax_journal"
+                        />
+                        <field
+                            name="withholding_tax_rate"
+                            string="Withholding rate"
+                            widget="percentage"
+                            placeholder="e.g. 1.5"
+                        />
+                        <div class="text-muted" colspan="2">
+                            For a withholding rate of 1.5%, enter 1.5.
+                        </div>
+                    </group>
+                    <div
+                        class="alert alert-info"
+                        role="status"
+                        invisible="not withholding_direction or withholding_has_manual_method"
+                    >
+                        Add the Manual payment method in the payment tab, then return here to choose the tax account.
+                    </div>
+                    <group
+                        name="withholding_account_settings"
+                        string="Accounting"
+                        invisible="not withholding_direction"
+                        groups="account.group_account_manager,account.group_account_readonly"
+                    >
+                        <label
+                            for="withholding_account_id"
+                            string="Tax receivable account"
+                            invisible="withholding_direction != 'inbound'"
+                        />
+                        <label
+                            for="withholding_account_id"
+                            string="Tax payable account"
+                            invisible="withholding_direction != 'outbound'"
+                        />
+                        <field
+                            name="withholding_account_id"
+                            nolabel="1"
+                            placeholder="Select the withholding tax account"
+                            readonly="not withholding_has_manual_method"
+                            required="is_withholding_tax_journal and withholding_has_manual_method"
+                            options="{'no_quick_create': True}"
+                            domain="[('account_type', 'in', ['asset_current', 'liability_current']), ('active', '=', True), ('company_ids', 'parent_of', company_id)]"
+                            context="{'default_account_type': 'asset_current' if withholding_direction == 'inbound' else 'liability_current', 'default_company_ids': [company_id]}"
+                        />
+                        <div
+                            class="text-muted"
+                            colspan="2"
+                            invisible="withholding_direction != 'inbound'"
+                        >
+                            Choose the account for withholding suffered, for example 434100. Withholding received will debit this account and credit the customer account.
+                        </div>
+                        <div
+                            class="text-muted"
+                            colspan="2"
+                            invisible="withholding_direction != 'outbound'"
+                        >
+                            Choose the account for withholding owed to the State, for example 432000. Withholding deducted will debit the supplier account and credit this account.
+                        </div>
+                    </group>
+                </page>
+            </xpath>
+            <xpath expr="//page[@name='bank_account']" position="attributes">
+                <attribute name="invisible">is_withholding_tax_journal</attribute>
+            </xpath>
+            <xpath expr="//page[@name='page_incoming_payments']" position="attributes">
+                <attribute name="invisible">
+                    type not in ['cash', 'bank', 'credit'] or (is_withholding_tax_journal and (withholding_has_manual_method or withholding_direction != 'inbound'))
+                </attribute>
+            </xpath>
+            <xpath expr="//page[@name='page_outgoing_payments']" position="attributes">
+                <attribute name="invisible">
+                    type not in ['cash', 'bank', 'credit'] or (is_withholding_tax_journal and (withholding_has_manual_method or withholding_direction != 'outbound'))
+                </attribute>
             </xpath>
         </field>
     </record>

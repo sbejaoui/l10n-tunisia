@@ -120,14 +120,103 @@ class AccountPayment(models.Model):
 
     def action_post(self):
         self._check_withholding_country()
+        self._check_withholding_configuration()
         return super().action_post()
 
-    def write(self, vals):
-        if vals.get("state") in ("draft", "canceled", "rejected"):
-            vals = dict(
-                vals,
-                withholding_reception_confirmed=False,
-                withholding_reception_date=False,
-                withholding_reception_user_id=False,
+    def _get_withholding_payment_account(self):
+        self.ensure_one()
+        self.journal_id._check_withholding_direction()
+        self.journal_id._check_withholding_configuration()
+        account = self.payment_method_line_id.payment_account_id
+        self.journal_id._check_withholding_account(account)
+        if account.currency_id and account.currency_id != self.currency_id:
+            raise ValidationError(
+                self.env._(
+                    "The withholding fiscal account currency must match "
+                    "the payment currency."
+                )
             )
-        return super().write(vals)
+        return account
+
+    @api.constrains(
+        "journal_id",
+        "outstanding_account_id",
+        "move_id",
+        "currency_id",
+    )
+    def _check_withholding_configuration(self):
+        for payment in self.filtered("is_withholding_tax_payment"):
+            outstanding_account = payment.outstanding_account_id
+            account = payment._get_withholding_payment_account()
+            if outstanding_account != account:
+                raise ValidationError(
+                    self.env._(
+                        "A withholding payment must use the fiscal account "
+                        "configured on its payment method."
+                    )
+                )
+            if payment.move_id:
+                liquidity, _counterpart, _writeoff = payment._seek_for_lines()
+                if liquidity.account_id != account:
+                    raise ValidationError(
+                        self.env._(
+                            "The withholding journal entry must use "
+                            "the configured fiscal account."
+                        )
+                    )
+
+    def _get_outstanding_account(self, payment_type):
+        if self.is_withholding_tax_payment:
+            return self._get_withholding_payment_account()
+        return super()._get_outstanding_account(payment_type)
+
+    @api.constrains(
+        "state",
+        "withholding_reception_confirmed",
+        "withholding_reception_date",
+        "withholding_reception_user_id",
+    )
+    def _check_inactive_withholding_confirmation(self):
+        for payment in self.filtered("is_withholding_tax_payment"):
+            if payment.state in ("draft", "canceled", "rejected") and (
+                payment.withholding_reception_confirmed
+                or payment.withholding_reception_date
+                or payment.withholding_reception_user_id
+            ):
+                raise ValidationError(
+                    self.env._(
+                        "A draft, canceled or rejected withholding payment "
+                        "cannot retain certificate confirmation."
+                    )
+                )
+
+    def _reset_withholding_confirmation(self):
+        payments = self.filtered(
+            lambda payment: (
+                payment.is_withholding_tax_payment
+                and (
+                    payment.withholding_reception_confirmed
+                    or payment.withholding_reception_date
+                    or payment.withholding_reception_user_id
+                )
+            )
+        )
+        payments.write(
+            {
+                "withholding_reception_confirmed": False,
+                "withholding_reception_date": False,
+                "withholding_reception_user_id": False,
+            }
+        )
+
+    def action_draft(self):
+        self._reset_withholding_confirmation()
+        return super().action_draft()
+
+    def action_cancel(self):
+        self._reset_withholding_confirmation()
+        return super().action_cancel()
+
+    def action_reject(self):
+        self._reset_withholding_confirmation()
+        return super().action_reject()

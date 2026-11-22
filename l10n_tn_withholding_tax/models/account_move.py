@@ -7,6 +7,10 @@ from odoo import api, fields, models
 class AccountMove(models.Model):
     _inherit = "account.move"
 
+    def _post(self, soft=True):
+        self.origin_payment_id._check_withholding_configuration()
+        return super()._post(soft=soft)
+
     @api.depends(
         "amount_residual",
         "move_type",

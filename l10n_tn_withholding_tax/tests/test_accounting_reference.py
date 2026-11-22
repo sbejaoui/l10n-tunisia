@@ -83,7 +83,12 @@ class TestWithholdingAccountingReference(WithholdingTaxTestCommon):
                     "partner_id": self.partner_a.id,
                     "debit": amount if inbound else 0,
                     "credit": 0 if inbound else amount,
-                    "amount_residual": amount if inbound else -amount,
+                    "balance": amount if inbound else -amount,
+                    "amount_residual": (
+                        (amount if inbound else -amount)
+                        if fiscal_account.reconcile
+                        else 0
+                    ),
                 }
             ],
         )
@@ -143,6 +148,24 @@ class TestWithholdingAccountingReference(WithholdingTaxTestCommon):
 
     def test_supplier_withholding_posts_to_tax_payable(self):
         self._check_accounting_reference("in_invoice")
+
+    def test_customer_withholding_with_native_tunisian_account_settings(self):
+        self.tax_receivable.write(
+            {
+                "name": "Retenue à la source (434100)",
+                "account_type": "liability_current",
+                "reconcile": False,
+            }
+        )
+        self._check_accounting_reference("out_invoice")
+        self.assertFalse(self.tax_receivable.reconcile)
+
+    def test_supplier_withholding_with_native_tunisian_account_settings(self):
+        self.tax_payable.write(
+            {"name": "État, retenues à la source (432000)", "reconcile": False}
+        )
+        self._check_accounting_reference("in_invoice")
+        self.assertFalse(self.tax_payable.reconcile)
 
     def test_standard_refunds_keep_bank_flow(self):
         for move_type, payment_type in (

@@ -585,8 +585,8 @@ msgstr "Un journal de retenue à la source doit avoir un sens."
 
 #. module: l10n_tn_withholding_tax
 #: model:ir.model.fields.selection,name:l10n_tn_withholding_tax.selection__account_journal__withholding_direction__inbound
-msgid "Incoming"
-msgstr "Entrant"
+msgid "Customer withholding (received)"
+msgstr "Retenue client (subie)"
 
 #. module: l10n_tn_withholding_tax
 #: model:ir.model.fields,help:l10n_tn_withholding_tax.field_account_journal__withholding_direction
@@ -595,10 +595,163 @@ msgstr "Entrant pour une retenue client ; sortant pour une retenue fournisseur."
 
 #. module: l10n_tn_withholding_tax
 #: model:ir.model.fields.selection,name:l10n_tn_withholding_tax.selection__account_journal__withholding_direction__outbound
-msgid "Outgoing"
-msgstr "Sortant"
+msgid "Supplier withholding (deducted)"
+msgstr "Retenue fournisseur (pratiquée)"
 
 #. module: l10n_tn_withholding_tax
 #: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_journal__withholding_direction
 msgid "Withholding Direction"
 msgstr "Sens de la retenue"
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/models/account_payment.py:0
+msgid ""
+"A withholding payment must use the fiscal account configured on its payment "
+"method."
+msgstr ""
+"Un paiement de retenue doit utiliser le compte fiscal configuré sur sa "
+"méthode de paiement."
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/models/account_journal.py:0
+msgid "A withholding tax journal must be a bank journal."
+msgstr "Un journal de retenue à la source doit être de type Banque."
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/models/account_journal.py:0
+msgid ""
+"Configure an active fiscal account for journal %(journal)s of type Current "
+"Assets or Current Liabilities. It must belong to the journal company and "
+"differ from the bank and transfer accounts."
+msgstr ""
+"Configurez un compte fiscal actif pour le journal %(journal)s, de type Actif"
+" circulant ou Passif circulant. Il doit appartenir à la société du journal "
+"et être distinct des comptes bancaire et de transfert."
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/models/account_payment.py:0
+msgid ""
+"The withholding fiscal account currency must match the payment currency."
+msgstr ""
+"La devise du compte fiscal de retenue doit correspondre à celle du paiement."
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/models/account_payment.py:0
+msgid "The withholding journal entry must use the configured fiscal account."
+msgstr "L’écriture de retenue doit utiliser le compte fiscal configuré."
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/models/account_journal.py:0
+msgid "The withholding rate must be greater than 0 and at most 1 (1 = 100%)."
+msgstr ""
+"Le taux de retenue doit être supérieur à 0 et inférieur ou égal à 1 (1 = 100"
+" %)."
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/models/account_payment.py:0
+msgid ""
+"A draft, canceled or rejected withholding payment cannot retain certificate "
+"confirmation."
+msgstr ""
+"Un paiement de retenue en brouillon, annulé ou rejeté ne peut pas conserver "
+"de confirmation de certificat."
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.journal_include_withholding
+msgid "Accounting"
+msgstr "Comptabilité"
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.journal_include_withholding
+msgid ""
+"Add the Manual payment method in the payment tab, then return here to choose"
+" the tax account."
+msgstr ""
+"Ajoutez la méthode de paiement manuelle dans l’onglet des paiements, puis "
+"revenez ici choisir le compte fiscal."
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.journal_include_withholding
+msgid ""
+"Choose the account for withholding suffered, for example 434100. Withholding"
+" received will debit this account and credit the customer account."
+msgstr ""
+"Choisissez le compte de retenue subie, par exemple 434100. La retenue subie "
+"débite ce compte et crédite le compte client."
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.journal_include_withholding
+msgid ""
+"Choose the account for withholding owed to the State, for example 432000. "
+"Withholding deducted will debit the supplier account and credit this "
+"account."
+msgstr ""
+"Choisissez le compte de retenue à reverser à l’État, par exemple 432000. La "
+"retenue pratiquée débite le compte fournisseur et crédite ce compte."
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.journal_include_withholding
+msgid "For a withholding rate of 1.5%, enter 1.5."
+msgstr "Pour une retenue de 1,5 %, saisissez 1,5."
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.journal_include_withholding
+msgid "Select the withholding tax account"
+msgstr "Sélectionnez le compte de retenue à la source"
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.journal_include_withholding
+msgid "Tax payable account"
+msgstr "Compte de dette fiscale"
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.journal_include_withholding
+msgid "Tax receivable account"
+msgstr "Compte de créance fiscale"
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.journal_include_withholding
+msgid "Withholding"
+msgstr "Retenue à la source"
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.journal_include_withholding
+msgid "Withholding flow"
+msgstr "Nature de la retenue"
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.journal_include_withholding
+msgid "Withholding rate"
+msgstr "Taux de retenue"
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.journal_include_withholding
+msgid "Withholding tax journal"
+msgstr "Journal de retenue à la source"
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.journal_include_withholding
+msgid "e.g. 1.5"
+msgstr "Ex. : 1,5"
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_journal__withholding_payment_method_line_id
+msgid "Withholding Payment Method Line"
+msgstr "Méthode de paiement de retenue"
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_journal__withholding_account_id
+msgid "Withholding Account"
+msgstr "Compte de retenue à la source"
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,help:l10n_tn_withholding_tax.field_account_journal__withholding_account_id
+msgid "Tax account used for withholding payments in this journal."
+msgstr "Compte fiscal utilisé pour les paiements de retenue de ce journal."

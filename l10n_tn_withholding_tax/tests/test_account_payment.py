@@ -143,3 +143,46 @@ class TestWithholdingPaymentReception(WithholdingTaxTestCommon):
         self.partner_a.country_id = self.env.ref("base.fr")
         with self.assertRaises(ValidationError):
             payment.action_post()
+
+    def test_inactive_states_cannot_keep_certificate_confirmation_via_orm(self):
+        for state in ("draft", "canceled", "rejected"):
+            with self.subTest(state=state):
+                with (
+                    self.assertRaisesRegex(
+                        ValidationError, "cannot retain certificate"
+                    ),
+                    self.cr.savepoint(),
+                ):
+                    self.env["account.payment"].create(
+                        {
+                            "journal_id": self.withholding_journal.id,
+                            "payment_type": "outbound",
+                            "partner_type": "supplier",
+                            "partner_id": self.partner_a.id,
+                            "amount": 30,
+                            "state": state,
+                            "withholding_reception_confirmed": True,
+                        }
+                    )
+
+    def test_lifecycle_actions_clear_certificate_confirmation(self):
+        for action in ("action_draft", "action_cancel", "action_reject"):
+            with self.subTest(action=action):
+                invoice = self._create_move(self.product_a, 2000)
+                payment = self._register_withholding(invoice)
+                payment.action_validate_withholding()
+                getattr(payment, action)()
+                self.assertFalse(payment.withholding_reception_confirmed)
+                self.assertFalse(payment.withholding_reception_date)
+                self.assertFalse(payment.withholding_reception_user_id)
+
+    def test_direct_state_change_cannot_keep_confirmed_certificate(self):
+        invoice = self._create_move(self.product_a, 2000)
+        payment = self._register_withholding(invoice)
+        payment.action_validate_withholding()
+        with (
+            self.assertRaisesRegex(ValidationError, "cannot retain certificate"),
+            self.cr.savepoint(),
+        ):
+            payment.state = "draft"
+        self.assertTrue(payment.withholding_reception_confirmed)

@@ -556,7 +556,7 @@ msgstr ""
 
 #. module: l10n_tn_withholding_tax
 #: model:ir.model.fields.selection,name:l10n_tn_withholding_tax.selection__account_journal__withholding_direction__inbound
-msgid "Incoming"
+msgid "Customer withholding (received)"
 msgstr ""
 
 #. module: l10n_tn_withholding_tax
@@ -566,10 +566,147 @@ msgstr ""
 
 #. module: l10n_tn_withholding_tax
 #: model:ir.model.fields.selection,name:l10n_tn_withholding_tax.selection__account_journal__withholding_direction__outbound
-msgid "Outgoing"
+msgid "Supplier withholding (deducted)"
 msgstr ""
 
 #. module: l10n_tn_withholding_tax
 #: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_journal__withholding_direction
 msgid "Withholding Direction"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/models/account_payment.py:0
+msgid ""
+"A withholding payment must use the fiscal account configured on its payment "
+"method."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/models/account_journal.py:0
+msgid "A withholding tax journal must be a bank journal."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/models/account_journal.py:0
+msgid ""
+"Configure an active fiscal account for journal %(journal)s of type Current "
+"Assets or Current Liabilities. It must belong to the journal company and "
+"differ from the bank and transfer accounts."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/models/account_payment.py:0
+msgid ""
+"The withholding fiscal account currency must match the payment currency."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/models/account_payment.py:0
+msgid "The withholding journal entry must use the configured fiscal account."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/models/account_journal.py:0
+msgid "The withholding rate must be greater than 0 and at most 1 (1 = 100%)."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/models/account_payment.py:0
+msgid ""
+"A draft, canceled or rejected withholding payment cannot retain certificate "
+"confirmation."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.journal_include_withholding
+msgid "Accounting"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.journal_include_withholding
+msgid ""
+"Add the Manual payment method in the payment tab, then return here to choose"
+" the tax account."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.journal_include_withholding
+msgid ""
+"Choose the account for withholding suffered, for example 434100. Withholding"
+" received will debit this account and credit the customer account."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.journal_include_withholding
+msgid ""
+"Choose the account for withholding owed to the State, for example 432000. "
+"Withholding deducted will debit the supplier account and credit this "
+"account."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.journal_include_withholding
+msgid "For a withholding rate of 1.5%, enter 1.5."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.journal_include_withholding
+msgid "Select the withholding tax account"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.journal_include_withholding
+msgid "Tax payable account"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.journal_include_withholding
+msgid "Tax receivable account"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.journal_include_withholding
+msgid "Withholding"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.journal_include_withholding
+msgid "Withholding flow"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.journal_include_withholding
+msgid "Withholding rate"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.journal_include_withholding
+msgid "Withholding tax journal"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.journal_include_withholding
+msgid "e.g. 1.5"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_journal__withholding_payment_method_line_id
+msgid "Withholding Payment Method Line"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_journal__withholding_account_id
+msgid "Withholding Account"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,help:l10n_tn_withholding_tax.field_account_journal__withholding_account_id
+msgid "Tax account used for withholding payments in this journal."
 msgstr ""
