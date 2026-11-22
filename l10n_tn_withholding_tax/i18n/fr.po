@@ -576,3 +576,29 @@ msgid "You are about to pay the withholding tax of multiple bills."
 msgstr ""
 "Vous êtes sur le point de payer la retenue à la source de plusieurs "
 "factures."
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/models/account_journal.py:0
+msgid "A withholding tax journal must have a direction."
+msgstr "Un journal de retenue à la source doit avoir un sens."
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields.selection,name:l10n_tn_withholding_tax.selection__account_journal__withholding_direction__inbound
+msgid "Incoming"
+msgstr "Entrant"
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,help:l10n_tn_withholding_tax.field_account_journal__withholding_direction
+msgid "Incoming for customer withholding; outgoing for supplier withholding."
+msgstr "Entrant pour une retenue client ; sortant pour une retenue fournisseur."
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields.selection,name:l10n_tn_withholding_tax.selection__account_journal__withholding_direction__outbound
+msgid "Outgoing"
+msgstr "Sortant"
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_journal__withholding_direction
+msgid "Withholding Direction"
+msgstr "Sens de la retenue"

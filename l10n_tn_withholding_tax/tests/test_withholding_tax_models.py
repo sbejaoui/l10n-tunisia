@@ -12,9 +12,9 @@ from .common import WithholdingTaxTestCommon
 @tagged("post_install", "-at_install")
 class TestWithholdingTaxModels(WithholdingTaxTestCommon):
     def test_rule_document_type_for_product_and_amount_only_rules(self):
-        invoice = self._create_move(self.product_a, 2000, move_type="out_invoice")
-        bill = self._create_move(self.product_a, 2000, move_type="in_invoice")
-        for products in (self.product_a, self.env["product.product"]):
+        invoice = self._create_move(self.unruled_product, 2000, move_type="out_invoice")
+        bill = self._create_move(self.unruled_product, 2000, move_type="in_invoice")
+        for products in (self.unruled_product, self.env["product.product"]):
             self.withholding_rule.product_id = [Command.set(products.ids)]
             for move_type, on_invoice, on_bill in (
                 (False, True, True),
@@ -46,13 +46,7 @@ class TestWithholdingTaxModels(WithholdingTaxTestCommon):
                     )
 
     def test_product_rule_lookup_skips_other_document_types(self):
-        self.withholding_rule.move_type = "in_invoice"
-        invoice_rule = self.withholding_rule.copy(
-            {
-                "move_type": "out_invoice",
-                "withholding_journal_id": self.other_withholding_journal.id,
-            }
-        )
+        invoice_rule = self.inbound_withholding_rule
         invoice = self._create_move(self.product_a, 2000, move_type="out_invoice")
         applicable = self.withholding_rule._get_applicable_rules(invoice)
         self.assertIn(invoice_rule, applicable)
@@ -71,6 +65,7 @@ class TestWithholdingTaxModels(WithholdingTaxTestCommon):
                     "type": "bank",
                     "company_id": other_company.id,
                     "is_withholding_tax_journal": True,
+                    "withholding_direction": "outbound",
                     "withholding_tax_rate": 0.01,
                 }
             )
@@ -102,9 +97,52 @@ class TestWithholdingTaxModels(WithholdingTaxTestCommon):
     def test_withholding_journal_configuration(self):
         self.assertTrue(self.withholding_journal.is_withholding_tax_journal)
         self.assertEqual(self.withholding_journal.withholding_tax_rate, 0.015)
+        self.assertEqual(self.withholding_journal.withholding_direction, "outbound")
+        self.assertEqual(
+            self.inbound_withholding_journal.withholding_direction, "inbound"
+        )
         self.assertFalse(
             self.company_data["default_journal_bank"].is_withholding_tax_journal
         )
+
+    def test_withholding_journal_requires_direction_on_creation(self):
+        with (
+            self.assertRaisesRegex(ValidationError, "must have a direction"),
+            self.cr.savepoint(),
+        ):
+            self.env["account.journal"].create(
+                {
+                    "name": "Missing withholding direction",
+                    "code": "NODIR",
+                    "type": "bank",
+                    "is_withholding_tax_journal": True,
+                    "withholding_tax_rate": 0.015,
+                }
+            )
+
+    def test_withholding_journal_requires_direction_on_update(self):
+        journal = self.env["account.journal"].create(
+            {"name": "Ordinary bank", "code": "DIRBK", "type": "bank"}
+        )
+        self.assertFalse(journal.withholding_direction)
+        with (
+            self.assertRaisesRegex(ValidationError, "must have a direction"),
+            self.cr.savepoint(),
+        ):
+            journal.is_withholding_tax_journal = True
+        journal.write(
+            {"is_withholding_tax_journal": True, "withholding_direction": "inbound"}
+        )
+        with (
+            self.assertRaisesRegex(ValidationError, "must have a direction"),
+            self.cr.savepoint(),
+        ):
+            journal.withholding_direction = False
+
+        journal.write(
+            {"is_withholding_tax_journal": False, "withholding_direction": False}
+        )
+        self.assertFalse(journal.withholding_direction)
 
     # Purpose: a negative minimum amount must be rejected when a rule is saved.
     def test_rule_rejects_negative_minimum_amount(self):
@@ -194,6 +232,7 @@ class TestWithholdingTaxModels(WithholdingTaxTestCommon):
                 "product_id": [Command.set(self.product_a.ids)],
                 "description": "RS 5% above 1,000 TND",
                 "amount": 1000,
+                "move_type": "in_invoice",
                 "withholding_journal_id": self.other_withholding_journal.id,
             }
         )

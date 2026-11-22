@@ -5,10 +5,13 @@ steps.
 
 1.  Go to *Accounting \> Configuration \> Journals*.
 2.  Create (or open) a journal of type **Bank**. Use one journal per
-    withholding tax rate.
+    withholding tax rate and direction.
 3.  Open the **Advanced Settings** tab and, in the **Withholding Tax**
     section, tick **Journal includes Withholding Tax**.
-4.  Set the **Rate** of the withholding tax.
+4.  Set **Withholding Direction** to **Incoming** for customer withholding
+    or **Outgoing** for supplier withholding. A direction is required for
+    every withholding journal, including when configured through the ORM.
+5.  Set the **Rate** of the withholding tax.
 
 The **Withholding Tax** section is only shown on journals of type
 **Bank**.
@@ -44,8 +47,9 @@ accounts and bank accounts. Configure account numbers according to the company's
 chart of accounts; the module does not prescribe them. The journal's default
 bank account is not the tax account: the withholding payment must use the
 account configured on its payment method. Configure separate journals for
-customer and supplier flows, even though the current version does not yet
-enforce journal direction.
+customer and supplier flows. Journal direction is mandatory; filtering rules
+and validating payment compatibility with that direction are subsequent
+roadmap steps.
 
 For a gross invoice of 2,000 and a withholding of 30, register a withholding
 payment of 30 and a bank payment of 1,970. Reconcile both payment counterpart

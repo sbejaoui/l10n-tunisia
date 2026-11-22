@@ -11,9 +11,14 @@ from .common import WithholdingTaxTestCommon
 @tagged("post_install", "-at_install")
 class TestWithholdingPaymentReception(WithholdingTaxTestCommon):
     def _register_withholding(self, move):
+        journal = (
+            self.inbound_withholding_journal
+            if move.move_type == "out_invoice"
+            else self.withholding_journal
+        )
         wizard = self._create_payment_wizard(move)
         with Form(wizard) as form:
-            form.journal_id = self.withholding_journal
+            form.journal_id = journal
         return wizard._create_payments()
 
     def _check_certificate_flow(self, move_type):
@@ -28,7 +33,7 @@ class TestWithholdingPaymentReception(WithholdingTaxTestCommon):
             invoice.amount_residual, invoice.amount_total - payment.amount
         )
         self.assertNotIn(
-            self.withholding_journal,
+            payment.journal_id,
             self._create_payment_wizard(invoice).available_journal_ids,
         )
 
@@ -103,6 +108,8 @@ class TestWithholdingPaymentReception(WithholdingTaxTestCommon):
         payment = self.env["account.payment"].create(
             {
                 "journal_id": self.withholding_journal.id,
+                "payment_type": "outbound",
+                "partner_type": "supplier",
                 "partner_id": self.partner_a.id,
                 "amount": 30,
             }
@@ -116,6 +123,8 @@ class TestWithholdingPaymentReception(WithholdingTaxTestCommon):
             self.env["account.payment"].create(
                 {
                     "journal_id": self.withholding_journal.id,
+                    "payment_type": "outbound",
+                    "partner_type": "supplier",
                     "partner_id": self.partner_a.id,
                     "amount": 30,
                 }
@@ -125,6 +134,8 @@ class TestWithholdingPaymentReception(WithholdingTaxTestCommon):
         payment = self.env["account.payment"].create(
             {
                 "journal_id": self.withholding_journal.id,
+                "payment_type": "outbound",
+                "partner_type": "supplier",
                 "partner_id": self.partner_a.id,
                 "amount": 30,
             }

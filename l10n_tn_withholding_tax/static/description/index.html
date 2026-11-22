@@ -432,9 +432,13 @@ steps.</p>
 <ol class="arabic simple">
 <li>Go to <em>Accounting &gt; Configuration &gt; Journals</em>.</li>
 <li>Create (or open) a journal of type <strong>Bank</strong>. Use one journal per
-withholding tax rate.</li>
+withholding tax rate and direction.</li>
 <li>Open the <strong>Advanced Settings</strong> tab and, in the <strong>Withholding Tax</strong>
 section, tick <strong>Journal includes Withholding Tax</strong>.</li>
+<li>Set <strong>Withholding Direction</strong> to <strong>Incoming</strong> for customer
+withholding or <strong>Outgoing</strong> for supplier withholding. A direction is
+required for every withholding journal, including when configured
+through the ORM.</li>
 <li>Set the <strong>Rate</strong> of the withholding tax.</li>
 </ol>
 <p>The <strong>Withholding Tax</strong> section is only shown on journals of type
@@ -507,8 +511,8 @@ according to the company’s chart of accounts; the module does not
 prescribe them. The journal’s default bank account is not the tax
 account: the withholding payment must use the account configured on its
 payment method. Configure separate journals for customer and supplier
-flows, even though the current version does not yet enforce journal
-direction.</p>
+flows. Journal direction is mandatory; filtering rules and validating
+payment compatibility with that direction are subsequent roadmap steps.</p>
 <p>For a gross invoice of 2,000 and a withholding of 30, register a
 withholding payment of 30 and a bank payment of 1,970. Reconcile both
 payment counterpart lines with the invoice. The invoice total stays

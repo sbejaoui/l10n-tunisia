@@ -1,7 +1,6 @@
 # Copyright 2026 Sobware
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import Command
 from odoo.tests import Form
 from odoo.tests.common import tagged
 
@@ -13,28 +12,6 @@ class TestWithholdingAccountingReference(WithholdingTaxTestCommon):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.tax_receivable, cls.tax_payable = cls.env["account.account"].create(
-            [
-                {
-                    "name": name,
-                    "code": code,
-                    "account_type": account_type,
-                    "reconcile": True,
-                    "company_ids": [Command.set(cls.env.company.ids)],
-                }
-                for name, code, account_type in (
-                    ("Withholding tax receivable", "991501", "asset_current"),
-                    ("Withholding tax payable", "991502", "liability_current"),
-                )
-            ]
-        )
-        # journal direction is introduced in the next roadmap step
-        cls.withholding_journal.inbound_payment_method_line_ids.payment_account_id = (
-            cls.tax_receivable
-        )
-        cls.withholding_journal.outbound_payment_method_line_ids.payment_account_id = (
-            cls.tax_payable
-        )
         cls.bank_journal = cls.company_data["default_journal_bank"]
         methods = (
             cls.bank_journal.inbound_payment_method_line_ids
@@ -78,16 +55,17 @@ class TestWithholdingAccountingReference(WithholdingTaxTestCommon):
     def _check_accounting_reference(self, move_type):
         invoice = self._create_move(self.product_a, 2000, move_type=move_type)
         gross = invoice.amount_total
-        amount = invoice.currency_id.round(
-            gross * self.withholding_journal.withholding_tax_rate
-        )
         inbound = move_type == "out_invoice"
+        journal = (
+            self.inbound_withholding_journal if inbound else self.withholding_journal
+        )
+        amount = invoice.currency_id.round(gross * journal.withholding_tax_rate)
         fiscal_account = self.tax_receivable if inbound else self.tax_payable
         counterpart_type = "asset_receivable" if inbound else "liability_payable"
         invoice_counterpart = invoice.line_ids.filtered(
             lambda line: line.account_id.account_type == counterpart_type
         )
-        withholding = self._register_payment(invoice, self.withholding_journal)
+        withholding = self._register_payment(invoice, journal)
 
         self.assertEqual(withholding.move_id.state, "posted")
         self.assertEqual(withholding.payment_type, "inbound" if inbound else "outbound")
@@ -156,7 +134,7 @@ class TestWithholdingAccountingReference(WithholdingTaxTestCommon):
         self.assertEqual(invoice.amount_residual, 0)
         self.assertFalse(
             self.env["account.bank.statement.line"].search_count(
-                [("journal_id", "=", self.withholding_journal.id)]
+                [("journal_id", "=", journal.id)]
             )
         )
 

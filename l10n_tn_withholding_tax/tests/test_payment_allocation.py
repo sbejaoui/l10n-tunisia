@@ -15,11 +15,18 @@ class TestPaymentAllocation(WithholdingTaxTestCommon):
     def setUpClass(cls):
         super().setUpClass()
         cls.env["l10n.tn.withholding.rule"].create(
-            {
-                "product_id": [Command.set(cls.product_b.ids)],
-                "description": "Second invoice withholding",
-                "withholding_journal_id": cls.other_withholding_journal.id,
-            }
+            [
+                {
+                    "product_id": [Command.set(cls.product_b.ids)],
+                    "description": "Second invoice withholding",
+                    "move_type": move_type,
+                    "withholding_journal_id": journal.id,
+                }
+                for move_type, journal in (
+                    ("out_invoice", cls.other_inbound_withholding_journal),
+                    ("in_invoice", cls.other_withholding_journal),
+                )
+            ]
         )
 
     def _allocation_wizard(self, handling="keep_unpaid", move_type="out_invoice"):
@@ -53,7 +60,9 @@ class TestPaymentAllocation(WithholdingTaxTestCommon):
         )
 
     def test_withholding_option_is_hidden_without_matching_document_rules(self):
-        journals = self.withholding_journal | self.other_withholding_journal
+        journals = (
+            self.inbound_withholding_journal | self.other_inbound_withholding_journal
+        )
         rules = self.env["l10n.tn.withholding.rule"].search(
             [("withholding_journal_id", "in", journals.ids)]
         )
@@ -93,7 +102,10 @@ class TestPaymentAllocation(WithholdingTaxTestCommon):
         self.assertEqual(len(withholding), 2)
         self.assertCountEqual(
             withholding.journal_id.ids,
-            (self.withholding_journal | self.other_withholding_journal).ids,
+            (
+                self.inbound_withholding_journal
+                | self.other_inbound_withholding_journal
+            ).ids,
         )
         for invoice in invoices:
             self.assertEqual(invoice.amount_residual, 0)
@@ -330,9 +342,13 @@ class TestPaymentAllocation(WithholdingTaxTestCommon):
             lambda allocation: allocation.invoice_id == invoices[0]
         )
         self.env["l10n.tn.withholding.rule"].create(
-            {"withholding_journal_id": self.other_withholding_journal.id, "amount": 0}
+            {
+                "withholding_journal_id": self.other_inbound_withholding_journal.id,
+                "move_type": "out_invoice",
+                "amount": 0,
+            }
         )
-        line.withholding_journal_ids |= self.other_withholding_journal
+        line.withholding_journal_ids |= self.other_inbound_withholding_journal
         wizard.amount = sum(
             wizard.withholding_allocation_line_ids.mapped("cash_amount")
         )

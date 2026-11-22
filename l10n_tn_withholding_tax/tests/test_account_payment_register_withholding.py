@@ -214,12 +214,12 @@ class TestAccountPaymentRegisterWithholding(WithholdingTaxTestCommon):
         wizard = self._create_payment_wizard(invoice)
 
         with Form(wizard) as form:
-            form.journal_id = self.withholding_journal
+            form.journal_id = self.inbound_withholding_journal
 
         payment = wizard._create_payments()
 
         self.assertEqual(payment.payment_type, "inbound")
-        self.assertEqual(payment.journal_id, self.withholding_journal)
+        self.assertEqual(payment.journal_id, self.inbound_withholding_journal)
         self.assertAlmostEqual(
             invoice.amount_residual, invoice.amount_total - payment.amount
         )
@@ -289,11 +289,13 @@ class TestAccountPaymentRegisterWithholding(WithholdingTaxTestCommon):
         wizard = self._create_payment_wizard(invoice | foreign_invoice)
 
         with Form(wizard) as form:
-            self.assertNotIn(self.withholding_journal, form.available_journal_ids)
+            self.assertNotIn(
+                self.inbound_withholding_journal, form.available_journal_ids
+            )
             self.assertIn("separately", form.withholding_tax_alert)
             self.assertFalse(form.show_withholding_tax_applicable)
 
-        wizard.journal_id = self.withholding_journal
+        wizard.journal_id = self.inbound_withholding_journal
         with self.assertRaisesRegex(UserError, "separately"):
             wizard._create_payments()
         self.assertFalse((invoice | foreign_invoice).matched_payment_ids)

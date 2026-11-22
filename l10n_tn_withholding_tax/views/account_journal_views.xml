@@ -11,6 +11,11 @@
                 <group string="Withholding Tax" invisible="type != 'bank'">
                     <field name="is_withholding_tax_journal" />
                     <field
+                        name="withholding_direction"
+                        invisible="not is_withholding_tax_journal"
+                        required="is_withholding_tax_journal"
+                    />
+                    <field
                         name="withholding_tax_rate"
                         widget="percentage"
                         invisible="not is_withholding_tax_journal"

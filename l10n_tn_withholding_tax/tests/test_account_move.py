@@ -4,7 +4,7 @@ from odoo.tests.common import tagged
 
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
-from .common import setup_tunisian_parties
+from .common import setup_tunisian_parties, setup_withholding_accounts
 
 
 @tagged("post_install", "-at_install")
@@ -13,12 +13,14 @@ class TestAccountMove(AccountTestInvoicingCommon):
     def setUpClass(cls):
         super().setUpClass()
         setup_tunisian_parties(cls)
+        setup_withholding_accounts(cls)
         cls.test_journal1 = cls.env["account.journal"].create(
             {
                 "name": "RS 1.5%",
                 "type": "bank",
                 "code": "RS15",
                 "is_withholding_tax_journal": True,
+                "withholding_direction": "outbound",
                 "withholding_tax_rate": 0.015,
             }
         )
@@ -28,23 +30,46 @@ class TestAccountMove(AccountTestInvoicingCommon):
                 "type": "bank",
                 "code": "RS5",
                 "is_withholding_tax_journal": True,
+                "withholding_direction": "outbound",
                 "withholding_tax_rate": 0.05,
             }
         )
+        cls.inbound_journal = cls.test_journal1.copy(
+            {
+                "name": "Incoming RS 1.5%",
+                "code": "IRS15",
+                "withholding_direction": "inbound",
+            }
+        )
+        for journal in cls.test_journal1 | cls.test_journal2:
+            journal.outbound_payment_method_line_ids.payment_account_id = (
+                cls.tax_payable
+            )
+        cls.inbound_journal.inbound_payment_method_line_ids.payment_account_id = (
+            cls.tax_receivable
+        )
         cls.test_withholding_rule = cls.env["l10n.tn.withholding.rule"].create(
             {
-                "product_id": [(6, 0, [cls.product_a.id])],
+                "product_id": [Command.set(cls.product_a.ids)],
                 "description": "Test Withholding Rule",
                 "amount": 0,
+                "move_type": "in_invoice",
                 "withholding_journal_id": cls.test_journal1.id,
             }
         )
         cls.test_withholding_rule2 = cls.env["l10n.tn.withholding.rule"].create(
             {
-                "product_id": [(6, 0, [cls.product_b.id])],
+                "product_id": [Command.set(cls.product_b.ids)],
                 "description": "Test Withholding Rule 2",
                 "amount": 1000,
+                "move_type": "in_invoice",
                 "withholding_journal_id": cls.test_journal2.id,
+            }
+        )
+        cls.test_withholding_rule.copy(
+            {
+                "move_type": "out_invoice",
+                "withholding_journal_id": cls.inbound_journal.id,
             }
         )
 
@@ -81,7 +106,7 @@ class TestAccountMove(AccountTestInvoicingCommon):
         self.assertEqual(bill._get_withholding_invoice_report_payments(), [])
         bank = self.company_data["default_journal_bank"]
         registered_payments = self.env["account.payment"]
-        for journal, amount in ((bank, 500), (bank, 250), (self.test_journal1, 30)):
+        for journal, amount in ((bank, 500), (bank, 250), (self.inbound_journal, 30)):
             wizard = (
                 self.env["account.payment.register"]
                 .with_context(active_model="account.move", active_ids=bill.ids)
@@ -99,7 +124,7 @@ class TestAccountMove(AccountTestInvoicingCommon):
         withholding = registered_payments.filtered("is_withholding_tax_payment")
         self.assertEqual(report_payments[0]["account_payment_id"], withholding.id)
         self.assertEqual(report_payments[0]["amount"], 30)
-        self.assertEqual(report_payments[0]["journal_name"], self.test_journal1.name)
+        self.assertEqual(report_payments[0]["journal_name"], self.inbound_journal.name)
         self.assertTrue(report_payments[0]["is_withholding_tax_payment"])
         self.assertEqual(
             [item["account_payment_id"] for item in report_payments[1:]],
@@ -156,6 +181,11 @@ class TestAccountMove(AccountTestInvoicingCommon):
         bank = self.company_data["default_journal_bank"]
         for move_type in ("in_invoice", "out_invoice"):
             with self.subTest(move_type=move_type):
+                journal = (
+                    self.test_journal1
+                    if move_type == "in_invoice"
+                    else self.inbound_journal
+                )
                 bill = self._create_bill(move_type)
                 bill.action_post()
                 wizard = (
@@ -165,7 +195,7 @@ class TestAccountMove(AccountTestInvoicingCommon):
                 )
 
                 with Form(wizard) as form:
-                    form.journal_id = self.test_journal1
+                    form.journal_id = journal
                     self.assertAlmostEqual(form.amount, bill.amount_total * 0.015)
                     form.amount = 10
                     form.journal_id = bank
