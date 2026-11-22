@@ -11,6 +11,7 @@
     "website": "https://github.com/OCA/l10n-tunisia",
     "license": "AGPL-3",
     "depends": ["account", "l10n_tn_account_base"],
+    "excludes": ["l10n_account_withholding_tax"],
     "data": [
         "security/ir.model.access.csv",
         "security/l10n_tn_payment_register_withholding_line.xml",

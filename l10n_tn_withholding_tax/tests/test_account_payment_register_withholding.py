@@ -237,3 +237,63 @@ class TestAccountPaymentRegisterWithholding(WithholdingTaxTestCommon):
         second_wizard.journal_id = self.withholding_journal
         with self.assertRaises(UserError):
             second_wizard._check_withholding_tax_already_paid()
+
+    def test_cancelled_withholding_payment_makes_rule_available_again(self):
+        bill = self._create_move(self.product_a, 2000)
+        wizard = self._create_payment_wizard(bill)
+
+        with Form(wizard) as form:
+            form.journal_id = self.withholding_journal
+
+        payment = wizard._create_payments()
+        payment.action_cancel()
+        next_wizard = self._create_payment_wizard(bill)
+
+        self.assertFalse(bill.is_rs_paid)
+        self.assertIn(
+            self.withholding_rule,
+            self.withholding_rule._get_applicable_rules(bill),
+        )
+        self.assertIn(
+            self.withholding_journal,
+            next_wizard.available_journal_ids,
+        )
+
+    def test_mixed_currency_bills_hide_withholding_journals(self):
+        invoice = self._create_move(self.product_a, 2000, move_type="out_invoice")
+        foreign_currency = (
+            self.env.ref("base.USD")
+            if invoice.currency_id != self.env.ref("base.USD")
+            else self.env.ref("base.EUR")
+        )
+        foreign_currency.active = True
+        foreign_invoice = self.env["account.move"].create(
+            {
+                "move_type": "out_invoice",
+                "partner_id": self.partner_a.id,
+                "invoice_date": "2024-01-01",
+                "currency_id": foreign_currency.id,
+                "invoice_line_ids": [
+                    Command.create(
+                        {
+                            "product_id": self.product_a.id,
+                            "quantity": 1,
+                            "price_unit": 2000,
+                        }
+                    )
+                ],
+            }
+        )
+        foreign_invoice.action_post()
+        self.assertNotEqual(invoice.currency_id, foreign_invoice.currency_id)
+        wizard = self._create_payment_wizard(invoice | foreign_invoice)
+
+        with Form(wizard) as form:
+            self.assertNotIn(self.withholding_journal, form.available_journal_ids)
+            self.assertIn("separately", form.withholding_tax_alert)
+            self.assertFalse(form.show_withholding_tax_applicable)
+
+        wizard.journal_id = self.withholding_journal
+        with self.assertRaisesRegex(UserError, "separately"):
+            wizard._create_payments()
+        self.assertFalse((invoice | foreign_invoice).matched_payment_ids)

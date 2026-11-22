@@ -187,3 +187,32 @@ class TestWithholdingTaxModels(WithholdingTaxTestCommon):
 
         self.assertFalse(below_threshold_bill.is_rs_eligible)
         self.assertTrue(at_threshold_bill.is_rs_eligible)
+
+    def test_product_uses_highest_applicable_rule_threshold(self):
+        higher_threshold_rule = self.env["l10n.tn.withholding.rule"].create(
+            {
+                "product_id": [Command.set(self.product_a.ids)],
+                "description": "RS 5% above 1,000 TND",
+                "amount": 1000,
+                "withholding_journal_id": self.other_withholding_journal.id,
+            }
+        )
+        bill = self._create_move(self.product_a, 2000)
+
+        applicable_rules = self.withholding_rule._get_applicable_rules(bill)
+
+        self.assertEqual(applicable_rules, higher_threshold_rule)
+
+    def test_product_ignores_rule_above_invoice_total(self):
+        self.withholding_rule.amount = 10000
+        lower_threshold_rule = self.withholding_rule.copy(
+            {
+                "amount": 0,
+                "withholding_journal_id": self.other_withholding_journal.id,
+            }
+        )
+        bill = self._create_move(self.product_a, 2000)
+
+        self.assertEqual(
+            self.withholding_rule._get_applicable_rules(bill), lower_threshold_rule
+        )

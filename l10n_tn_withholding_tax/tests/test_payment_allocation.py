@@ -83,19 +83,6 @@ class TestPaymentAllocation(WithholdingTaxTestCommon):
                 invoice.matched_payment_ids.filtered("is_withholding_tax_payment")
             )
 
-    def test_allocation_coexists_with_native_withholding_wizard(self):
-        if "account.payment.register.withholding.line" not in self.env:
-            self.skipTest("Odoo's optional withholding addon is not installed")
-        wizard, invoices = self._allocation_wizard()
-
-        self.assertFalse(wizard.withholding_line_ids)
-        self.assertEqual(len(wizard.withholding_allocation_line_ids), 2)
-        payment = wizard._create_payments()
-
-        self.assertEqual(len(payment), 1)
-        self.assertCountEqual(payment.invoice_ids.ids, invoices.ids)
-        self.assertTrue(all(invoice.amount_residual > 0 for invoice in invoices))
-
     def test_pay_creates_individual_withholding_and_one_receipt(self):
         wizard, invoices = self._allocation_wizard(handling="pay")
         payment = wizard._create_payments()

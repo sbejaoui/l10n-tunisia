@@ -398,25 +398,34 @@ that bill.</p>
 <p><strong>Table of contents</strong></p>
 <div class="contents local topic" id="contents">
 <ul class="simple">
-<li><a class="reference internal" href="#configuration" id="toc-entry-1">Configuration</a></li>
-<li><a class="reference internal" href="#usage" id="toc-entry-2">Usage</a><ul>
-<li><a class="reference internal" href="#one-receipt-for-several-invoices" id="toc-entry-3">One receipt for several invoices</a></li>
-<li><a class="reference internal" href="#individual-withholding-payments" id="toc-entry-4">Individual withholding payments</a></li>
-<li><a class="reference internal" href="#invoice-report-with-payments" id="toc-entry-5">Invoice report with payments</a></li>
-<li><a class="reference internal" href="#certificate-confirmation" id="toc-entry-6">Certificate confirmation</a></li>
+<li><a class="reference internal" href="#installation" id="toc-entry-1">Installation</a></li>
+<li><a class="reference internal" href="#configuration" id="toc-entry-2">Configuration</a></li>
+<li><a class="reference internal" href="#usage" id="toc-entry-3">Usage</a><ul>
+<li><a class="reference internal" href="#one-receipt-for-several-invoices" id="toc-entry-4">One receipt for several invoices</a></li>
+<li><a class="reference internal" href="#individual-withholding-payments" id="toc-entry-5">Individual withholding payments</a></li>
+<li><a class="reference internal" href="#invoice-report-with-payments" id="toc-entry-6">Invoice report with payments</a></li>
+<li><a class="reference internal" href="#certificate-confirmation" id="toc-entry-7">Certificate confirmation</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#bug-tracker" id="toc-entry-7">Bug Tracker</a></li>
-<li><a class="reference internal" href="#credits" id="toc-entry-8">Credits</a><ul>
-<li><a class="reference internal" href="#authors" id="toc-entry-9">Authors</a></li>
-<li><a class="reference internal" href="#contributors" id="toc-entry-10">Contributors</a></li>
-<li><a class="reference internal" href="#maintainers" id="toc-entry-11">Maintainers</a></li>
+<li><a class="reference internal" href="#bug-tracker" id="toc-entry-8">Bug Tracker</a></li>
+<li><a class="reference internal" href="#credits" id="toc-entry-9">Credits</a><ul>
+<li><a class="reference internal" href="#authors" id="toc-entry-10">Authors</a></li>
+<li><a class="reference internal" href="#contributors" id="toc-entry-11">Contributors</a></li>
+<li><a class="reference internal" href="#maintainers" id="toc-entry-12">Maintainers</a></li>
 </ul>
 </li>
 </ul>
 </div>
+<div class="section" id="installation">
+<h2><a class="toc-backref" href="#toc-entry-1">Installation</a></h2>
+<p>This addon is incompatible with Odoo’s native <strong>Withholding Tax on
+Payment</strong> (<tt class="docutils literal">l10n_account_withholding_tax</tt>). Only one of these addons
+can be installed in a database, including databases with multiple
+companies. Odoo blocks installation when the other addon is already
+installed.</p>
+</div>
 <div class="section" id="configuration">
-<h2><a class="toc-backref" href="#toc-entry-1">Configuration</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-2">Configuration</a></h2>
 <p>This module does not create any journal or rule. You set them up in two
 steps.</p>
 <p><strong>Withholding tax journals</strong></p>
@@ -451,7 +460,7 @@ be selected.</li>
 </ol>
 </div>
 <div class="section" id="usage">
-<h2><a class="toc-backref" href="#toc-entry-2">Usage</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-3">Usage</a></h2>
 <p>Once the journals and rules are configured (see <em>Configuration</em>),
 withholding tax is handled from the payment wizard.</p>
 <p>Withholding applies only when both the invoice company and invoice
@@ -460,7 +469,7 @@ document ineligible. Withholding journals and alerts are not offered for
 ineligible documents. Direct payment creation and confirmation enforce
 the same country restriction.</p>
 <div class="section" id="one-receipt-for-several-invoices">
-<h3><a class="toc-backref" href="#toc-entry-3">One receipt for several invoices</a></h3>
+<h3><a class="toc-backref" href="#toc-entry-4">One receipt for several invoices</a></h3>
 <p>Select several invoices for the same customer and click <strong>Pay</strong>. Enable
 <strong>Withholding Tax Applicable</strong>, then choose <strong>Keep Unpaid</strong> or
 <strong>Register Withholding Payment</strong>.</p>
@@ -502,7 +511,7 @@ flow. Existing withholding payments are excluded from the suggested
 withholding journals to avoid duplicates.</p>
 </div>
 <div class="section" id="individual-withholding-payments">
-<h3><a class="toc-backref" href="#toc-entry-4">Individual withholding payments</a></h3>
+<h3><a class="toc-backref" href="#toc-entry-5">Individual withholding payments</a></h3>
 <ol class="arabic simple">
 <li>Open a posted vendor bill that meets a withholding rule’s conditions,
 and click <strong>Pay</strong>.</li>
@@ -523,7 +532,7 @@ journals that do not match an applicable rule are not offered in the
 for that bill and the rule no longer appears in the wizard.</p>
 </div>
 <div class="section" id="invoice-report-with-payments">
-<h3><a class="toc-backref" href="#toc-entry-5">Invoice report with payments</a></h3>
+<h3><a class="toc-backref" href="#toc-entry-6">Invoice report with payments</a></h3>
 <p>When printing an invoice with payments, withholding payments appear
 first, labelled with their journal name (for example <strong>RS 1.5%</strong>), with
 the reconciled amount in the invoice currency. Other payments keep their
@@ -531,7 +540,7 @@ usual labels, dates and relative order. The invoice balance and
 accounting entries are unchanged.</p>
 </div>
 <div class="section" id="certificate-confirmation">
-<h3><a class="toc-backref" href="#toc-entry-6">Certificate confirmation</a></h3>
+<h3><a class="toc-backref" href="#toc-entry-7">Certificate confirmation</a></h3>
 <p>Withholding payments remain <strong>In Process</strong> until the certificate is
 confirmed. The invoice or bill balance is reduced immediately, but a
 fully settled invoice or bill remains <strong>In Payment</strong> while its
@@ -557,7 +566,7 @@ historical certificate confirmation was recorded.</p>
 </div>
 </div>
 <div class="section" id="bug-tracker">
-<h2><a class="toc-backref" href="#toc-entry-7">Bug Tracker</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-8">Bug Tracker</a></h2>
 <p>Bugs are tracked on <a class="reference external" href="https://github.com/OCA/l10n-tunisia/issues">GitHub Issues</a>.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
@@ -565,22 +574,22 @@ If you spotted it first, help us to smash it by providing a detailed and welcome
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
-<h2><a class="toc-backref" href="#toc-entry-8">Credits</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-9">Credits</a></h2>
 <div class="section" id="authors">
-<h3><a class="toc-backref" href="#toc-entry-9">Authors</a></h3>
+<h3><a class="toc-backref" href="#toc-entry-10">Authors</a></h3>
 <ul class="simple">
 <li>Sobware</li>
 </ul>
 </div>
 <div class="section" id="contributors">
-<h3><a class="toc-backref" href="#toc-entry-10">Contributors</a></h3>
+<h3><a class="toc-backref" href="#toc-entry-11">Contributors</a></h3>
 <ul class="simple">
 <li>Rami Brick &lt;<a class="reference external" href="mailto:rami.brick&#64;sobware-tech.com">rami.brick&#64;sobware-tech.com</a>&gt;</li>
 <li>Souheil Bejaoui &lt;<a class="reference external" href="mailto:souheil.bejaoui&#64;sobware-tech.com">souheil.bejaoui&#64;sobware-tech.com</a>&gt;</li>
 </ul>
 </div>
 <div class="section" id="maintainers">
-<h3><a class="toc-backref" href="#toc-entry-11">Maintainers</a></h3>
+<h3><a class="toc-backref" href="#toc-entry-12">Maintainers</a></h3>
 <p>This module is maintained by the OCA.</p>
 <a class="reference external image-reference" href="https://odoo-community.org">
 <img alt="Odoo Community Association" src="https://odoo-community.org/logo.png" />
