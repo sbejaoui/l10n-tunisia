@@ -34,18 +34,23 @@ class AccountPayment(models.Model):
     @api.depends(
         "reconciled_invoice_ids.payment_state",
         "move_id.line_ids.amount_residual",
+        "move_id.state",
         "is_withholding_tax_payment",
         "withholding_reception_confirmed",
     )
     def _compute_state(self):
         withholding = self.filtered("is_withholding_tax_payment")
+        # standard matching can mark non-reconcilable fiscal accounts as paid
         result = super(AccountPayment, self - withholding)._compute_state()
         for payment in withholding:
             if not payment.state:
                 payment.state = "draft"
             elif payment.state in ("in_process", "paid"):
                 payment.state = (
-                    "paid" if payment.withholding_reception_confirmed else "in_process"
+                    "paid"
+                    if payment.withholding_reception_confirmed
+                    and payment.move_id.state == "posted"
+                    else "in_process"
                 )
         return result
 
@@ -81,6 +86,12 @@ class AccountPayment(models.Model):
         ):
             raise UserError(
                 self.env._("Only pending withholding payments can be confirmed.")
+            )
+        if any(
+            not payment.move_id or payment.move_id.state != "posted" for payment in self
+        ):
+            raise UserError(
+                self.env._("Certificate confirmation requires a posted journal entry.")
             )
         self.write(
             {
@@ -118,16 +129,158 @@ class AccountPayment(models.Model):
                     )
                 )
 
+    @api.constrains("journal_id", "payment_type", "partner_type", "invoice_ids")
+    def _check_withholding_refund(self):
+        for payment in self.filtered("is_withholding_tax_payment"):
+            if (payment.partner_type, payment.payment_type) in (
+                ("customer", "outbound"),
+                ("supplier", "inbound"),
+            ) or any(
+                invoice.move_type in ("out_refund", "in_refund")
+                for invoice in payment.invoice_ids
+            ):
+                raise ValidationError(
+                    self.env._(
+                        "New withholding payments are not supported for refunds. "
+                        "Use a regular bank or cash payment."
+                    )
+                )
+
     def action_post(self):
         self._check_withholding_country()
+        self._check_withholding_refund()
+        self._check_withholding_configuration()
         return super().action_post()
 
-    def write(self, vals):
-        if vals.get("state") in ("draft", "canceled", "rejected"):
-            vals = dict(
-                vals,
-                withholding_reception_confirmed=False,
-                withholding_reception_date=False,
-                withholding_reception_user_id=False,
+    def _check_withholding_payment_account(self, account):
+        self.ensure_one()
+        self.journal_id._check_withholding_configuration()
+        self.journal_id._check_withholding_account(account)
+        if account.currency_id and account.currency_id != self.currency_id:
+            raise ValidationError(
+                self.env._(
+                    "The withholding fiscal account currency must match "
+                    "the payment currency."
+                )
             )
-        return super().write(vals)
+
+    def _get_withholding_payment_account(self):
+        self.ensure_one()
+        account = self.payment_method_line_id.payment_account_id
+        self._check_withholding_payment_account(account)
+        return account
+
+    @api.constrains(
+        "journal_id",
+        "outstanding_account_id",
+        "move_id",
+        "currency_id",
+    )
+    def _check_withholding_configuration(self):
+        for payment in self.filtered("is_withholding_tax_payment"):
+            account = payment.outstanding_account_id
+            if not payment.move_id:
+                if account != payment._get_withholding_payment_account():
+                    raise ValidationError(
+                        self.env._(
+                            "A withholding payment must use the fiscal account "
+                            "configured on its payment method."
+                        )
+                    )
+                continue
+            # an existing entry keeps its account after a method account change
+            payment._check_withholding_payment_account(account)
+            liquidity, _counterpart, _writeoff = payment._seek_for_lines()
+            if liquidity.account_id != account:
+                raise ValidationError(
+                    self.env._(
+                        "The withholding journal entry must use "
+                        "the configured fiscal account."
+                    )
+                )
+
+    def _get_outstanding_account(self, payment_type):
+        if self.is_withholding_tax_payment:
+            return self._get_withholding_payment_account()
+        return super()._get_outstanding_account(payment_type)
+
+    @api.constrains(
+        "state",
+        "withholding_reception_confirmed",
+        "withholding_reception_date",
+        "withholding_reception_user_id",
+    )
+    def _check_inactive_withholding_confirmation(self):
+        for payment in self.filtered("is_withholding_tax_payment"):
+            if payment.state in ("draft", "canceled", "rejected") and (
+                payment.withholding_reception_confirmed
+                or payment.withholding_reception_date
+                or payment.withholding_reception_user_id
+            ):
+                raise ValidationError(
+                    self.env._(
+                        "A draft, canceled or rejected withholding payment "
+                        "cannot retain certificate confirmation."
+                    )
+                )
+
+    @api.constrains(
+        "journal_id",
+        "move_id",
+        "withholding_reception_confirmed",
+        "withholding_reception_date",
+        "withholding_reception_user_id",
+    )
+    def _check_withholding_certificate(self):
+        for payment in self:
+            if not (
+                payment.withholding_reception_confirmed
+                or payment.withholding_reception_date
+                or payment.withholding_reception_user_id
+            ):
+                continue
+            if (
+                not payment.is_withholding_tax_payment
+                or not payment.withholding_reception_confirmed
+                or not payment.withholding_reception_date
+                or not payment.withholding_reception_user_id
+                or not payment.move_id
+                or payment.move_id.state != "posted"
+            ):
+                raise ValidationError(
+                    self.env._(
+                        "A confirmed certificate requires a withholding payment "
+                        "with a posted journal entry, confirmation date and user."
+                    )
+                )
+
+    def _reset_withholding_confirmation(self):
+        payments = self.filtered(
+            lambda payment: (
+                payment.is_withholding_tax_payment
+                and (
+                    payment.withholding_reception_confirmed
+                    or payment.withholding_reception_date
+                    or payment.withholding_reception_user_id
+                )
+            )
+        )
+        payments.write(
+            {
+                "withholding_reception_confirmed": False,
+                "withholding_reception_date": False,
+                "withholding_reception_user_id": False,
+            }
+        )
+
+    def action_draft(self):
+        self._reset_withholding_confirmation()
+        return super().action_draft()
+
+    def action_cancel(self):
+        self._reset_withholding_confirmation()
+        return super().action_cancel()
+
+    def action_reject(self):
+        self._reset_withholding_confirmation()
+        return super().action_reject()

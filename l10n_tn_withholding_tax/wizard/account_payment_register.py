@@ -50,11 +50,24 @@ class AccountPaymentRegister(models.TransientModel):
     @api.depends(
         "line_ids",
         "line_ids.move_id.l10n_tn_is_domestic_transaction",
+        "line_ids.move_id.line_ids.matched_debit_ids",
+        "line_ids.move_id.line_ids.matched_credit_ids",
+        "line_ids.move_id.move_type",
+        "line_ids.move_id.company_id",
+        "line_ids.move_id.amount_total",
+        "line_ids.move_id.invoice_line_ids.product_id",
+        "line_ids.move_id.currency_id",
     )
     def _compute_withholding_tax_alert(self):
         for record in self:
             invoices = record.line_ids.move_id
             currency = invoices.currency_id
+            if len(currency) > 1:
+                record.withholding_tax_alert = self.env._(
+                    "Register withholding separately for invoices "
+                    "in different currencies."
+                )
+                continue
             rules = self.env["l10n.tn.withholding.rule"]._get_applicable_rules(invoices)
 
             if rules:
@@ -108,7 +121,9 @@ class AccountPaymentRegister(models.TransientModel):
         if not self.journal_id.is_withholding_tax_journal:
             return
 
-        payments = self.line_ids.move_id.matched_payment_ids
+        payments = self.line_ids.move_id.mapped(
+            lambda invoice: invoice._get_reconciled_withholding_payments()
+        )
 
         if any(
             payment.journal_id == self.journal_id
@@ -125,6 +140,14 @@ class AccountPaymentRegister(models.TransientModel):
 
         if not self.journal_id.is_withholding_tax_journal:
             return super()._create_payments()
+
+        if len(self.line_ids.move_id.currency_id) > 1:
+            raise UserError(
+                self.env._(
+                    "Register withholding separately for invoices "
+                    "in different currencies."
+                )
+            )
 
         eligible_bills = self._get_withholding_eligible_bills()
         if not eligible_bills:
@@ -160,7 +183,14 @@ class AccountPaymentRegister(models.TransientModel):
         "company_id",
         "can_edit_wizard",
         "line_ids.move_id.l10n_tn_is_domestic_transaction",
+        "line_ids.move_id.line_ids.matched_debit_ids",
+        "line_ids.move_id.line_ids.matched_credit_ids",
+        "line_ids.move_id.move_type",
+        "line_ids.move_id.company_id",
+        "line_ids.move_id.amount_total",
+        "line_ids.move_id.invoice_line_ids.product_id",
         "withholding_tax_applicable",
+        "line_ids.move_id.currency_id",
     )
     def _compute_available_journal_ids(self):
         res = super()._compute_available_journal_ids()
@@ -173,7 +203,7 @@ class AccountPaymentRegister(models.TransientModel):
                 )
                 + rules.withholding_journal_id
             )
-            if wizard.withholding_tax_applicable:
+            if wizard.withholding_tax_applicable or len(invoices.currency_id) > 1:
                 wizard.available_journal_ids = wizard.available_journal_ids.filtered(
                     lambda journal: not journal.is_withholding_tax_journal
                 )
@@ -194,17 +224,36 @@ class AccountPaymentRegister(models.TransientModel):
     @api.depends(
         "line_ids",
         "line_ids.move_id.l10n_tn_is_domestic_transaction",
+        "line_ids.move_id.line_ids.matched_debit_ids",
+        "line_ids.move_id.line_ids.matched_credit_ids",
+        "line_ids.move_id.move_type",
+        "line_ids.move_id.company_id",
+        "line_ids.move_id.amount_total",
+        "line_ids.move_id.invoice_line_ids.product_id",
         "line_ids.move_id.matched_payment_ids.state",
+        "line_ids.move_id.currency_id",
     )
     def _compute_show_withholding_tax_applicable(self):
         rules = self.env["l10n.tn.withholding.rule"]
         for wizard in self:
             invoices = wizard.line_ids.move_id
-            wizard.show_withholding_tax_applicable = len(invoices) > 1 and bool(
-                rules._get_applicable_rules(invoices)
+            wizard.show_withholding_tax_applicable = (
+                len(invoices) > 1
+                and len(invoices.currency_id) == 1
+                and bool(rules._get_applicable_rules(invoices))
             )
 
-    @api.depends("line_ids", "withholding_tax_applicable")
+    @api.depends(
+        "line_ids",
+        "line_ids.move_id.move_type",
+        "line_ids.move_id.company_id",
+        "line_ids.move_id.amount_total",
+        "line_ids.move_id.invoice_line_ids.product_id",
+        "line_ids.move_id.l10n_tn_is_domestic_transaction",
+        "line_ids.move_id.line_ids.matched_debit_ids",
+        "line_ids.move_id.line_ids.matched_credit_ids",
+        "withholding_tax_applicable",
+    )
     def _compute_withholding_allocation_line_ids(self):
         rules = self.env["l10n.tn.withholding.rule"]
         for wizard in self:

@@ -31,7 +31,9 @@ class WithholdingRule(models.Model):
     def _get_applicable_rules(self, invoices):
         applicable_rules = self.env["l10n.tn.withholding.rule"]
         for invoice in invoices:
-            if not invoice._is_withholding_tax_applicable():
+            if invoice.move_type not in ("out_invoice", "in_invoice") or not (
+                invoice._is_withholding_tax_applicable()
+            ):
                 continue
             journals = self.env["account.journal"].search(
                 [
@@ -48,22 +50,23 @@ class WithholdingRule(models.Model):
                 + [("product_id", "=", False), ("amount", "<=", invoice.amount_total)]
             )
             applicable_rules |= amount_rules.filtered(
-                lambda rule, bill=invoice: not bill.is_withholding_tax_rule_applied(
-                    rule
+                lambda rule, bill=invoice: (
+                    not bill.is_withholding_tax_rule_applied(rule)
                 )
             )
             for line in invoice.invoice_line_ids:
                 if not line.product_id:
                     continue
                 rule = self.search(
-                    rule_domain + [("product_id", "=", line.product_id.id)],
+                    rule_domain
+                    + [
+                        ("product_id", "=", line.product_id.id),
+                        ("amount", "<=", invoice.amount_total),
+                    ],
+                    order="amount desc, id",
                     limit=1,
                 )
-                if (
-                    rule
-                    and not invoice.is_withholding_tax_rule_applied(rule)
-                    and invoice.amount_total >= rule.amount
-                ):
+                if rule and not invoice.is_withholding_tax_rule_applied(rule):
                     applicable_rules |= rule
         return applicable_rules
 

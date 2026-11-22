@@ -398,37 +398,51 @@ that bill.</p>
 <p><strong>Table of contents</strong></p>
 <div class="contents local topic" id="contents">
 <ul class="simple">
-<li><a class="reference internal" href="#configuration" id="toc-entry-1">Configuration</a></li>
-<li><a class="reference internal" href="#usage" id="toc-entry-2">Usage</a><ul>
-<li><a class="reference internal" href="#one-receipt-for-several-invoices" id="toc-entry-3">One receipt for several invoices</a></li>
-<li><a class="reference internal" href="#individual-withholding-payments" id="toc-entry-4">Individual withholding payments</a></li>
-<li><a class="reference internal" href="#certificate-confirmation" id="toc-entry-5">Certificate confirmation</a></li>
+<li><a class="reference internal" href="#installation" id="toc-entry-1">Installation</a></li>
+<li><a class="reference internal" href="#configuration" id="toc-entry-2">Configuration</a></li>
+<li><a class="reference internal" href="#usage" id="toc-entry-3">Usage</a><ul>
+<li><a class="reference internal" href="#one-receipt-for-several-invoices" id="toc-entry-4">One receipt for several invoices</a></li>
+<li><a class="reference internal" href="#individual-withholding-payments" id="toc-entry-5">Individual withholding payments</a></li>
+<li><a class="reference internal" href="#invoice-report-with-payments" id="toc-entry-6">Invoice report with payments</a></li>
+<li><a class="reference internal" href="#certificate-confirmation" id="toc-entry-7">Certificate confirmation</a></li>
+<li><a class="reference internal" href="#tracking-certificates-from-an-invoice" id="toc-entry-8">Tracking certificates from an invoice</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#bug-tracker" id="toc-entry-6">Bug Tracker</a></li>
-<li><a class="reference internal" href="#credits" id="toc-entry-7">Credits</a><ul>
-<li><a class="reference internal" href="#authors" id="toc-entry-8">Authors</a></li>
-<li><a class="reference internal" href="#contributors" id="toc-entry-9">Contributors</a></li>
-<li><a class="reference internal" href="#maintainers" id="toc-entry-10">Maintainers</a></li>
+<li><a class="reference internal" href="#bug-tracker" id="toc-entry-9">Bug Tracker</a></li>
+<li><a class="reference internal" href="#credits" id="toc-entry-10">Credits</a><ul>
+<li><a class="reference internal" href="#authors" id="toc-entry-11">Authors</a></li>
+<li><a class="reference internal" href="#contributors" id="toc-entry-12">Contributors</a></li>
+<li><a class="reference internal" href="#maintainers" id="toc-entry-13">Maintainers</a></li>
 </ul>
 </li>
 </ul>
 </div>
+<div class="section" id="installation">
+<h2><a class="toc-backref" href="#toc-entry-1">Installation</a></h2>
+<p>This addon is incompatible with Odoo’s native <strong>Withholding Tax on
+Payment</strong> (<tt class="docutils literal">l10n_account_withholding_tax</tt>).</p>
+</div>
 <div class="section" id="configuration">
-<h2><a class="toc-backref" href="#toc-entry-1">Configuration</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-2">Configuration</a></h2>
 <p>This module does not create any journal or rule. You set them up in two
 steps.</p>
 <p><strong>Withholding tax journals</strong></p>
 <ol class="arabic simple">
 <li>Go to <em>Accounting &gt; Configuration &gt; Journals</em>.</li>
-<li>Create (or open) a journal of type <strong>Bank</strong>. Use one journal per
-withholding tax rate.</li>
-<li>Open the <strong>Advanced Settings</strong> tab and, in the <strong>Withholding Tax</strong>
-section, tick <strong>Journal includes Withholding Tax</strong>.</li>
-<li>Set the <strong>Rate</strong> of the withholding tax.</li>
+<li>Create (or open) a journal of type <strong>Bank</strong> for the withholding rate.
+The same journal may serve customer and supplier withholding.</li>
+<li>Tick <strong>Withholding tax journal</strong>, next to the journal type.</li>
+<li>In <strong>Withholding Tax</strong>, enter the rate as a percentage, for example
+<tt class="docutils literal">1.5</tt> for 1.5%.</li>
+<li>Configure fiscal accounts on the payment methods in Odoo’s standard
+<strong>Incoming Payments</strong> and <strong>Outgoing Payments</strong> tabs. Incoming
+payments use the customer withholding account; outgoing payments use
+the supplier withholding account. There is no additional account
+field on the journal.</li>
 </ol>
-<p>The <strong>Withholding Tax</strong> section is only shown on journals of type
-<strong>Bank</strong>.</p>
+<p>Separate journals for customer and supplier withholding are optional.
+Use the rule’s <strong>Document Type</strong> to restrict a rule to customer invoices
+or vendor bills.</p>
 <p><strong>Withholding rules</strong></p>
 <ol class="arabic simple">
 <li>Go to <em>Accounting &gt; Configuration &gt; Withholding Rules</em>.</li>
@@ -437,8 +451,8 @@ section, tick <strong>Journal includes Withholding Tax</strong>.</li>
 the rule to any invoice meeting the minimum amount.</li>
 <li><strong>Description</strong>: a short explanation of the rule.</li>
 <li><strong>Document Type</strong>: <strong>Customer Invoice</strong> (<tt class="docutils literal">out_invoice</tt>) or
-<strong>Vendor Bill</strong> (<tt class="docutils literal">in_invoice</tt>). Leave empty to apply the rule to
-both.</li>
+<strong>Vendor Bill</strong> (<tt class="docutils literal">in_invoice</tt>). Leave empty to apply to both. The
+same journal may be used by rules for either document type.</li>
 <li><strong>Amount</strong>: the minimum bill total (taxes included) from which the
 withholding applies. The threshold is inclusive. Use 0 for no
 minimum. This amount cannot be negative.</li>
@@ -448,9 +462,117 @@ be selected.</li>
 </ul>
 </li>
 </ol>
+<p>Product rules are filtered by company, document type and minimum amount
+before selecting the highest applicable threshold (then the lowest rule
+ID in case of a tie). Rules without products follow the same
+compatibility checks. Alerts, available journals and invoice allocation
+proposals use this selection.</p>
+<p><strong>Accounting reference</strong></p>
+<p>Use Odoo’s standard outstanding receipt/payment account on each payment
+method. A shared journal can use different accounts for incoming and
+outgoing payments:</p>
+<ul class="simple">
+<li><strong>Customer invoice</strong> (inbound payment method): example tax account
+434100, withholding suffered. Entry: debit tax receivable, credit the
+invoice’s customer account.</li>
+<li><strong>Vendor bill</strong> (outbound payment method): example tax account 432000,
+withholding owed to the State. Entry: debit the invoice’s supplier
+account, credit tax payable.</li>
+</ul>
+<p>Use dedicated tax accounts, separate from the customer/supplier accounts
+and bank accounts. Configure account numbers according to the company’s
+chart of accounts; these examples are not enforced. Odoo’s Tunisian
+chart supplies both 432 and 4341 as Current Liabilities
+(<tt class="docutils literal">liability_current</tt>), without reconciliation enabled. The module
+accepts Current Assets (<tt class="docutils literal">asset_current</tt>) and Current Liabilities for
+either flow, without requiring reconciliation on the fiscal account. The
+payment direction determines the debit/credit entry. Invoice counterpart
+lines are still reconciled on their customer/supplier account. Account
+types still affect financial report classification; accepting an account
+does not verify or correct its presentation in those reports.</p>
+<p>The journal’s default bank account is not the tax account: withholding
+must use its selected payment method’s fiscal account, for the actual
+payment direction.</p>
+<p>A withholding journal must have type <strong>Bank</strong> and a valid rate. A
+configured payment method account must be active, available to the
+journal’s company and of type Current Assets or Current Liabilities. It
+must differ from the journal’s default bank account and the company’s
+transfer account. A forced account currency must also match the payment
+currency.</p>
+<p>The rate is stored as a fraction: <tt class="docutils literal">0 &lt; rate &lt;= 1</tt>, where <tt class="docutils literal">0.015</tt>
+means 1.5% and <tt class="docutils literal">1</tt> means 100%. The journal form displays and accepts
+percentages.</p>
+<p>You may save a journal while its payment method account is still empty,
+to finish configuration afterward. Creating or posting a withholding
+payment requires an explicit fiscal account on the selected method.
+Direct ORM calls and forced journal entry generation follow the same
+rule; the payment’s actual account and generated entry must match that
+configured account. Withholding payments cannot fall back to a normal
+outstanding or transfer account. Regular bank/cash payments keep Odoo’s
+standard behavior.</p>
+<p>Configuration remains editable as long as it is valid. The module does
+not freeze the journal or its accounts after a payment has been posted.
+Changing the rate or payment method account affects future payments
+without rewriting existing journal entries. Changing a journal’s
+withholding flag also changes the withholding classification of payments
+linked to that journal.</p>
+<p>For a gross invoice of 2,000 and a withholding of 30, register a
+withholding payment of 30 and a bank payment of 1,970. Reconcile both
+payment counterpart lines with the invoice. The invoice total stays
+2,000 and its residual becomes zero; only the net payment affects the
+bank or its normal outstanding account.</p>
+<p>Certificate confirmation changes the workflow and records the user and
+date. It must not change accounts, debit/credit amounts, residuals or
+reconciliations, or create another journal entry. The tax
+receivable/payable balance remains after confirmation; its subsequent
+tax settlement is a separate operation. On a non-reconcilable fiscal
+account, follow this balance in the general ledger, rather than using
+the line’s residual amount.</p>
+<p>Use the payment’s reset, cancel or reject actions to clear certificate
+confirmation and its audit fields. Direct ORM state changes that leave
+confirmation on a draft, canceled or rejected withholding payment are
+refused.</p>
+<p>New withholding payments are supported only for customer receipts and
+supplier payments. Customer refunds and supplier reimbursements use
+regular bank/cash payments, without new withholding. This also applies
+to direct ORM creation or updates, including a refund document linked to
+an otherwise normal payment. Reversing or settling the tax balance of an
+earlier withholding is a separate operation, outside this workflow.</p>
+<p>The certificate confirmation action is available to accounting users
+with write access to the payment and a posted journal entry. It records
+the current user and server date, and checks every payment in a batch
+before updating any certificate. Direct ORM updates are allowed under
+standard access rights when the certificate, date and user are
+consistent and the withholding payment has a posted journal entry. Clear
+all three fields together when resetting through the ORM; the standard
+reset, cancel and reject actions do this automatically.</p>
+<p>A withholding payment stays <strong>In Process</strong> until its certificate is
+confirmed and its journal entry is posted. If the entry is reset
+directly to draft, the payment returns to <strong>In Process</strong> and is no
+longer matched; the certificate metadata remains recorded. Posting that
+entry again restores <strong>Paid</strong> when the certificate is still confirmed.
+Resetting the payment itself, canceling it or rejecting it clears the
+confirmation and preserves the selected lifecycle state. Regular
+payments retain Odoo’s standard state computation.</p>
+<p>Invoice withholding status and duplicate-rule checks follow the current
+reconciliations on the customer/supplier journal items. A historical
+payment association alone does not count. Unreconciling a withholding
+makes its rule available again for the remaining balance. Reassigning
+the payment to another invoice transfers certificate tracking to that
+invoice. A fully settled invoice stays <strong>In Payment</strong> while any
+currently reconciled withholding is awaiting its certificate; confirming
+one withholding does not confirm the others. The same withholding
+payment may be partially reconciled to several invoices.</p>
+<p>The withholding-specific <tt class="docutils literal">is_matched</tt> behavior is retained: the
+certificate controls matching for withholding payments only. Standard
+Odoo matching would otherwise consider a non-reconcilable fiscal account
+matched before certificate confirmation. Normal bank/cash payments
+retain standard matching and state computation. No change to this
+behavior is required for invoice tracking, which uses current
+reconciliations and the certificate confirmation flag directly.</p>
 </div>
 <div class="section" id="usage">
-<h2><a class="toc-backref" href="#toc-entry-2">Usage</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-3">Usage</a></h2>
 <p>Once the journals and rules are configured (see <em>Configuration</em>),
 withholding tax is handled from the payment wizard.</p>
 <p>Withholding applies only when both the invoice company and invoice
@@ -459,7 +581,7 @@ document ineligible. Withholding journals and alerts are not offered for
 ineligible documents. Direct payment creation and confirmation enforce
 the same country restriction.</p>
 <div class="section" id="one-receipt-for-several-invoices">
-<h3><a class="toc-backref" href="#toc-entry-3">One receipt for several invoices</a></h3>
+<h3><a class="toc-backref" href="#toc-entry-4">One receipt for several invoices</a></h3>
 <p>Select several invoices for the same customer and click <strong>Pay</strong>. Enable
 <strong>Withholding Tax Applicable</strong>, then choose <strong>Keep Unpaid</strong> or
 <strong>Register Withholding Payment</strong>.</p>
@@ -501,10 +623,10 @@ flow. Existing withholding payments are excluded from the suggested
 withholding journals to avoid duplicates.</p>
 </div>
 <div class="section" id="individual-withholding-payments">
-<h3><a class="toc-backref" href="#toc-entry-4">Individual withholding payments</a></h3>
+<h3><a class="toc-backref" href="#toc-entry-5">Individual withholding payments</a></h3>
 <ol class="arabic simple">
-<li>Open a posted vendor bill that meets a withholding rule’s conditions,
-and click <strong>Pay</strong>.</li>
+<li>Open a posted customer invoice or vendor bill that meets a
+withholding rule’s conditions, and click <strong>Pay</strong>.</li>
 <li>At the top of the wizard, a message lists the applicable withholding
 taxes, with the journal and the amount to withhold for each one.</li>
 <li>In <strong>Journal</strong>, select the withholding tax journal. The <strong>Amount</strong> is
@@ -518,11 +640,22 @@ Rules without products also apply to invoice lines without a product.
 Amount-only and matching product rules can both apply. Withholding tax
 journals that do not match an applicable rule are not offered in the
 <strong>Journal</strong> field.</p>
-<p>Once the withholding tax has been paid, its journal is no longer offered
-for that bill and the rule no longer appears in the wizard.</p>
+<p>Once withholding is currently reconciled with the invoice, its journal
+is no longer offered for that invoice and the rule no longer appears in
+the wizard. Unreconciling it makes the rule available again for the
+remaining balance. The same withholding journal can serve customer and
+supplier documents; rules can restrict its use by document type.</p>
+</div>
+<div class="section" id="invoice-report-with-payments">
+<h3><a class="toc-backref" href="#toc-entry-6">Invoice report with payments</a></h3>
+<p>When printing an invoice with payments, withholding payments appear
+first, labelled with their journal name (for example <strong>RS 1.5%</strong>), with
+the reconciled amount in the invoice currency. Other payments keep their
+usual labels, dates and relative order. The invoice balance and
+accounting entries are unchanged.</p>
 </div>
 <div class="section" id="certificate-confirmation">
-<h3><a class="toc-backref" href="#toc-entry-5">Certificate confirmation</a></h3>
+<h3><a class="toc-backref" href="#toc-entry-7">Certificate confirmation</a></h3>
 <p>Withholding payments remain <strong>In Process</strong> until the certificate is
 confirmed. The invoice or bill balance is reduced immediately, but a
 fully settled invoice or bill remains <strong>In Payment</strong> while its
@@ -530,7 +663,7 @@ withholding certificate is pending.</p>
 <ul class="simple">
 <li>Open <strong>Customers &gt; Incoming Withholding Payments</strong> to track received
 withholding. Open a payment and click <strong>Validate Reception</strong> after
-receiving its certificate.</li>
+receiving and checking its certificate on TEJ.</li>
 <li>Open <strong>Vendors &gt; Outgoing Withholding Payments</strong> to track issued
 withholding. Open a payment and click <strong>Confirm Certificate Delivery</strong>
 after delivering its certificate.</li>
@@ -542,13 +675,38 @@ all payments are matched. Confirmation does not create another journal
 entry. Resetting, canceling or rejecting a payment clears its
 confirmation. Pending withholding payments still prevent duplicate
 registration; canceled payments no longer block the rule.</p>
-<p>On upgrade, existing <strong>Paid</strong> withholding payments are treated as
-confirmed. Their confirmation user and date stay empty because no
-historical certificate confirmation was recorded.</p>
+</div>
+<div class="section" id="tracking-certificates-from-an-invoice">
+<h3><a class="toc-backref" href="#toc-entry-8">Tracking certificates from an invoice</a></h3>
+<p>A <strong>Withholding certificate pending</strong> message appears while at least one
+currently reconciled withholding is unconfirmed. Use the <strong>Withholding
+Taxes</strong> button to open its withholding payments, including confirmed
+payments. The count includes each payment once per invoice. When several
+invoices share a payment, opening their payments together lists that
+payment once.</p>
+<p>Confirming one certificate leaves the message visible if another
+withholding still awaits confirmation. After unreconciliation, an old
+payment association does not keep the message or block the rule.
+Reassigning a withholding transfers tracking to its currently reconciled
+invoice. A partially paid invoice keeps its normal residual and payment
+state while showing any pending certificate.</p>
+<p>Confirmation requires a posted payment entry. The action records the
+current accounting user and server date. Coherent ORM updates remain
+supported under standard access rights, with a complete
+certificate/date/user and posted entry. Resetting the payment, canceling
+it or rejecting it clears the confirmation. New withholding on customer
+or supplier refunds is not supported; use normal bank/cash
+reimbursement. Fiscal reversal of an earlier withholding is outside this
+workflow.</p>
+<p>The module is under development; no migration or historical certificate
+recovery is provided. Banking integrations beyond the verified
+invoice/payment workflow remain outside the validated scope. Check the
+dashboards and financial reports used in the target installation
+separately.</p>
 </div>
 </div>
 <div class="section" id="bug-tracker">
-<h2><a class="toc-backref" href="#toc-entry-6">Bug Tracker</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-9">Bug Tracker</a></h2>
 <p>Bugs are tracked on <a class="reference external" href="https://github.com/OCA/l10n-tunisia/issues">GitHub Issues</a>.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
@@ -556,22 +714,22 @@ If you spotted it first, help us to smash it by providing a detailed and welcome
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
-<h2><a class="toc-backref" href="#toc-entry-7">Credits</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-10">Credits</a></h2>
 <div class="section" id="authors">
-<h3><a class="toc-backref" href="#toc-entry-8">Authors</a></h3>
+<h3><a class="toc-backref" href="#toc-entry-11">Authors</a></h3>
 <ul class="simple">
 <li>Sobware</li>
 </ul>
 </div>
 <div class="section" id="contributors">
-<h3><a class="toc-backref" href="#toc-entry-9">Contributors</a></h3>
+<h3><a class="toc-backref" href="#toc-entry-12">Contributors</a></h3>
 <ul class="simple">
 <li>Rami Brick &lt;<a class="reference external" href="mailto:rami.brick&#64;sobware-tech.com">rami.brick&#64;sobware-tech.com</a>&gt;</li>
 <li>Souheil Bejaoui &lt;<a class="reference external" href="mailto:souheil.bejaoui&#64;sobware-tech.com">souheil.bejaoui&#64;sobware-tech.com</a>&gt;</li>
 </ul>
 </div>
 <div class="section" id="maintainers">
-<h3><a class="toc-backref" href="#toc-entry-10">Maintainers</a></h3>
+<h3><a class="toc-backref" href="#toc-entry-13">Maintainers</a></h3>
 <p>This module is maintained by the OCA.</p>
 <a class="reference external image-reference" href="https://odoo-community.org">
 <img alt="Odoo Community Association" src="https://odoo-community.org/logo.png" />

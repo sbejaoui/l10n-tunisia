@@ -3,19 +3,34 @@
      License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
 <odoo>
     <record id="journal_include_withholding" model="ir.ui.view">
-        <field name="name">account.journal.form.journal_include_withholding</field>
         <field name="model">account.journal</field>
         <field name="inherit_id" ref="account.view_account_journal_form" />
         <field name="arch" type="xml">
-            <xpath expr="//page[@name='advanced_settings']" position="inside">
-                <group string="Withholding Tax" invisible="type != 'bank'">
-                    <field name="is_withholding_tax_journal" />
-                    <field
-                        name="withholding_tax_rate"
-                        widget="percentage"
-                        invisible="not is_withholding_tax_journal"
-                    />
-                </group>
+            <xpath expr="//sheet/group/group/field[@name='type']" position="after">
+                <field
+                    name="is_withholding_tax_journal"
+                    string="Withholding tax journal"
+                    invisible="type != 'bank'"
+                />
+            </xpath>
+            <xpath expr="//page[@name='bank_account']" position="before">
+                <page
+                    name="withholding_tax"
+                    string="Withholding Tax"
+                    invisible="type != 'bank' or not is_withholding_tax_journal"
+                >
+                    <group name="withholding_parameters">
+                        <field
+                            name="withholding_tax_rate"
+                            string="Withholding rate"
+                            widget="percentage"
+                            placeholder="e.g. 1.5"
+                        />
+                        <div class="text-muted" colspan="2">
+                            For a withholding rate of 1.5%, enter 1.5.
+                        </div>
+                    </group>
+                </page>
             </xpath>
         </field>
     </record>

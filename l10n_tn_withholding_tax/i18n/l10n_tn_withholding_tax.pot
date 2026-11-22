@@ -534,6 +534,7 @@ msgstr ""
 
 #. module: l10n_tn_withholding_tax
 #: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_l10n_tn_payment_register_withholding_line__withholding_journal_ids
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.view_move_form_withholding
 msgid "Withholding Taxes"
 msgstr ""
 
@@ -546,4 +547,120 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_tn_withholding_tax/wizard/account_payment_register.py:0
 msgid "You are about to pay the withholding tax of multiple bills."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/models/account_payment.py:0
+msgid ""
+"A withholding payment must use the fiscal account configured on its payment "
+"method."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/models/account_journal.py:0
+msgid "A withholding tax journal must be a bank journal."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/models/account_journal.py:0
+msgid ""
+"Configure an active fiscal account for journal %(journal)s of type Current "
+"Assets or Current Liabilities. It must belong to the journal company and "
+"differ from the bank and transfer accounts."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/models/account_payment.py:0
+msgid ""
+"The withholding fiscal account currency must match the payment currency."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/models/account_payment.py:0
+msgid "The withholding journal entry must use the configured fiscal account."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/models/account_journal.py:0
+msgid "The withholding rate must be greater than 0 and at most 1 (1 = 100%)."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/models/account_payment.py:0
+msgid ""
+"A draft, canceled or rejected withholding payment cannot retain certificate "
+"confirmation."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.journal_include_withholding
+msgid "For a withholding rate of 1.5%, enter 1.5."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.journal_include_withholding
+msgid "Withholding rate"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.journal_include_withholding
+msgid "Withholding tax journal"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.journal_include_withholding
+msgid "e.g. 1.5"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,help:l10n_tn_withholding_tax.field_l10n_tn_withholding_rule__move_type
+msgid "Leave empty to apply to both customer invoices and vendor bills."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/models/account_payment.py:0
+msgid ""
+"New withholding payments are not supported for refunds. Use a regular bank "
+"or cash payment."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/models/account_payment.py:0
+msgid "Certificate confirmation requires a posted journal entry."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: code:addons/l10n_tn_withholding_tax/models/account_payment.py:0
+msgid ""
+"A confirmed certificate requires a withholding payment with a posted journal"
+" entry, confirmation date and user."
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_move__withholding_certificate_pending
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_bank_statement_line__withholding_certificate_pending
+msgid "Withholding Certificate Pending"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#. odoo-python
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_move__withholding_payment_count
+#: model:ir.model.fields,field_description:l10n_tn_withholding_tax.field_account_bank_statement_line__withholding_payment_count
+#: code:addons/l10n_tn_withholding_tax/models/account_move.py:0
+msgid "Withholding Payments"
+msgstr ""
+
+#. module: l10n_tn_withholding_tax
+#: model_terms:ir.ui.view,arch_db:l10n_tn_withholding_tax.view_move_form_withholding
+msgid "Withholding certificate pending"
 msgstr ""

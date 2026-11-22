@@ -40,6 +40,12 @@ class L10nTnPaymentRegisterWithholdingLine(models.TransientModel):
     @api.depends(
         "invoice_id",
         "invoice_id.l10n_tn_is_domestic_transaction",
+        "invoice_id.line_ids.matched_debit_ids",
+        "invoice_id.line_ids.matched_credit_ids",
+        "invoice_id.move_type",
+        "invoice_id.company_id",
+        "invoice_id.amount_total",
+        "invoice_id.invoice_line_ids.product_id",
         "invoice_id.matched_payment_ids.state",
     )
     def _compute_available_withholding_journal_ids(self):

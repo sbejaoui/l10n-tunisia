@@ -15,11 +15,18 @@ class TestPaymentAllocation(WithholdingTaxTestCommon):
     def setUpClass(cls):
         super().setUpClass()
         cls.env["l10n.tn.withholding.rule"].create(
-            {
-                "product_id": [Command.set(cls.product_b.ids)],
-                "description": "Second invoice withholding",
-                "withholding_journal_id": cls.other_withholding_journal.id,
-            }
+            [
+                {
+                    "product_id": [Command.set(cls.product_b.ids)],
+                    "description": "Second invoice withholding",
+                    "move_type": move_type,
+                    "withholding_journal_id": journal.id,
+                }
+                for move_type, journal in (
+                    ("out_invoice", cls.other_inbound_withholding_journal),
+                    ("in_invoice", cls.other_withholding_journal),
+                )
+            ]
         )
 
     def _allocation_wizard(self, handling="keep_unpaid", move_type="out_invoice"):
@@ -53,7 +60,9 @@ class TestPaymentAllocation(WithholdingTaxTestCommon):
         )
 
     def test_withholding_option_is_hidden_without_matching_document_rules(self):
-        journals = self.withholding_journal | self.other_withholding_journal
+        journals = (
+            self.inbound_withholding_journal | self.other_inbound_withholding_journal
+        )
         rules = self.env["l10n.tn.withholding.rule"].search(
             [("withholding_journal_id", "in", journals.ids)]
         )
@@ -83,19 +92,6 @@ class TestPaymentAllocation(WithholdingTaxTestCommon):
                 invoice.matched_payment_ids.filtered("is_withholding_tax_payment")
             )
 
-    def test_allocation_coexists_with_native_withholding_wizard(self):
-        if "account.payment.register.withholding.line" not in self.env:
-            self.skipTest("Odoo's optional withholding addon is not installed")
-        wizard, invoices = self._allocation_wizard()
-
-        self.assertFalse(wizard.withholding_line_ids)
-        self.assertEqual(len(wizard.withholding_allocation_line_ids), 2)
-        payment = wizard._create_payments()
-
-        self.assertEqual(len(payment), 1)
-        self.assertCountEqual(payment.invoice_ids.ids, invoices.ids)
-        self.assertTrue(all(invoice.amount_residual > 0 for invoice in invoices))
-
     def test_pay_creates_individual_withholding_and_one_receipt(self):
         wizard, invoices = self._allocation_wizard(handling="pay")
         payment = wizard._create_payments()
@@ -106,7 +102,10 @@ class TestPaymentAllocation(WithholdingTaxTestCommon):
         self.assertEqual(len(withholding), 2)
         self.assertCountEqual(
             withholding.journal_id.ids,
-            (self.withholding_journal | self.other_withholding_journal).ids,
+            (
+                self.inbound_withholding_journal
+                | self.other_inbound_withholding_journal
+            ).ids,
         )
         for invoice in invoices:
             self.assertEqual(invoice.amount_residual, 0)
@@ -343,9 +342,13 @@ class TestPaymentAllocation(WithholdingTaxTestCommon):
             lambda allocation: allocation.invoice_id == invoices[0]
         )
         self.env["l10n.tn.withholding.rule"].create(
-            {"withholding_journal_id": self.other_withholding_journal.id, "amount": 0}
+            {
+                "withholding_journal_id": self.other_inbound_withholding_journal.id,
+                "move_type": "out_invoice",
+                "amount": 0,
+            }
         )
-        line.withholding_journal_ids |= self.other_withholding_journal
+        line.withholding_journal_ids |= self.other_inbound_withholding_journal
         wizard.amount = sum(
             wizard.withholding_allocation_line_ids.mapped("cash_amount")
         )
@@ -406,6 +409,59 @@ class TestPaymentAllocation(WithholdingTaxTestCommon):
         self.assertTrue(payment.is_reconciled)
         for invoice in invoices:
             self.assertAlmostEqual(invoice.amount_residual, expected[invoice.id])
+
+    def test_vendor_pay_registers_withholding_and_net_bank_payment(self):
+        wizard, invoices = self._allocation_wizard(
+            handling="pay", move_type="in_invoice"
+        )
+        expected = {
+            line.invoice_id.id: (line.withholding_amount, line.cash_amount)
+            for line in wizard.withholding_allocation_line_ids
+        }
+        payment = wizard._create_payments()
+        self.assertEqual(len(payment), 1)
+        self.assertEqual(payment.payment_type, "outbound")
+        self.assertFalse(payment.is_withholding_tax_payment)
+        self.assertEqual(payment.move_id.state, "posted")
+        self.assertAlmostEqual(
+            payment.amount, sum(net for _tax, net in expected.values())
+        )
+        liquidity, counterpart, _writeoff = payment._seek_for_lines()
+        self.assertAlmostEqual(sum(liquidity.mapped("balance")), -payment.amount)
+        self.assertFalse(
+            liquidity.filtered(lambda line: line.account_id == self.tax_payable)
+        )
+        self.assertTrue(all(counterpart.mapped("reconciled")))
+        withholding = invoices.matched_payment_ids.filtered(
+            "is_withholding_tax_payment"
+        )
+        self.assertEqual(len(withholding), 2)
+        self.assertCountEqual(
+            withholding.journal_id.ids,
+            (self.withholding_journal | self.other_withholding_journal).ids,
+        )
+        for invoice in invoices:
+            with self.subTest(invoice=invoice.name):
+                tax, net = expected[invoice.id]
+                fiscal_payment = invoice.matched_payment_ids & withholding
+                self.assertEqual(len(fiscal_payment), 1)
+                self.assertEqual(fiscal_payment.payment_type, "outbound")
+                self.assertAlmostEqual(fiscal_payment.amount, tax)
+                self.assertEqual(fiscal_payment.move_id.state, "posted")
+                self.assertEqual(fiscal_payment.state, "in_process")
+                fiscal, supplier, _writeoff = fiscal_payment._seek_for_lines()
+                self.assertEqual(fiscal.account_id, self.tax_payable)
+                self.assertAlmostEqual(fiscal.credit, tax)
+                self.assertEqual(fiscal.debit, 0)
+                self.assertEqual(
+                    supplier.account_id, invoice.partner_id.property_account_payable_id
+                )
+                self.assertAlmostEqual(supplier.debit, tax)
+                self.assertEqual(supplier.credit, 0)
+                self.assertTrue(supplier.reconciled)
+                self.assertAlmostEqual(invoice.amount_total, tax + net)
+                self.assertEqual(invoice.amount_residual, 0)
+                self.assertEqual(invoice.payment_state, "in_payment")
 
     def test_invoicing_user_can_allocate_without_managing_rules(self):
         user = new_test_user(

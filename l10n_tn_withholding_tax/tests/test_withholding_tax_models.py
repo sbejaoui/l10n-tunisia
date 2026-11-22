@@ -12,9 +12,9 @@ from .common import WithholdingTaxTestCommon
 @tagged("post_install", "-at_install")
 class TestWithholdingTaxModels(WithholdingTaxTestCommon):
     def test_rule_document_type_for_product_and_amount_only_rules(self):
-        invoice = self._create_move(self.product_a, 2000, move_type="out_invoice")
-        bill = self._create_move(self.product_a, 2000, move_type="in_invoice")
-        for products in (self.product_a, self.env["product.product"]):
+        invoice = self._create_move(self.unruled_product, 2000, move_type="out_invoice")
+        bill = self._create_move(self.unruled_product, 2000, move_type="in_invoice")
+        for products in (self.unruled_product, self.env["product.product"]):
             self.withholding_rule.product_id = [Command.set(products.ids)]
             for move_type, on_invoice, on_bill in (
                 (False, True, True),
@@ -46,17 +46,13 @@ class TestWithholdingTaxModels(WithholdingTaxTestCommon):
                     )
 
     def test_product_rule_lookup_skips_other_document_types(self):
-        self.withholding_rule.move_type = "in_invoice"
-        invoice_rule = self.withholding_rule.copy(
-            {
-                "move_type": "out_invoice",
-                "withholding_journal_id": self.other_withholding_journal.id,
-            }
-        )
+        invoice_rule = self.inbound_withholding_rule
         invoice = self._create_move(self.product_a, 2000, move_type="out_invoice")
+        incompatible = self.withholding_rule.copy({"amount": 1000})
         applicable = self.withholding_rule._get_applicable_rules(invoice)
         self.assertIn(invoice_rule, applicable)
         self.assertNotIn(self.withholding_rule, applicable)
+        self.assertNotIn(incompatible, applicable)
 
     def test_rules_and_available_journals_are_scoped_to_invoice_company(self):
         company = self.company_data["company"]
@@ -187,3 +183,43 @@ class TestWithholdingTaxModels(WithholdingTaxTestCommon):
 
         self.assertFalse(below_threshold_bill.is_rs_eligible)
         self.assertTrue(at_threshold_bill.is_rs_eligible)
+
+    def test_product_uses_highest_applicable_rule_threshold(self):
+        higher_threshold_rule = self.env["l10n.tn.withholding.rule"].create(
+            {
+                "product_id": [Command.set(self.product_a.ids)],
+                "description": "RS 5% above 1,000 TND",
+                "amount": 1000,
+                "move_type": "in_invoice",
+                "withholding_journal_id": self.other_withholding_journal.id,
+            }
+        )
+        bill = self._create_move(self.product_a, 2000)
+
+        applicable_rules = self.withholding_rule._get_applicable_rules(bill)
+
+        self.assertEqual(applicable_rules, higher_threshold_rule)
+
+    def test_product_ignores_rule_above_invoice_total(self):
+        self.withholding_rule.amount = 10000
+        lower_threshold_rule = self.withholding_rule.copy(
+            {
+                "amount": 0,
+                "withholding_journal_id": self.other_withholding_journal.id,
+            }
+        )
+        bill = self._create_move(self.product_a, 2000)
+
+        self.assertEqual(
+            self.withholding_rule._get_applicable_rules(bill), lower_threshold_rule
+        )
+
+    def test_equal_threshold_product_rules_keep_id_priority(self):
+        later = self.withholding_rule.copy(
+            {"withholding_journal_id": self.other_withholding_journal.id}
+        )
+        bill = self._create_move(self.product_a, 2000)
+        self.assertGreater(later.id, self.withholding_rule.id)
+        self.assertEqual(
+            self.withholding_rule._get_applicable_rules(bill), self.withholding_rule
+        )

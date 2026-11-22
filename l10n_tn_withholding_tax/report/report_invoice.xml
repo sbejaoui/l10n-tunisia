@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright 2026 Sobware
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <template
+        id="report_invoice_withholding"
+        inherit_id="account.report_invoice_document"
+    >
+        <xpath expr="//t[@t-set='payments_vals']" position="attributes">
+            <attribute name="t-value">
+                o.sudo()._get_withholding_invoice_report_payments()
+            </attribute>
+        </xpath>
+        <xpath expr="//t[@t-foreach='payments_vals']//i" position="before">
+            <span t-if="payment_vals['is_withholding_tax_payment']">
+                <t t-out="payment_vals['journal_name']" />
+            </span>
+        </xpath>
+        <xpath expr="//t[@t-foreach='payments_vals']//i" position="attributes">
+            <attribute name="t-if">
+                not payment_vals['is_withholding_tax_payment']
+            </attribute>
+        </xpath>
+    </template>
+</odoo>
