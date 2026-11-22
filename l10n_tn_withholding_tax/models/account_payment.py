@@ -34,18 +34,23 @@ class AccountPayment(models.Model):
     @api.depends(
         "reconciled_invoice_ids.payment_state",
         "move_id.line_ids.amount_residual",
+        "move_id.state",
         "is_withholding_tax_payment",
         "withholding_reception_confirmed",
     )
     def _compute_state(self):
         withholding = self.filtered("is_withholding_tax_payment")
+        # standard matching can mark non-reconcilable fiscal accounts as paid
         result = super(AccountPayment, self - withholding)._compute_state()
         for payment in withholding:
             if not payment.state:
                 payment.state = "draft"
             elif payment.state in ("in_process", "paid"):
                 payment.state = (
-                    "paid" if payment.withholding_reception_confirmed else "in_process"
+                    "paid"
+                    if payment.withholding_reception_confirmed
+                    and payment.move_id.state == "posted"
+                    else "in_process"
                 )
         return result
 

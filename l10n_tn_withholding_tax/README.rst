@@ -220,6 +220,15 @@ consistent and the withholding payment has a posted journal entry. Clear
 all three fields together when resetting through the ORM; the standard
 reset, cancel and reject actions do this automatically.
 
+A withholding payment stays **In Process** until its certificate is
+confirmed and its journal entry is posted. If the entry is reset
+directly to draft, the payment returns to **In Process** and is no
+longer matched; the certificate metadata remains recorded. Posting that
+entry again restores **Paid** when the certificate is still confirmed.
+Resetting the payment itself, canceling it or rejecting it clears the
+confirmation and preserves the selected lifecycle state. Regular
+payments retain Odoo's standard state computation.
+
 Usage
 =====
 

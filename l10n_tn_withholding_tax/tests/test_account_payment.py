@@ -349,16 +349,77 @@ class TestWithholdingPaymentReception(WithholdingTaxTestCommon):
         self.assertEqual(payment.withholding_reception_user_id, accountant)
         self.assertTrue(payment.withholding_reception_date)
 
-    def test_lifecycle_actions_clear_certificate_confirmation(self):
-        for action in ("action_draft", "action_cancel", "action_reject"):
-            with self.subTest(action=action):
-                invoice = self._create_move(self.product_a, 2000)
-                payment = self._register_withholding(invoice)
-                payment.action_validate_withholding()
-                getattr(payment, action)()
-                self.assertFalse(payment.withholding_reception_confirmed)
-                self.assertFalse(payment.withholding_reception_date)
-                self.assertFalse(payment.withholding_reception_user_id)
+    def test_lifecycle_actions_preserve_states_and_clear_confirmation(self):
+        for action, expected in (
+            ("action_draft", "draft"),
+            ("action_cancel", "canceled"),
+            ("action_reject", "rejected"),
+        ):
+            for confirmed in (False, True):
+                with self.subTest(action=action, confirmed=confirmed):
+                    invoice = self._create_move(self.product_a, 2000)
+                    payment = self._register_withholding(invoice)
+                    if confirmed:
+                        payment.action_validate_withholding()
+                    getattr(payment, action)()
+                    self.assertEqual(payment.state, expected)
+                    self.assertFalse(payment.withholding_reception_confirmed)
+                    self.assertFalse(payment.withholding_reception_date)
+                    self.assertFalse(payment.withholding_reception_user_id)
+                    self.env.add_to_compute(payment._fields["state"], payment)
+                    payment.flush_recordset(["state"])
+                    self.assertEqual(payment.state, expected)
+                    self.assertFalse(payment.is_matched)
+
+    def test_confirmed_payment_follows_its_entry_posting_state(self):
+        invoice = self._create_move(self.product_a, 2000)
+        payment = self._register_withholding(invoice)
+        payment.action_validate_withholding()
+        self.assertEqual(payment.state, "paid")
+        self.assertTrue(payment.is_matched)
+
+        payment.move_id.button_draft()
+
+        self.assertEqual(payment.state, "in_process")
+        self.assertFalse(payment.is_matched)
+        self.assertTrue(payment.withholding_reception_confirmed)
+
+        payment.move_id.action_post()
+
+        self.assertEqual(payment.state, "paid")
+        self.assertTrue(payment.is_matched)
+
+    def test_mixed_state_recomputation_preserves_standard_payments(self):
+        invoice = self._create_move(self.product_a, 2000)
+        withholding = self._register_withholding(invoice)
+        journal = self.company_data["default_journal_bank"]
+        journal.inbound_payment_method_line_ids.payment_account_id = (
+            journal.default_account_id
+        )
+        ordinary = self.env["account.payment"].create(
+            {
+                "journal_id": journal.id,
+                "payment_type": "inbound",
+                "partner_type": "customer",
+                "partner_id": self.partner_a.id,
+                "amount": 50,
+            }
+        )
+        ordinary.action_post()
+        payments = ordinary | withholding
+        self.env.add_to_compute(payments._fields["state"], payments)
+        payments.flush_recordset(["state"])
+        self.assertEqual(ordinary.state, "paid")
+        self.assertTrue(ordinary.is_matched)
+        self.assertEqual(withholding.state, "in_process")
+        self.assertFalse(withholding.is_matched)
+        withholding.action_validate_withholding()
+        self.env.add_to_compute(payments._fields["state"], payments)
+        payments.flush_recordset(["state"])
+        self.assertEqual(ordinary.state, "paid")
+        self.assertTrue(ordinary.is_matched)
+        self.assertEqual(withholding.state, "paid")
+        self.assertTrue(withholding.is_matched)
 
     def test_direct_state_change_cannot_keep_confirmed_certificate(self):
         invoice = self._create_move(self.product_a, 2000)
