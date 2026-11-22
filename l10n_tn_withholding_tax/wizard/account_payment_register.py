@@ -50,6 +50,8 @@ class AccountPaymentRegister(models.TransientModel):
     @api.depends(
         "line_ids",
         "line_ids.move_id.l10n_tn_is_domestic_transaction",
+        "line_ids.move_id.line_ids.matched_debit_ids",
+        "line_ids.move_id.line_ids.matched_credit_ids",
         "line_ids.move_id.move_type",
         "line_ids.move_id.company_id",
         "line_ids.move_id.amount_total",
@@ -119,7 +121,9 @@ class AccountPaymentRegister(models.TransientModel):
         if not self.journal_id.is_withholding_tax_journal:
             return
 
-        payments = self.line_ids.move_id.matched_payment_ids
+        payments = self.line_ids.move_id.mapped(
+            lambda invoice: invoice._get_reconciled_withholding_payments()
+        )
 
         if any(
             payment.journal_id == self.journal_id
@@ -179,6 +183,8 @@ class AccountPaymentRegister(models.TransientModel):
         "company_id",
         "can_edit_wizard",
         "line_ids.move_id.l10n_tn_is_domestic_transaction",
+        "line_ids.move_id.line_ids.matched_debit_ids",
+        "line_ids.move_id.line_ids.matched_credit_ids",
         "line_ids.move_id.move_type",
         "line_ids.move_id.company_id",
         "line_ids.move_id.amount_total",
@@ -218,6 +224,8 @@ class AccountPaymentRegister(models.TransientModel):
     @api.depends(
         "line_ids",
         "line_ids.move_id.l10n_tn_is_domestic_transaction",
+        "line_ids.move_id.line_ids.matched_debit_ids",
+        "line_ids.move_id.line_ids.matched_credit_ids",
         "line_ids.move_id.move_type",
         "line_ids.move_id.company_id",
         "line_ids.move_id.amount_total",
@@ -242,6 +250,8 @@ class AccountPaymentRegister(models.TransientModel):
         "line_ids.move_id.amount_total",
         "line_ids.move_id.invoice_line_ids.product_id",
         "line_ids.move_id.l10n_tn_is_domestic_transaction",
+        "line_ids.move_id.line_ids.matched_debit_ids",
+        "line_ids.move_id.line_ids.matched_credit_ids",
         "withholding_tax_applicable",
     )
     def _compute_withholding_allocation_line_ids(self):

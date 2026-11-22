@@ -124,3 +124,12 @@ metadata remains recorded. Posting that entry again restores **Paid** when the
 certificate is still confirmed. Resetting the payment itself, canceling it or
 rejecting it clears the confirmation and preserves the selected lifecycle state.
 Regular payments retain Odoo's standard state computation.
+
+Invoice withholding status and duplicate-rule checks follow the current
+reconciliations on the customer/supplier journal items. A historical payment
+association alone does not count. Unreconciling a withholding makes its rule
+available again for the remaining balance. Reassigning the payment to another
+invoice transfers certificate tracking to that invoice. A fully settled invoice
+stays **In Payment** while any currently reconciled withholding is awaiting its
+certificate; confirming one withholding does not confirm the others. The same
+withholding payment may be partially reconciled to several invoices.

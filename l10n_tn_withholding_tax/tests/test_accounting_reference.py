@@ -1,6 +1,7 @@
 # Copyright 2026 Sobware
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+from odoo import Command
 from odoo.exceptions import UserError
 from odoo.tests import Form
 from odoo.tests.common import tagged
@@ -211,3 +212,117 @@ class TestWithholdingAccountingReference(WithholdingTaxTestCommon):
                         )
                     )
                 )
+
+    def _invoice_counterpart(self, invoice):
+        return invoice.line_ids.filtered(
+            lambda line: (
+                line.account_id.account_type
+                in ("asset_receivable", "liability_payable")
+            )
+        )
+
+    def test_unreconciled_withholding_does_not_block_replacement_payment(self):
+        for move_type, journal, rule in (
+            (
+                "out_invoice",
+                self.inbound_withholding_journal,
+                self.inbound_withholding_rule,
+            ),
+            ("in_invoice", self.withholding_journal, self.withholding_rule),
+        ):
+            with self.subTest(move_type=move_type):
+                invoice = self._create_move(self.product_a, 2000, move_type=move_type)
+                withholding = self._register_payment(invoice, journal)
+                self._register_payment(invoice, self.bank_journal)
+                self.assertTrue(invoice.is_rs_paid)
+                self.assertTrue(invoice.is_withholding_tax_rule_applied(rule))
+                self.assertEqual(invoice.payment_state, "in_payment")
+                _fiscal, counterpart, _writeoff = withholding._seek_for_lines()
+                counterpart.remove_move_reconcile()
+                # retain the historical association to verify it is ignored
+                invoice.matched_payment_ids = [Command.link(withholding.id)]
+                self.assertFalse(invoice._get_reconciled_withholding_payments())
+                self.assertFalse(invoice.is_rs_paid)
+                self.assertFalse(invoice.is_withholding_tax_rule_applied(rule))
+                self.assertAlmostEqual(invoice.amount_residual, withholding.amount)
+                wizard = self._create_payment_wizard(invoice)
+                self.assertIn(journal, wizard.available_journal_ids)
+                with Form(wizard) as form:
+                    form.journal_id = journal
+                self._register_payment(invoice, self.bank_journal)
+                self.assertEqual(invoice.amount_residual, 0)
+                self.assertEqual(invoice.payment_state, "paid")
+                self.assertFalse(withholding.withholding_reception_confirmed)
+
+    def test_reassigned_withholding_affects_only_its_current_invoice(self):
+        first = self._create_move(self.product_a, 2000, move_type="out_invoice")
+        second = self._create_move(self.product_a, 2000, move_type="out_invoice")
+        withholding = self._register_payment(first, self.inbound_withholding_journal)
+        self._register_payment(first, self.bank_journal)
+        _fiscal, counterpart, _writeoff = withholding._seek_for_lines()
+        counterpart.remove_move_reconcile()
+        first.matched_payment_ids = [Command.link(withholding.id)]
+        (counterpart + self._invoice_counterpart(second)).reconcile()
+        self.assertFalse(first._get_reconciled_withholding_payments())
+        self.assertEqual(second._get_reconciled_withholding_payments(), withholding)
+        self.assertFalse(first.is_rs_paid)
+        self.assertTrue(second.is_rs_paid)
+        self._register_payment(first, self.bank_journal)
+        self._register_payment(second, self.bank_journal)
+        self.assertEqual(first.payment_state, "paid")
+        self.assertEqual(second.payment_state, "in_payment")
+        withholding.action_validate_withholding()
+        self.assertEqual(first.payment_state, "paid")
+        self.assertEqual(second.payment_state, "paid")
+
+    def test_each_reconciled_withholding_requires_confirmation(self):
+        invoice = self._create_move(self.product_a, 2000, move_type="out_invoice")
+        self.env["l10n.tn.withholding.rule"].create(
+            {
+                "move_type": "out_invoice",
+                "withholding_journal_id": self.other_inbound_withholding_journal.id,
+            }
+        )
+        first = self._register_payment(invoice, self.inbound_withholding_journal)
+        second = self._register_payment(invoice, self.other_inbound_withholding_journal)
+        self._register_payment(invoice, self.bank_journal)
+        self.assertCountEqual(
+            invoice._get_reconciled_withholding_payments().ids, (first | second).ids
+        )
+        self.assertEqual(invoice.payment_state, "in_payment")
+        first.action_validate_withholding()
+        self.assertEqual(invoice.payment_state, "in_payment")
+        second.action_validate_withholding()
+        self.assertEqual(invoice.payment_state, "paid")
+
+    def test_one_withholding_can_be_partially_reconciled_to_two_invoices(self):
+        first = self._create_move(self.product_a, 2000, move_type="out_invoice")
+        second = self._create_move(self.product_a, 4000, move_type="out_invoice")
+        journal = self.inbound_withholding_journal
+        amounts = [
+            invoice.amount_total * journal.withholding_tax_rate
+            for invoice in (first, second)
+        ]
+        withholding = self.env["account.payment"].create(
+            {
+                "journal_id": journal.id,
+                "payment_type": "inbound",
+                "partner_type": "customer",
+                "partner_id": self.partner_a.id,
+                "amount": sum(amounts),
+            }
+        )
+        withholding.action_post()
+        _fiscal, counterpart, _writeoff = withholding._seek_for_lines()
+        for invoice, amount in zip((first, second), amounts, strict=True):
+            (counterpart + self._invoice_counterpart(invoice)).with_context(
+                l10n_tn_payment_allocation=(counterpart.id, amount)
+            ).reconcile()
+            self.assertEqual(
+                invoice._get_reconciled_withholding_payments(), withholding
+            )
+            self._register_payment(invoice, self.bank_journal)
+            self.assertEqual(invoice.payment_state, "in_payment")
+        withholding.action_validate_withholding()
+        self.assertEqual(first.payment_state, "paid")
+        self.assertEqual(second.payment_state, "paid")

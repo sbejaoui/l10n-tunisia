@@ -3,6 +3,18 @@
 
 from odoo import api, fields, models
 
+_WITHHOLDING_RECONCILIATION_DEPENDS = (
+    "state",
+    "move_type",
+    "line_ids.account_id.account_type",
+    "line_ids.matched_debit_ids.debit_move_id.move_id.state",
+    "line_ids.matched_credit_ids.credit_move_id.move_id.state",
+    "line_ids.matched_debit_ids.debit_move_id.move_id.origin_payment_id.state",
+    "line_ids.matched_credit_ids.credit_move_id.move_id.origin_payment_id.state",
+    "line_ids.matched_debit_ids.debit_move_id.move_id.origin_payment_id.is_withholding_tax_payment",
+    "line_ids.matched_credit_ids.credit_move_id.move_id.origin_payment_id.is_withholding_tax_payment",
+)
+
 
 class AccountMove(models.Model):
     _inherit = "account.move"
@@ -18,8 +30,7 @@ class AccountMove(models.Model):
         "company_id",
         "reconciled_payment_ids.state",
         "matched_payment_ids.state",
-        "matched_payment_ids.is_matched",
-        "matched_payment_ids.is_withholding_tax_payment",
+        *_WITHHOLDING_RECONCILIATION_DEPENDS,
     )
     def _compute_payment_state(self):
         result = super()._compute_payment_state()
@@ -28,7 +39,7 @@ class AccountMove(models.Model):
                 payment.is_withholding_tax_payment
                 and payment.state == "in_process"
                 and not payment.is_matched
-                for payment in move.matched_payment_ids
+                for payment in move._get_reconciled_withholding_payments()
             ):
                 # community normally skips the in_payment state
                 move.payment_state = "in_payment"
@@ -49,32 +60,43 @@ class AccountMove(models.Model):
         compute="_compute_is_rs_paid",
     )
 
-    @api.depends(
-        "matched_payment_ids.state",
-        "matched_payment_ids.journal_id.is_withholding_tax_journal",
-    )
+    @api.depends(*_WITHHOLDING_RECONCILIATION_DEPENDS)
     def _compute_is_rs_paid(self):
         for move in self:
-            rs_paid = False
-            for payment in move.matched_payment_ids:
-                if payment.journal_id.is_withholding_tax_journal and payment.state in (
-                    "in_process",
-                    "paid",
-                ):
-                    rs_paid = True
-            move.is_rs_paid = rs_paid
+            move.is_rs_paid = bool(move._get_reconciled_withholding_payments())
+
+    def _get_reconciled_withholding_payments(self):
+        self.ensure_one()
+        if self.state != "posted" or self.move_type not in (
+            "out_invoice",
+            "in_invoice",
+        ):
+            return self.env["account.payment"]
+        counterpart_lines = self.line_ids.filtered(
+            lambda line: (
+                line.account_id.account_type
+                in ("asset_receivable", "liability_payable")
+            )
+        )
+        partials = (
+            counterpart_lines.matched_debit_ids | counterpart_lines.matched_credit_ids
+        )
+        payments = (
+            partials.debit_move_id | partials.credit_move_id
+        ).move_id.origin_payment_id
+        return payments.filtered(
+            lambda payment: (
+                payment.is_withholding_tax_payment
+                and payment.state in ("in_process", "paid")
+                and payment.move_id.state == "posted"
+            )
+        )
 
     def is_withholding_tax_rule_applied(self, rule):
         self.ensure_one()
-
-        for payment in self.matched_payment_ids:
-            if payment.journal_id == rule.withholding_journal_id and payment.state in (
-                "in_process",
-                "paid",
-            ):
-                return True
-
-        return False
+        return rule.withholding_journal_id in (
+            self._get_reconciled_withholding_payments().journal_id
+        )
 
     def _is_withholding_tax_applicable(self):
         self.ensure_one()
